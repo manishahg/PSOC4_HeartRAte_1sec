@@ -1,0 +1,45 @@
+net ClockBlock_HFCLK
+	term   ":m0s8clockblockcell.hfclk"
+	switch ":m0s8clockblockcell.hfclk==>:ioport2_clock_io_mux.hfclk"
+	switch ":ioport2_clock_io_mux.clk_in==>:ioport2:pin7.in_clock"
+	term   ":ioport2:pin7.in_clock"
+	switch ":m0s8clockblockcell.hfclk==>:interrupt_2.clock"
+	term   ":interrupt_2.clock"
+	switch ":m0s8clockblockcell.hfclk==>:interrupt_15.clock"
+	term   ":interrupt_15.clock"
+	switch ":m0s8clockblockcell.hfclk==>:interrupt_12.clock"
+	term   ":interrupt_12.clock"
+end ClockBlock_HFCLK
+net Net_1045
+	term   ":ioport2:pin7.fb"
+	switch ":ioport2:pin7.fb==>:ioport2:hsiom_in7.hsiom7_in"
+	switch ":ioport2:hsiom_in7.dsi==>Stub-:dsiswitch_top@[DSI=(0,1)][side=top]:dsihc_top:v13+:dsiswitch_top@[DSI=(0,1)][side=top]:dsihc_top:v15"
+	switch "OStub-:dsiswitch_top@[DSI=(0,1)][side=top]:dsihc_top:v13+:dsiswitch_top@[DSI=(0,1)][side=top]:dsihc_top:v15"
+	switch ":dsiswitch_top@[DSI=(0,1)][side=top]:dsihc_top:13,13"
+	switch ":hvswitch@[UDB=(0,0)][side=left]:hseg_13_b"
+	switch ":dsiswitch_top@[DSI=(0,0)][side=top]:dsihc_top:90,13_f"
+	switch "IStub-:dsiswitch_top@[DSI=(0,0)][side=top]:dsihc_top:v86+:dsiswitch_top@[DSI=(0,0)][side=top]:dsihc_top:v88+:dsiswitch_top@[DSI=(0,0)][side=top]:dsihc_top:v90"
+	switch "Stub-:dsiswitch_top@[DSI=(0,0)][side=top]:dsihc_top:v86+:dsiswitch_top@[DSI=(0,0)][side=top]:dsihc_top:v88+:dsiswitch_top@[DSI=(0,0)][side=top]:dsihc_top:v90==>:ioport3:inputs1_mux.in_2"
+	switch ":ioport3:inputs1_mux.pin0__pin_input==>:ioport3:hsiom_out0.dsi"
+	switch ":ioport3:hsiom_out0.hsiom0_out==>:ioport3:pin0.pin_input"
+	term   ":ioport3:pin0.pin_input"
+end Net_1045
+net Net_1047
+	term   ":logicalport_2.interrupt"
+	switch ":logicalport_2.interrupt==>Stub-:dsiswitch_bottom@[DSI=(1,0)][side=bottom]:dsihc_bottom:v20+:dsiswitch_bottom@[DSI=(1,0)][side=bottom]:dsihc_bottom:v22"
+	switch "Stub-:dsiswitch_bottom@[DSI=(1,0)][side=bottom]:dsihc_bottom:v20+:dsiswitch_bottom@[DSI=(1,0)][side=bottom]:dsihc_bottom:v22==>:interrupt_idmux_2.in_0"
+	switch ":interrupt_idmux_2.interrupt_idmux_2__out==>:interrupt_2.interrupt"
+	term   ":interrupt_2.interrupt"
+end Net_1047
+net \ADC:Net_3112\
+	term   ":p4sarcell.irq"
+	switch ":p4sarcell.irq==>:interrupt_idmux_15.in_0"
+	switch ":interrupt_idmux_15.interrupt_idmux_15__out==>:interrupt_15.interrupt"
+	term   ":interrupt_15.interrupt"
+end \ADC:Net_3112\
+net \BLE:Net_15\
+	term   ":p4blecell.interrupt"
+	switch ":p4blecell.interrupt==>:interrupt_idmux_12.in_0"
+	switch ":interrupt_idmux_12.interrupt_idmux_12__out==>:interrupt_12.interrupt"
+	term   ":interrupt_12.interrupt"
+end \BLE:Net_15\

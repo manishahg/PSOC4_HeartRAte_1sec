@@ -1,0 +1,588 @@
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\cc67TuIP.s 			page 1
+
+
+   1              		.cpu cortex-m0
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.code	16
+  13              		.file	"Opamp_PM.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.Opamp_SaveConfig,"ax",%progbits
+  18              		.align	2
+  19              		.global	Opamp_SaveConfig
+  20              		.code	16
+  21              		.thumb_func
+  22              		.type	Opamp_SaveConfig, %function
+  23              	Opamp_SaveConfig:
+  24              	.LFB0:
+  25              		.file 1 ".\\Generated_Source\\PSoC4\\Opamp_PM.c"
+   1:.\Generated_Source\PSoC4/Opamp_PM.c **** /*******************************************************************************
+   2:.\Generated_Source\PSoC4/Opamp_PM.c **** * File Name: Opamp_PM.c
+   3:.\Generated_Source\PSoC4/Opamp_PM.c **** * Version 1.10
+   4:.\Generated_Source\PSoC4/Opamp_PM.c **** *
+   5:.\Generated_Source\PSoC4/Opamp_PM.c **** * Description:
+   6:.\Generated_Source\PSoC4/Opamp_PM.c **** *  This file provides the power management source code to the API for the
+   7:.\Generated_Source\PSoC4/Opamp_PM.c **** *  Opamp (Analog Buffer) component.
+   8:.\Generated_Source\PSoC4/Opamp_PM.c **** *
+   9:.\Generated_Source\PSoC4/Opamp_PM.c **** *
+  10:.\Generated_Source\PSoC4/Opamp_PM.c **** ********************************************************************************
+  11:.\Generated_Source\PSoC4/Opamp_PM.c **** * Copyright 2013-2014, Cypress Semiconductor Corporation.  All rights reserved.
+  12:.\Generated_Source\PSoC4/Opamp_PM.c **** * You may use this file only in accordance with the license, terms, conditions,
+  13:.\Generated_Source\PSoC4/Opamp_PM.c **** * disclaimers, and limitations in the end user license agreement accompanying
+  14:.\Generated_Source\PSoC4/Opamp_PM.c **** * the software package with which this file was provided.
+  15:.\Generated_Source\PSoC4/Opamp_PM.c **** *******************************************************************************/
+  16:.\Generated_Source\PSoC4/Opamp_PM.c **** 
+  17:.\Generated_Source\PSoC4/Opamp_PM.c **** #include "Opamp.h"
+  18:.\Generated_Source\PSoC4/Opamp_PM.c **** 
+  19:.\Generated_Source\PSoC4/Opamp_PM.c **** #if(!Opamp_CHECK_DEEPSLEEP_SUPPORT)
+  20:.\Generated_Source\PSoC4/Opamp_PM.c ****     static Opamp_BACKUP_STRUCT Opamp_backup =
+  21:.\Generated_Source\PSoC4/Opamp_PM.c ****     {
+  22:.\Generated_Source\PSoC4/Opamp_PM.c ****         0u, /* enableState */
+  23:.\Generated_Source\PSoC4/Opamp_PM.c ****     };
+  24:.\Generated_Source\PSoC4/Opamp_PM.c **** #endif /* (Opamp_CHECK_DEEPSLEEP_SUPPORT) */
+  25:.\Generated_Source\PSoC4/Opamp_PM.c **** 
+  26:.\Generated_Source\PSoC4/Opamp_PM.c **** 
+  27:.\Generated_Source\PSoC4/Opamp_PM.c **** /*******************************************************************************
+  28:.\Generated_Source\PSoC4/Opamp_PM.c **** * Function Name: Opamp_SaveConfig
+  29:.\Generated_Source\PSoC4/Opamp_PM.c **** ********************************************************************************
+  30:.\Generated_Source\PSoC4/Opamp_PM.c **** *
+  31:.\Generated_Source\PSoC4/Opamp_PM.c **** * Summary:
+  32:.\Generated_Source\PSoC4/Opamp_PM.c **** *  Empty function. Included for consistency with other components.
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\cc67TuIP.s 			page 2
+
+
+  33:.\Generated_Source\PSoC4/Opamp_PM.c **** *
+  34:.\Generated_Source\PSoC4/Opamp_PM.c **** * Parameters:
+  35:.\Generated_Source\PSoC4/Opamp_PM.c **** *  None
+  36:.\Generated_Source\PSoC4/Opamp_PM.c **** *
+  37:.\Generated_Source\PSoC4/Opamp_PM.c **** * Return:
+  38:.\Generated_Source\PSoC4/Opamp_PM.c **** *  None
+  39:.\Generated_Source\PSoC4/Opamp_PM.c **** *
+  40:.\Generated_Source\PSoC4/Opamp_PM.c **** *******************************************************************************/
+  41:.\Generated_Source\PSoC4/Opamp_PM.c **** void Opamp_SaveConfig(void)
+  42:.\Generated_Source\PSoC4/Opamp_PM.c **** {
+  26              		.loc 1 42 0
+  27              		.cfi_startproc
+  28 0000 80B5     		push	{r7, lr}
+  29              		.cfi_def_cfa_offset 8
+  30              		.cfi_offset 7, -8
+  31              		.cfi_offset 14, -4
+  32 0002 00AF     		add	r7, sp, #0
+  33              		.cfi_def_cfa_register 7
+  43:.\Generated_Source\PSoC4/Opamp_PM.c **** 
+  44:.\Generated_Source\PSoC4/Opamp_PM.c **** }
+  34              		.loc 1 44 0
+  35 0004 BD46     		mov	sp, r7
+  36              		@ sp needed
+  37 0006 80BD     		pop	{r7, pc}
+  38              		.cfi_endproc
+  39              	.LFE0:
+  40              		.size	Opamp_SaveConfig, .-Opamp_SaveConfig
+  41              		.section	.text.Opamp_RestoreConfig,"ax",%progbits
+  42              		.align	2
+  43              		.global	Opamp_RestoreConfig
+  44              		.code	16
+  45              		.thumb_func
+  46              		.type	Opamp_RestoreConfig, %function
+  47              	Opamp_RestoreConfig:
+  48              	.LFB1:
+  45:.\Generated_Source\PSoC4/Opamp_PM.c **** 
+  46:.\Generated_Source\PSoC4/Opamp_PM.c **** 
+  47:.\Generated_Source\PSoC4/Opamp_PM.c **** /*******************************************************************************
+  48:.\Generated_Source\PSoC4/Opamp_PM.c **** * Function Name: Opamp_RestoreConfig
+  49:.\Generated_Source\PSoC4/Opamp_PM.c **** ********************************************************************************
+  50:.\Generated_Source\PSoC4/Opamp_PM.c **** *
+  51:.\Generated_Source\PSoC4/Opamp_PM.c **** * Summary:
+  52:.\Generated_Source\PSoC4/Opamp_PM.c **** *  Empty function. Included for consistency with other components.
+  53:.\Generated_Source\PSoC4/Opamp_PM.c **** *
+  54:.\Generated_Source\PSoC4/Opamp_PM.c **** * Parameters:
+  55:.\Generated_Source\PSoC4/Opamp_PM.c **** *  None
+  56:.\Generated_Source\PSoC4/Opamp_PM.c **** *
+  57:.\Generated_Source\PSoC4/Opamp_PM.c **** * Return:
+  58:.\Generated_Source\PSoC4/Opamp_PM.c **** *  None
+  59:.\Generated_Source\PSoC4/Opamp_PM.c **** *
+  60:.\Generated_Source\PSoC4/Opamp_PM.c **** *******************************************************************************/
+  61:.\Generated_Source\PSoC4/Opamp_PM.c **** void Opamp_RestoreConfig(void)
+  62:.\Generated_Source\PSoC4/Opamp_PM.c **** {
+  49              		.loc 1 62 0
+  50              		.cfi_startproc
+  51 0000 80B5     		push	{r7, lr}
+  52              		.cfi_def_cfa_offset 8
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\cc67TuIP.s 			page 3
+
+
+  53              		.cfi_offset 7, -8
+  54              		.cfi_offset 14, -4
+  55 0002 00AF     		add	r7, sp, #0
+  56              		.cfi_def_cfa_register 7
+  63:.\Generated_Source\PSoC4/Opamp_PM.c ****     
+  64:.\Generated_Source\PSoC4/Opamp_PM.c **** }
+  57              		.loc 1 64 0
+  58 0004 BD46     		mov	sp, r7
+  59              		@ sp needed
+  60 0006 80BD     		pop	{r7, pc}
+  61              		.cfi_endproc
+  62              	.LFE1:
+  63              		.size	Opamp_RestoreConfig, .-Opamp_RestoreConfig
+  64              		.section	.text.Opamp_Sleep,"ax",%progbits
+  65              		.align	2
+  66              		.global	Opamp_Sleep
+  67              		.code	16
+  68              		.thumb_func
+  69              		.type	Opamp_Sleep, %function
+  70              	Opamp_Sleep:
+  71              	.LFB2:
+  65:.\Generated_Source\PSoC4/Opamp_PM.c **** 
+  66:.\Generated_Source\PSoC4/Opamp_PM.c **** 
+  67:.\Generated_Source\PSoC4/Opamp_PM.c **** /*******************************************************************************
+  68:.\Generated_Source\PSoC4/Opamp_PM.c **** * Function Name: Opamp_Sleep
+  69:.\Generated_Source\PSoC4/Opamp_PM.c **** ********************************************************************************
+  70:.\Generated_Source\PSoC4/Opamp_PM.c **** *
+  71:.\Generated_Source\PSoC4/Opamp_PM.c **** * Summary:
+  72:.\Generated_Source\PSoC4/Opamp_PM.c **** *  This is the preferred API to prepare the component for sleep. The Sleep() API 
+  73:.\Generated_Source\PSoC4/Opamp_PM.c **** *  saves the current component state. Call the Sleep() function before calling the 
+  74:.\Generated_Source\PSoC4/Opamp_PM.c **** *  CySysPmDeepSleep() or the CySysPmHibernate() functions. The "Deep sleep operation" 
+  75:.\Generated_Source\PSoC4/Opamp_PM.c **** *  option has an influence on this function implementation.
+  76:.\Generated_Source\PSoC4/Opamp_PM.c **** *
+  77:.\Generated_Source\PSoC4/Opamp_PM.c **** * Parameters:
+  78:.\Generated_Source\PSoC4/Opamp_PM.c **** *  None
+  79:.\Generated_Source\PSoC4/Opamp_PM.c **** *
+  80:.\Generated_Source\PSoC4/Opamp_PM.c **** * Return:
+  81:.\Generated_Source\PSoC4/Opamp_PM.c **** *  None
+  82:.\Generated_Source\PSoC4/Opamp_PM.c **** *
+  83:.\Generated_Source\PSoC4/Opamp_PM.c **** * Global variables:
+  84:.\Generated_Source\PSoC4/Opamp_PM.c **** *  Opamp_backup: The structure field 'enableState' is modified
+  85:.\Generated_Source\PSoC4/Opamp_PM.c **** *  depending on the enable state of the block before entering the sleep mode.
+  86:.\Generated_Source\PSoC4/Opamp_PM.c **** *
+  87:.\Generated_Source\PSoC4/Opamp_PM.c **** *******************************************************************************/
+  88:.\Generated_Source\PSoC4/Opamp_PM.c **** void Opamp_Sleep(void)
+  89:.\Generated_Source\PSoC4/Opamp_PM.c **** {
+  72              		.loc 1 89 0
+  73              		.cfi_startproc
+  74 0000 80B5     		push	{r7, lr}
+  75              		.cfi_def_cfa_offset 8
+  76              		.cfi_offset 7, -8
+  77              		.cfi_offset 14, -4
+  78 0002 00AF     		add	r7, sp, #0
+  79              		.cfi_def_cfa_register 7
+  90:.\Generated_Source\PSoC4/Opamp_PM.c **** #if(!Opamp_CHECK_DEEPSLEEP_SUPPORT)
+  91:.\Generated_Source\PSoC4/Opamp_PM.c ****     if(Opamp_CHECK_PWR_MODE_OFF)
+  92:.\Generated_Source\PSoC4/Opamp_PM.c ****     {
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\cc67TuIP.s 			page 4
+
+
+  93:.\Generated_Source\PSoC4/Opamp_PM.c ****         Opamp_backup.enableState = 1u;
+  94:.\Generated_Source\PSoC4/Opamp_PM.c ****         Opamp_Stop();
+  95:.\Generated_Source\PSoC4/Opamp_PM.c ****     }
+  96:.\Generated_Source\PSoC4/Opamp_PM.c ****     else /* The component is disabled */
+  97:.\Generated_Source\PSoC4/Opamp_PM.c ****     {
+  98:.\Generated_Source\PSoC4/Opamp_PM.c ****         Opamp_backup.enableState = 0u;
+  99:.\Generated_Source\PSoC4/Opamp_PM.c ****     }
+ 100:.\Generated_Source\PSoC4/Opamp_PM.c **** #endif /* (Opamp_CHECK_DEEPSLEEP_SUPPORT) */
+ 101:.\Generated_Source\PSoC4/Opamp_PM.c **** }
+  80              		.loc 1 101 0
+  81 0004 BD46     		mov	sp, r7
+  82              		@ sp needed
+  83 0006 80BD     		pop	{r7, pc}
+  84              		.cfi_endproc
+  85              	.LFE2:
+  86              		.size	Opamp_Sleep, .-Opamp_Sleep
+  87              		.section	.text.Opamp_Wakeup,"ax",%progbits
+  88              		.align	2
+  89              		.global	Opamp_Wakeup
+  90              		.code	16
+  91              		.thumb_func
+  92              		.type	Opamp_Wakeup, %function
+  93              	Opamp_Wakeup:
+  94              	.LFB3:
+ 102:.\Generated_Source\PSoC4/Opamp_PM.c **** 
+ 103:.\Generated_Source\PSoC4/Opamp_PM.c **** 
+ 104:.\Generated_Source\PSoC4/Opamp_PM.c **** /*******************************************************************************
+ 105:.\Generated_Source\PSoC4/Opamp_PM.c **** * Function Name: Opamp_Wakeup
+ 106:.\Generated_Source\PSoC4/Opamp_PM.c **** ********************************************************************************
+ 107:.\Generated_Source\PSoC4/Opamp_PM.c **** *
+ 108:.\Generated_Source\PSoC4/Opamp_PM.c **** * Summary:
+ 109:.\Generated_Source\PSoC4/Opamp_PM.c **** *  This is the preferred API to restore the component to the state when Sleep() 
+ 110:.\Generated_Source\PSoC4/Opamp_PM.c **** *  is called. If the component has been enabled before the Sleep() function is 
+ 111:.\Generated_Source\PSoC4/Opamp_PM.c **** *  called, the Wakeup() function will also re-enable the component.
+ 112:.\Generated_Source\PSoC4/Opamp_PM.c **** *  The "Deep sleep operation" option has an influence on this function
+ 113:.\Generated_Source\PSoC4/Opamp_PM.c **** *  implementation.
+ 114:.\Generated_Source\PSoC4/Opamp_PM.c **** *
+ 115:.\Generated_Source\PSoC4/Opamp_PM.c **** * Parameters:
+ 116:.\Generated_Source\PSoC4/Opamp_PM.c **** *  None
+ 117:.\Generated_Source\PSoC4/Opamp_PM.c **** *
+ 118:.\Generated_Source\PSoC4/Opamp_PM.c **** * Return:
+ 119:.\Generated_Source\PSoC4/Opamp_PM.c **** *  None
+ 120:.\Generated_Source\PSoC4/Opamp_PM.c **** *
+ 121:.\Generated_Source\PSoC4/Opamp_PM.c **** * Global variables:
+ 122:.\Generated_Source\PSoC4/Opamp_PM.c **** *  Opamp_backup: The structure field 'enableState' is used to
+ 123:.\Generated_Source\PSoC4/Opamp_PM.c **** *  restore the enable state of block after wakeup from sleep mode.
+ 124:.\Generated_Source\PSoC4/Opamp_PM.c **** *
+ 125:.\Generated_Source\PSoC4/Opamp_PM.c **** *******************************************************************************/
+ 126:.\Generated_Source\PSoC4/Opamp_PM.c **** void Opamp_Wakeup(void)
+ 127:.\Generated_Source\PSoC4/Opamp_PM.c **** {
+  95              		.loc 1 127 0
+  96              		.cfi_startproc
+  97 0000 80B5     		push	{r7, lr}
+  98              		.cfi_def_cfa_offset 8
+  99              		.cfi_offset 7, -8
+ 100              		.cfi_offset 14, -4
+ 101 0002 00AF     		add	r7, sp, #0
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\cc67TuIP.s 			page 5
+
+
+ 102              		.cfi_def_cfa_register 7
+ 128:.\Generated_Source\PSoC4/Opamp_PM.c **** #if(!Opamp_CHECK_DEEPSLEEP_SUPPORT)
+ 129:.\Generated_Source\PSoC4/Opamp_PM.c ****     if(0u != Opamp_backup.enableState)
+ 130:.\Generated_Source\PSoC4/Opamp_PM.c ****     {
+ 131:.\Generated_Source\PSoC4/Opamp_PM.c ****         /* Enable Opamp's operation */
+ 132:.\Generated_Source\PSoC4/Opamp_PM.c ****         Opamp_Enable();
+ 133:.\Generated_Source\PSoC4/Opamp_PM.c ****     } /* Do nothing if Opamp was disabled before */
+ 134:.\Generated_Source\PSoC4/Opamp_PM.c **** #endif /* (Opamp_CHECK_DEEPSLEEP_SUPPORT) */
+ 135:.\Generated_Source\PSoC4/Opamp_PM.c **** }
+ 103              		.loc 1 135 0
+ 104 0004 BD46     		mov	sp, r7
+ 105              		@ sp needed
+ 106 0006 80BD     		pop	{r7, pc}
+ 107              		.cfi_endproc
+ 108              	.LFE3:
+ 109              		.size	Opamp_Wakeup, .-Opamp_Wakeup
+ 110              		.text
+ 111              	.Letext0:
+ 112              		.section	.debug_info,"",%progbits
+ 113              	.Ldebug_info0:
+ 114 0000 C1000000 		.4byte	0xc1
+ 115 0004 0400     		.2byte	0x4
+ 116 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 117 000a 04       		.byte	0x4
+ 118 000b 01       		.uleb128 0x1
+ 119 000c 13010000 		.4byte	.LASF16
+ 120 0010 01       		.byte	0x1
+ 121 0011 5E000000 		.4byte	.LASF17
+ 122 0015 11000000 		.4byte	.LASF18
+ 123 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 124 001d 00000000 		.4byte	0
+ 125 0021 00000000 		.4byte	.Ldebug_line0
+ 126 0025 02       		.uleb128 0x2
+ 127 0026 01       		.byte	0x1
+ 128 0027 06       		.byte	0x6
+ 129 0028 B5010000 		.4byte	.LASF0
+ 130 002c 02       		.uleb128 0x2
+ 131 002d 01       		.byte	0x1
+ 132 002e 08       		.byte	0x8
+ 133 002f AC000000 		.4byte	.LASF1
+ 134 0033 02       		.uleb128 0x2
+ 135 0034 02       		.byte	0x2
+ 136 0035 05       		.byte	0x5
+ 137 0036 A2010000 		.4byte	.LASF2
+ 138 003a 02       		.uleb128 0x2
+ 139 003b 02       		.byte	0x2
+ 140 003c 07       		.byte	0x7
+ 141 003d E0000000 		.4byte	.LASF3
+ 142 0041 02       		.uleb128 0x2
+ 143 0042 04       		.byte	0x4
+ 144 0043 05       		.byte	0x5
+ 145 0044 AC010000 		.4byte	.LASF4
+ 146 0048 02       		.uleb128 0x2
+ 147 0049 04       		.byte	0x4
+ 148 004a 07       		.byte	0x7
+ 149 004b CE000000 		.4byte	.LASF5
+ 150 004f 02       		.uleb128 0x2
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\cc67TuIP.s 			page 6
+
+
+ 151 0050 08       		.byte	0x8
+ 152 0051 05       		.byte	0x5
+ 153 0052 8F010000 		.4byte	.LASF6
+ 154 0056 02       		.uleb128 0x2
+ 155 0057 08       		.byte	0x8
+ 156 0058 07       		.byte	0x7
+ 157 0059 95000000 		.4byte	.LASF7
+ 158 005d 03       		.uleb128 0x3
+ 159 005e 04       		.byte	0x4
+ 160 005f 05       		.byte	0x5
+ 161 0060 696E7400 		.ascii	"int\000"
+ 162 0064 02       		.uleb128 0x2
+ 163 0065 04       		.byte	0x4
+ 164 0066 07       		.byte	0x7
+ 165 0067 06010000 		.4byte	.LASF8
+ 166 006b 02       		.uleb128 0x2
+ 167 006c 04       		.byte	0x4
+ 168 006d 04       		.byte	0x4
+ 169 006e 8F000000 		.4byte	.LASF9
+ 170 0072 02       		.uleb128 0x2
+ 171 0073 08       		.byte	0x8
+ 172 0074 04       		.byte	0x4
+ 173 0075 F3000000 		.4byte	.LASF10
+ 174 0079 02       		.uleb128 0x2
+ 175 007a 01       		.byte	0x1
+ 176 007b 08       		.byte	0x8
+ 177 007c 9D010000 		.4byte	.LASF11
+ 178 0080 04       		.uleb128 0x4
+ 179 0081 00000000 		.4byte	.LASF12
+ 180 0085 01       		.byte	0x1
+ 181 0086 29       		.byte	0x29
+ 182 0087 00000000 		.4byte	.LFB0
+ 183 008b 08000000 		.4byte	.LFE0-.LFB0
+ 184 008f 01       		.uleb128 0x1
+ 185 0090 9C       		.byte	0x9c
+ 186 0091 04       		.uleb128 0x4
+ 187 0092 BA000000 		.4byte	.LASF13
+ 188 0096 01       		.byte	0x1
+ 189 0097 3D       		.byte	0x3d
+ 190 0098 00000000 		.4byte	.LFB1
+ 191 009c 08000000 		.4byte	.LFE1-.LFB1
+ 192 00a0 01       		.uleb128 0x1
+ 193 00a1 9C       		.byte	0x9c
+ 194 00a2 04       		.uleb128 0x4
+ 195 00a3 FA000000 		.4byte	.LASF14
+ 196 00a7 01       		.byte	0x1
+ 197 00a8 58       		.byte	0x58
+ 198 00a9 00000000 		.4byte	.LFB2
+ 199 00ad 08000000 		.4byte	.LFE2-.LFB2
+ 200 00b1 01       		.uleb128 0x1
+ 201 00b2 9C       		.byte	0x9c
+ 202 00b3 04       		.uleb128 0x4
+ 203 00b4 82000000 		.4byte	.LASF15
+ 204 00b8 01       		.byte	0x1
+ 205 00b9 7E       		.byte	0x7e
+ 206 00ba 00000000 		.4byte	.LFB3
+ 207 00be 08000000 		.4byte	.LFE3-.LFB3
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\cc67TuIP.s 			page 7
+
+
+ 208 00c2 01       		.uleb128 0x1
+ 209 00c3 9C       		.byte	0x9c
+ 210 00c4 00       		.byte	0
+ 211              		.section	.debug_abbrev,"",%progbits
+ 212              	.Ldebug_abbrev0:
+ 213 0000 01       		.uleb128 0x1
+ 214 0001 11       		.uleb128 0x11
+ 215 0002 01       		.byte	0x1
+ 216 0003 25       		.uleb128 0x25
+ 217 0004 0E       		.uleb128 0xe
+ 218 0005 13       		.uleb128 0x13
+ 219 0006 0B       		.uleb128 0xb
+ 220 0007 03       		.uleb128 0x3
+ 221 0008 0E       		.uleb128 0xe
+ 222 0009 1B       		.uleb128 0x1b
+ 223 000a 0E       		.uleb128 0xe
+ 224 000b 55       		.uleb128 0x55
+ 225 000c 17       		.uleb128 0x17
+ 226 000d 11       		.uleb128 0x11
+ 227 000e 01       		.uleb128 0x1
+ 228 000f 10       		.uleb128 0x10
+ 229 0010 17       		.uleb128 0x17
+ 230 0011 00       		.byte	0
+ 231 0012 00       		.byte	0
+ 232 0013 02       		.uleb128 0x2
+ 233 0014 24       		.uleb128 0x24
+ 234 0015 00       		.byte	0
+ 235 0016 0B       		.uleb128 0xb
+ 236 0017 0B       		.uleb128 0xb
+ 237 0018 3E       		.uleb128 0x3e
+ 238 0019 0B       		.uleb128 0xb
+ 239 001a 03       		.uleb128 0x3
+ 240 001b 0E       		.uleb128 0xe
+ 241 001c 00       		.byte	0
+ 242 001d 00       		.byte	0
+ 243 001e 03       		.uleb128 0x3
+ 244 001f 24       		.uleb128 0x24
+ 245 0020 00       		.byte	0
+ 246 0021 0B       		.uleb128 0xb
+ 247 0022 0B       		.uleb128 0xb
+ 248 0023 3E       		.uleb128 0x3e
+ 249 0024 0B       		.uleb128 0xb
+ 250 0025 03       		.uleb128 0x3
+ 251 0026 08       		.uleb128 0x8
+ 252 0027 00       		.byte	0
+ 253 0028 00       		.byte	0
+ 254 0029 04       		.uleb128 0x4
+ 255 002a 2E       		.uleb128 0x2e
+ 256 002b 00       		.byte	0
+ 257 002c 3F       		.uleb128 0x3f
+ 258 002d 19       		.uleb128 0x19
+ 259 002e 03       		.uleb128 0x3
+ 260 002f 0E       		.uleb128 0xe
+ 261 0030 3A       		.uleb128 0x3a
+ 262 0031 0B       		.uleb128 0xb
+ 263 0032 3B       		.uleb128 0x3b
+ 264 0033 0B       		.uleb128 0xb
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\cc67TuIP.s 			page 8
+
+
+ 265 0034 27       		.uleb128 0x27
+ 266 0035 19       		.uleb128 0x19
+ 267 0036 11       		.uleb128 0x11
+ 268 0037 01       		.uleb128 0x1
+ 269 0038 12       		.uleb128 0x12
+ 270 0039 06       		.uleb128 0x6
+ 271 003a 40       		.uleb128 0x40
+ 272 003b 18       		.uleb128 0x18
+ 273 003c 9742     		.uleb128 0x2117
+ 274 003e 19       		.uleb128 0x19
+ 275 003f 00       		.byte	0
+ 276 0040 00       		.byte	0
+ 277 0041 00       		.byte	0
+ 278              		.section	.debug_aranges,"",%progbits
+ 279 0000 34000000 		.4byte	0x34
+ 280 0004 0200     		.2byte	0x2
+ 281 0006 00000000 		.4byte	.Ldebug_info0
+ 282 000a 04       		.byte	0x4
+ 283 000b 00       		.byte	0
+ 284 000c 0000     		.2byte	0
+ 285 000e 0000     		.2byte	0
+ 286 0010 00000000 		.4byte	.LFB0
+ 287 0014 08000000 		.4byte	.LFE0-.LFB0
+ 288 0018 00000000 		.4byte	.LFB1
+ 289 001c 08000000 		.4byte	.LFE1-.LFB1
+ 290 0020 00000000 		.4byte	.LFB2
+ 291 0024 08000000 		.4byte	.LFE2-.LFB2
+ 292 0028 00000000 		.4byte	.LFB3
+ 293 002c 08000000 		.4byte	.LFE3-.LFB3
+ 294 0030 00000000 		.4byte	0
+ 295 0034 00000000 		.4byte	0
+ 296              		.section	.debug_ranges,"",%progbits
+ 297              	.Ldebug_ranges0:
+ 298 0000 00000000 		.4byte	.LFB0
+ 299 0004 08000000 		.4byte	.LFE0
+ 300 0008 00000000 		.4byte	.LFB1
+ 301 000c 08000000 		.4byte	.LFE1
+ 302 0010 00000000 		.4byte	.LFB2
+ 303 0014 08000000 		.4byte	.LFE2
+ 304 0018 00000000 		.4byte	.LFB3
+ 305 001c 08000000 		.4byte	.LFE3
+ 306 0020 00000000 		.4byte	0
+ 307 0024 00000000 		.4byte	0
+ 308              		.section	.debug_line,"",%progbits
+ 309              	.Ldebug_line0:
+ 310 0000 84000000 		.section	.debug_str,"MS",%progbits,1
+ 310      02003A00 
+ 310      00000201 
+ 310      FB0E0D00 
+ 310      01010101 
+ 311              	.LASF12:
+ 312 0000 4F70616D 		.ascii	"Opamp_SaveConfig\000"
+ 312      705F5361 
+ 312      7665436F 
+ 312      6E666967 
+ 312      00
+ 313              	.LASF18:
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\cc67TuIP.s 			page 9
+
+
+ 314 0011 433A5C55 		.ascii	"C:\\Users\\Manisha Goyal\\Desktop\\safe_3\\lab3_man"
+ 314      73657273 
+ 314      5C4D616E 
+ 314      69736861 
+ 314      20476F79 
+ 315 003f 69736861 		.ascii	"isha\\BLE Lab 3\\BLE Lab 3.cydsn\000"
+ 315      5C424C45 
+ 315      204C6162 
+ 315      20335C42 
+ 315      4C45204C 
+ 316              	.LASF17:
+ 317 005e 2E5C4765 		.ascii	".\\Generated_Source\\PSoC4\\Opamp_PM.c\000"
+ 317      6E657261 
+ 317      7465645F 
+ 317      536F7572 
+ 317      63655C50 
+ 318              	.LASF15:
+ 319 0082 4F70616D 		.ascii	"Opamp_Wakeup\000"
+ 319      705F5761 
+ 319      6B657570 
+ 319      00
+ 320              	.LASF9:
+ 321 008f 666C6F61 		.ascii	"float\000"
+ 321      7400
+ 322              	.LASF7:
+ 323 0095 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 323      206C6F6E 
+ 323      6720756E 
+ 323      7369676E 
+ 323      65642069 
+ 324              	.LASF1:
+ 325 00ac 756E7369 		.ascii	"unsigned char\000"
+ 325      676E6564 
+ 325      20636861 
+ 325      7200
+ 326              	.LASF13:
+ 327 00ba 4F70616D 		.ascii	"Opamp_RestoreConfig\000"
+ 327      705F5265 
+ 327      73746F72 
+ 327      65436F6E 
+ 327      66696700 
+ 328              	.LASF5:
+ 329 00ce 6C6F6E67 		.ascii	"long unsigned int\000"
+ 329      20756E73 
+ 329      69676E65 
+ 329      6420696E 
+ 329      7400
+ 330              	.LASF3:
+ 331 00e0 73686F72 		.ascii	"short unsigned int\000"
+ 331      7420756E 
+ 331      7369676E 
+ 331      65642069 
+ 331      6E7400
+ 332              	.LASF10:
+ 333 00f3 646F7562 		.ascii	"double\000"
+ 333      6C6500
+ 334              	.LASF14:
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\cc67TuIP.s 			page 10
+
+
+ 335 00fa 4F70616D 		.ascii	"Opamp_Sleep\000"
+ 335      705F536C 
+ 335      65657000 
+ 336              	.LASF8:
+ 337 0106 756E7369 		.ascii	"unsigned int\000"
+ 337      676E6564 
+ 337      20696E74 
+ 337      00
+ 338              	.LASF16:
+ 339 0113 474E5520 		.ascii	"GNU C 4.8.4 20140526 (release) [ARM/embedded-4_8-br"
+ 339      4320342E 
+ 339      382E3420 
+ 339      32303134 
+ 339      30353236 
+ 340 0146 616E6368 		.ascii	"anch revision 211358] -mcpu=cortex-m0 -mthumb -g -O"
+ 340      20726576 
+ 340      6973696F 
+ 340      6E203231 
+ 340      31333538 
+ 341 0179 30202D66 		.ascii	"0 -ffunction-sections\000"
+ 341      66756E63 
+ 341      74696F6E 
+ 341      2D736563 
+ 341      74696F6E 
+ 342              	.LASF6:
+ 343 018f 6C6F6E67 		.ascii	"long long int\000"
+ 343      206C6F6E 
+ 343      6720696E 
+ 343      7400
+ 344              	.LASF11:
+ 345 019d 63686172 		.ascii	"char\000"
+ 345      00
+ 346              	.LASF2:
+ 347 01a2 73686F72 		.ascii	"short int\000"
+ 347      7420696E 
+ 347      7400
+ 348              	.LASF4:
+ 349 01ac 6C6F6E67 		.ascii	"long int\000"
+ 349      20696E74 
+ 349      00
+ 350              	.LASF0:
+ 351 01b5 7369676E 		.ascii	"signed char\000"
+ 351      65642063 
+ 351      68617200 
+ 352              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.8.4 20140526 (release) [ARM/embedded-4_8-br

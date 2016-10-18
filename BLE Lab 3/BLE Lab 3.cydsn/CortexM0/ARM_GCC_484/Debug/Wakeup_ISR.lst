@@ -1,0 +1,1917 @@
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccmGLtBH.s 			page 1
+
+
+   1              		.cpu cortex-m0
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.code	16
+  13              		.file	"Wakeup_ISR.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.Wakeup_ISR_Start,"ax",%progbits
+  18              		.align	2
+  19              		.global	Wakeup_ISR_Start
+  20              		.code	16
+  21              		.thumb_func
+  22              		.type	Wakeup_ISR_Start, %function
+  23              	Wakeup_ISR_Start:
+  24              	.LFB2:
+  25              		.file 1 ".\\Generated_Source\\PSoC4\\Wakeup_ISR.c"
+   1:.\Generated_Source\PSoC4/Wakeup_ISR.c **** /*******************************************************************************
+   2:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * File Name: Wakeup_ISR.c  
+   3:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Version 1.70
+   4:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+   5:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *  Description:
+   6:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   API for controlling the state of an interrupt.
+   7:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+   8:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+   9:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *  Note:
+  10:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+  11:.\Generated_Source\PSoC4/Wakeup_ISR.c **** ********************************************************************************
+  12:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Copyright 2008-2015, Cypress Semiconductor Corporation.  All rights reserved.
+  13:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * You may use this file only in accordance with the license, terms, conditions, 
+  14:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * disclaimers, and limitations in the end user license agreement accompanying 
+  15:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * the software package with which this file was provided.
+  16:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *******************************************************************************/
+  17:.\Generated_Source\PSoC4/Wakeup_ISR.c **** 
+  18:.\Generated_Source\PSoC4/Wakeup_ISR.c **** 
+  19:.\Generated_Source\PSoC4/Wakeup_ISR.c **** #include <cydevice_trm.h>
+  20:.\Generated_Source\PSoC4/Wakeup_ISR.c **** #include <CyLib.h>
+  21:.\Generated_Source\PSoC4/Wakeup_ISR.c **** #include <Wakeup_ISR.h>
+  22:.\Generated_Source\PSoC4/Wakeup_ISR.c **** 
+  23:.\Generated_Source\PSoC4/Wakeup_ISR.c **** #if !defined(Wakeup_ISR__REMOVED) /* Check for removal by optimization */
+  24:.\Generated_Source\PSoC4/Wakeup_ISR.c **** 
+  25:.\Generated_Source\PSoC4/Wakeup_ISR.c **** /*******************************************************************************
+  26:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *  Place your includes, defines and code here 
+  27:.\Generated_Source\PSoC4/Wakeup_ISR.c **** ********************************************************************************/
+  28:.\Generated_Source\PSoC4/Wakeup_ISR.c **** /* `#START Wakeup_ISR_intc` */
+  29:.\Generated_Source\PSoC4/Wakeup_ISR.c **** 
+  30:.\Generated_Source\PSoC4/Wakeup_ISR.c **** /* `#END` */
+  31:.\Generated_Source\PSoC4/Wakeup_ISR.c **** 
+  32:.\Generated_Source\PSoC4/Wakeup_ISR.c **** extern cyisraddress CyRamVectors[CYINT_IRQ_BASE + CY_NUM_INTERRUPTS];
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccmGLtBH.s 			page 2
+
+
+  33:.\Generated_Source\PSoC4/Wakeup_ISR.c **** 
+  34:.\Generated_Source\PSoC4/Wakeup_ISR.c **** /* Declared in startup, used to set unused interrupts to. */
+  35:.\Generated_Source\PSoC4/Wakeup_ISR.c **** CY_ISR_PROTO(IntDefaultHandler);
+  36:.\Generated_Source\PSoC4/Wakeup_ISR.c **** 
+  37:.\Generated_Source\PSoC4/Wakeup_ISR.c **** 
+  38:.\Generated_Source\PSoC4/Wakeup_ISR.c **** /*******************************************************************************
+  39:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Function Name: Wakeup_ISR_Start
+  40:.\Generated_Source\PSoC4/Wakeup_ISR.c **** ********************************************************************************
+  41:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+  42:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Summary:
+  43:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *  Set up the interrupt and enable it. This function disables the interrupt, 
+  44:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *  sets the default interrupt vector, sets the priority from the value in the
+  45:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *  Design Wide Resources Interrupt Editor, then enables the interrupt to the 
+  46:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *  interrupt controller.
+  47:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+  48:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Parameters:  
+  49:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   None
+  50:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+  51:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Return:
+  52:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   None
+  53:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+  54:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *******************************************************************************/
+  55:.\Generated_Source\PSoC4/Wakeup_ISR.c **** void Wakeup_ISR_Start(void)
+  56:.\Generated_Source\PSoC4/Wakeup_ISR.c **** {
+  26              		.loc 1 56 0
+  27              		.cfi_startproc
+  28 0000 80B5     		push	{r7, lr}
+  29              		.cfi_def_cfa_offset 8
+  30              		.cfi_offset 7, -8
+  31              		.cfi_offset 14, -4
+  32 0002 00AF     		add	r7, sp, #0
+  33              		.cfi_def_cfa_register 7
+  57:.\Generated_Source\PSoC4/Wakeup_ISR.c ****     /* For all we know the interrupt is active. */
+  58:.\Generated_Source\PSoC4/Wakeup_ISR.c ****     Wakeup_ISR_Disable();
+  34              		.loc 1 58 0
+  35 0004 FFF7FEFF 		bl	Wakeup_ISR_Disable
+  59:.\Generated_Source\PSoC4/Wakeup_ISR.c **** 
+  60:.\Generated_Source\PSoC4/Wakeup_ISR.c ****     /* Set the ISR to point to the Wakeup_ISR Interrupt. */
+  61:.\Generated_Source\PSoC4/Wakeup_ISR.c ****     Wakeup_ISR_SetVector(&Wakeup_ISR_Interrupt);
+  36              		.loc 1 61 0
+  37 0008 054B     		ldr	r3, .L2
+  38 000a 181C     		mov	r0, r3
+  39 000c FFF7FEFF 		bl	Wakeup_ISR_SetVector
+  62:.\Generated_Source\PSoC4/Wakeup_ISR.c **** 
+  63:.\Generated_Source\PSoC4/Wakeup_ISR.c ****     /* Set the priority. */
+  64:.\Generated_Source\PSoC4/Wakeup_ISR.c ****     Wakeup_ISR_SetPriority((uint8)Wakeup_ISR_INTC_PRIOR_NUMBER);
+  40              		.loc 1 64 0
+  41 0010 0320     		mov	r0, #3
+  42 0012 FFF7FEFF 		bl	Wakeup_ISR_SetPriority
+  65:.\Generated_Source\PSoC4/Wakeup_ISR.c **** 
+  66:.\Generated_Source\PSoC4/Wakeup_ISR.c ****     /* Enable it. */
+  67:.\Generated_Source\PSoC4/Wakeup_ISR.c ****     Wakeup_ISR_Enable();
+  43              		.loc 1 67 0
+  44 0016 FFF7FEFF 		bl	Wakeup_ISR_Enable
+  68:.\Generated_Source\PSoC4/Wakeup_ISR.c **** }
+  45              		.loc 1 68 0
+  46 001a BD46     		mov	sp, r7
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccmGLtBH.s 			page 3
+
+
+  47              		@ sp needed
+  48 001c 80BD     		pop	{r7, pc}
+  49              	.L3:
+  50 001e C046     		.align	2
+  51              	.L2:
+  52 0020 00000000 		.word	Wakeup_ISR_Interrupt
+  53              		.cfi_endproc
+  54              	.LFE2:
+  55              		.size	Wakeup_ISR_Start, .-Wakeup_ISR_Start
+  56              		.section	.text.Wakeup_ISR_StartEx,"ax",%progbits
+  57              		.align	2
+  58              		.global	Wakeup_ISR_StartEx
+  59              		.code	16
+  60              		.thumb_func
+  61              		.type	Wakeup_ISR_StartEx, %function
+  62              	Wakeup_ISR_StartEx:
+  63              	.LFB3:
+  69:.\Generated_Source\PSoC4/Wakeup_ISR.c **** 
+  70:.\Generated_Source\PSoC4/Wakeup_ISR.c **** 
+  71:.\Generated_Source\PSoC4/Wakeup_ISR.c **** /*******************************************************************************
+  72:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Function Name: Wakeup_ISR_StartEx
+  73:.\Generated_Source\PSoC4/Wakeup_ISR.c **** ********************************************************************************
+  74:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+  75:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Summary:
+  76:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *  Sets up the interrupt and enables it. This function disables the interrupt,
+  77:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *  sets the interrupt vector based on the address passed in, sets the priority 
+  78:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *  from the value in the Design Wide Resources Interrupt Editor, then enables 
+  79:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *  the interrupt to the interrupt controller.
+  80:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *  
+  81:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *  When defining ISR functions, the CY_ISR and CY_ISR_PROTO macros should be 
+  82:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *  used to provide consistent definition across compilers:
+  83:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *  
+  84:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *  Function definition example:
+  85:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   CY_ISR(MyISR)
+  86:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   {
+  87:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   }
+  88:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   Function prototype example:
+  89:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   CY_ISR_PROTO(MyISR);
+  90:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+  91:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Parameters:  
+  92:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   address: Address of the ISR to set in the interrupt vector table.
+  93:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+  94:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Return:
+  95:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   None
+  96:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+  97:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *******************************************************************************/
+  98:.\Generated_Source\PSoC4/Wakeup_ISR.c **** void Wakeup_ISR_StartEx(cyisraddress address)
+  99:.\Generated_Source\PSoC4/Wakeup_ISR.c **** {
+  64              		.loc 1 99 0
+  65              		.cfi_startproc
+  66 0000 80B5     		push	{r7, lr}
+  67              		.cfi_def_cfa_offset 8
+  68              		.cfi_offset 7, -8
+  69              		.cfi_offset 14, -4
+  70 0002 82B0     		sub	sp, sp, #8
+  71              		.cfi_def_cfa_offset 16
+  72 0004 00AF     		add	r7, sp, #0
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccmGLtBH.s 			page 4
+
+
+  73              		.cfi_def_cfa_register 7
+  74 0006 7860     		str	r0, [r7, #4]
+ 100:.\Generated_Source\PSoC4/Wakeup_ISR.c ****     /* For all we know the interrupt is active. */
+ 101:.\Generated_Source\PSoC4/Wakeup_ISR.c ****     Wakeup_ISR_Disable();
+  75              		.loc 1 101 0
+  76 0008 FFF7FEFF 		bl	Wakeup_ISR_Disable
+ 102:.\Generated_Source\PSoC4/Wakeup_ISR.c **** 
+ 103:.\Generated_Source\PSoC4/Wakeup_ISR.c ****     /* Set the ISR to point to the Wakeup_ISR Interrupt. */
+ 104:.\Generated_Source\PSoC4/Wakeup_ISR.c ****     Wakeup_ISR_SetVector(address);
+  77              		.loc 1 104 0
+  78 000c 7B68     		ldr	r3, [r7, #4]
+  79 000e 181C     		mov	r0, r3
+  80 0010 FFF7FEFF 		bl	Wakeup_ISR_SetVector
+ 105:.\Generated_Source\PSoC4/Wakeup_ISR.c **** 
+ 106:.\Generated_Source\PSoC4/Wakeup_ISR.c ****     /* Set the priority. */
+ 107:.\Generated_Source\PSoC4/Wakeup_ISR.c ****     Wakeup_ISR_SetPriority((uint8)Wakeup_ISR_INTC_PRIOR_NUMBER);
+  81              		.loc 1 107 0
+  82 0014 0320     		mov	r0, #3
+  83 0016 FFF7FEFF 		bl	Wakeup_ISR_SetPriority
+ 108:.\Generated_Source\PSoC4/Wakeup_ISR.c **** 
+ 109:.\Generated_Source\PSoC4/Wakeup_ISR.c ****     /* Enable it. */
+ 110:.\Generated_Source\PSoC4/Wakeup_ISR.c ****     Wakeup_ISR_Enable();
+  84              		.loc 1 110 0
+  85 001a FFF7FEFF 		bl	Wakeup_ISR_Enable
+ 111:.\Generated_Source\PSoC4/Wakeup_ISR.c **** }
+  86              		.loc 1 111 0
+  87 001e BD46     		mov	sp, r7
+  88 0020 02B0     		add	sp, sp, #8
+  89              		@ sp needed
+  90 0022 80BD     		pop	{r7, pc}
+  91              		.cfi_endproc
+  92              	.LFE3:
+  93              		.size	Wakeup_ISR_StartEx, .-Wakeup_ISR_StartEx
+  94              		.section	.text.Wakeup_ISR_Stop,"ax",%progbits
+  95              		.align	2
+  96              		.global	Wakeup_ISR_Stop
+  97              		.code	16
+  98              		.thumb_func
+  99              		.type	Wakeup_ISR_Stop, %function
+ 100              	Wakeup_ISR_Stop:
+ 101              	.LFB4:
+ 112:.\Generated_Source\PSoC4/Wakeup_ISR.c **** 
+ 113:.\Generated_Source\PSoC4/Wakeup_ISR.c **** 
+ 114:.\Generated_Source\PSoC4/Wakeup_ISR.c **** /*******************************************************************************
+ 115:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Function Name: Wakeup_ISR_Stop
+ 116:.\Generated_Source\PSoC4/Wakeup_ISR.c **** ********************************************************************************
+ 117:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+ 118:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Summary:
+ 119:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   Disables and removes the interrupt.
+ 120:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+ 121:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Parameters:  
+ 122:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   None
+ 123:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+ 124:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Return:
+ 125:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   None
+ 126:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+ 127:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *******************************************************************************/
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccmGLtBH.s 			page 5
+
+
+ 128:.\Generated_Source\PSoC4/Wakeup_ISR.c **** void Wakeup_ISR_Stop(void)
+ 129:.\Generated_Source\PSoC4/Wakeup_ISR.c **** {
+ 102              		.loc 1 129 0
+ 103              		.cfi_startproc
+ 104 0000 80B5     		push	{r7, lr}
+ 105              		.cfi_def_cfa_offset 8
+ 106              		.cfi_offset 7, -8
+ 107              		.cfi_offset 14, -4
+ 108 0002 00AF     		add	r7, sp, #0
+ 109              		.cfi_def_cfa_register 7
+ 130:.\Generated_Source\PSoC4/Wakeup_ISR.c ****     /* Disable this interrupt. */
+ 131:.\Generated_Source\PSoC4/Wakeup_ISR.c ****     Wakeup_ISR_Disable();
+ 110              		.loc 1 131 0
+ 111 0004 FFF7FEFF 		bl	Wakeup_ISR_Disable
+ 132:.\Generated_Source\PSoC4/Wakeup_ISR.c **** 
+ 133:.\Generated_Source\PSoC4/Wakeup_ISR.c ****     /* Set the ISR to point to the passive one. */
+ 134:.\Generated_Source\PSoC4/Wakeup_ISR.c ****     Wakeup_ISR_SetVector(&IntDefaultHandler);
+ 112              		.loc 1 134 0
+ 113 0008 024B     		ldr	r3, .L6
+ 114 000a 181C     		mov	r0, r3
+ 115 000c FFF7FEFF 		bl	Wakeup_ISR_SetVector
+ 135:.\Generated_Source\PSoC4/Wakeup_ISR.c **** }
+ 116              		.loc 1 135 0
+ 117 0010 BD46     		mov	sp, r7
+ 118              		@ sp needed
+ 119 0012 80BD     		pop	{r7, pc}
+ 120              	.L7:
+ 121              		.align	2
+ 122              	.L6:
+ 123 0014 00000000 		.word	IntDefaultHandler
+ 124              		.cfi_endproc
+ 125              	.LFE4:
+ 126              		.size	Wakeup_ISR_Stop, .-Wakeup_ISR_Stop
+ 127              		.section	.text.Wakeup_ISR_Interrupt,"ax",%progbits
+ 128              		.align	2
+ 129              		.global	Wakeup_ISR_Interrupt
+ 130              		.code	16
+ 131              		.thumb_func
+ 132              		.type	Wakeup_ISR_Interrupt, %function
+ 133              	Wakeup_ISR_Interrupt:
+ 134              	.LFB5:
+ 136:.\Generated_Source\PSoC4/Wakeup_ISR.c **** 
+ 137:.\Generated_Source\PSoC4/Wakeup_ISR.c **** 
+ 138:.\Generated_Source\PSoC4/Wakeup_ISR.c **** /*******************************************************************************
+ 139:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Function Name: Wakeup_ISR_Interrupt
+ 140:.\Generated_Source\PSoC4/Wakeup_ISR.c **** ********************************************************************************
+ 141:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+ 142:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Summary:
+ 143:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   The default Interrupt Service Routine for Wakeup_ISR.
+ 144:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+ 145:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   Add custom code between the START and END comments to keep the next version
+ 146:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   of this file from over-writing your code.
+ 147:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+ 148:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   Note You may use either the default ISR by using this API, or you may define
+ 149:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   your own separate ISR through ISR_StartEx().
+ 150:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+ 151:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Parameters:  
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccmGLtBH.s 			page 6
+
+
+ 152:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   None
+ 153:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+ 154:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Return:
+ 155:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   None
+ 156:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+ 157:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *******************************************************************************/
+ 158:.\Generated_Source\PSoC4/Wakeup_ISR.c **** CY_ISR(Wakeup_ISR_Interrupt)
+ 159:.\Generated_Source\PSoC4/Wakeup_ISR.c **** {
+ 135              		.loc 1 159 0
+ 136              		.cfi_startproc
+ 137 0000 80B5     		push	{r7, lr}
+ 138              		.cfi_def_cfa_offset 8
+ 139              		.cfi_offset 7, -8
+ 140              		.cfi_offset 14, -4
+ 141 0002 00AF     		add	r7, sp, #0
+ 142              		.cfi_def_cfa_register 7
+ 160:.\Generated_Source\PSoC4/Wakeup_ISR.c ****     /*  Place your Interrupt code here. */
+ 161:.\Generated_Source\PSoC4/Wakeup_ISR.c ****     /* `#START Wakeup_ISR_Interrupt` */
+ 162:.\Generated_Source\PSoC4/Wakeup_ISR.c **** 
+ 163:.\Generated_Source\PSoC4/Wakeup_ISR.c ****     /* `#END` */
+ 164:.\Generated_Source\PSoC4/Wakeup_ISR.c **** }
+ 143              		.loc 1 164 0
+ 144 0004 BD46     		mov	sp, r7
+ 145              		@ sp needed
+ 146 0006 80BD     		pop	{r7, pc}
+ 147              		.cfi_endproc
+ 148              	.LFE5:
+ 149              		.size	Wakeup_ISR_Interrupt, .-Wakeup_ISR_Interrupt
+ 150              		.section	.text.Wakeup_ISR_SetVector,"ax",%progbits
+ 151              		.align	2
+ 152              		.global	Wakeup_ISR_SetVector
+ 153              		.code	16
+ 154              		.thumb_func
+ 155              		.type	Wakeup_ISR_SetVector, %function
+ 156              	Wakeup_ISR_SetVector:
+ 157              	.LFB6:
+ 165:.\Generated_Source\PSoC4/Wakeup_ISR.c **** 
+ 166:.\Generated_Source\PSoC4/Wakeup_ISR.c **** 
+ 167:.\Generated_Source\PSoC4/Wakeup_ISR.c **** /*******************************************************************************
+ 168:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Function Name: Wakeup_ISR_SetVector
+ 169:.\Generated_Source\PSoC4/Wakeup_ISR.c **** ********************************************************************************
+ 170:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+ 171:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Summary:
+ 172:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   Change the ISR vector for the Interrupt. Note calling Wakeup_ISR_Start
+ 173:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   will override any effect this method would have had. To set the vector 
+ 174:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   before the component has been started use Wakeup_ISR_StartEx instead.
+ 175:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * 
+ 176:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   When defining ISR functions, the CY_ISR and CY_ISR_PROTO macros should be 
+ 177:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   used to provide consistent definition across compilers:
+ 178:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+ 179:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   Function definition example:
+ 180:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   CY_ISR(MyISR)
+ 181:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   {
+ 182:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   }
+ 183:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+ 184:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   Function prototype example:
+ 185:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *     CY_ISR_PROTO(MyISR);
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccmGLtBH.s 			page 7
+
+
+ 186:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+ 187:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Parameters:
+ 188:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   address: Address of the ISR to set in the interrupt vector table.
+ 189:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+ 190:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Return:
+ 191:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   None
+ 192:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+ 193:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *******************************************************************************/
+ 194:.\Generated_Source\PSoC4/Wakeup_ISR.c **** void Wakeup_ISR_SetVector(cyisraddress address)
+ 195:.\Generated_Source\PSoC4/Wakeup_ISR.c **** {
+ 158              		.loc 1 195 0
+ 159              		.cfi_startproc
+ 160 0000 80B5     		push	{r7, lr}
+ 161              		.cfi_def_cfa_offset 8
+ 162              		.cfi_offset 7, -8
+ 163              		.cfi_offset 14, -4
+ 164 0002 82B0     		sub	sp, sp, #8
+ 165              		.cfi_def_cfa_offset 16
+ 166 0004 00AF     		add	r7, sp, #0
+ 167              		.cfi_def_cfa_register 7
+ 168 0006 7860     		str	r0, [r7, #4]
+ 196:.\Generated_Source\PSoC4/Wakeup_ISR.c ****     CyRamVectors[CYINT_IRQ_BASE + Wakeup_ISR__INTC_NUMBER] = address;
+ 169              		.loc 1 196 0
+ 170 0008 024B     		ldr	r3, .L10
+ 171 000a 7A68     		ldr	r2, [r7, #4]
+ 172 000c 9A64     		str	r2, [r3, #72]
+ 197:.\Generated_Source\PSoC4/Wakeup_ISR.c **** }
+ 173              		.loc 1 197 0
+ 174 000e BD46     		mov	sp, r7
+ 175 0010 02B0     		add	sp, sp, #8
+ 176              		@ sp needed
+ 177 0012 80BD     		pop	{r7, pc}
+ 178              	.L11:
+ 179              		.align	2
+ 180              	.L10:
+ 181 0014 00000000 		.word	CyRamVectors
+ 182              		.cfi_endproc
+ 183              	.LFE6:
+ 184              		.size	Wakeup_ISR_SetVector, .-Wakeup_ISR_SetVector
+ 185              		.section	.text.Wakeup_ISR_GetVector,"ax",%progbits
+ 186              		.align	2
+ 187              		.global	Wakeup_ISR_GetVector
+ 188              		.code	16
+ 189              		.thumb_func
+ 190              		.type	Wakeup_ISR_GetVector, %function
+ 191              	Wakeup_ISR_GetVector:
+ 192              	.LFB7:
+ 198:.\Generated_Source\PSoC4/Wakeup_ISR.c **** 
+ 199:.\Generated_Source\PSoC4/Wakeup_ISR.c **** 
+ 200:.\Generated_Source\PSoC4/Wakeup_ISR.c **** /*******************************************************************************
+ 201:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Function Name: Wakeup_ISR_GetVector
+ 202:.\Generated_Source\PSoC4/Wakeup_ISR.c **** ********************************************************************************
+ 203:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+ 204:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Summary:
+ 205:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   Gets the "address" of the current ISR vector for the Interrupt.
+ 206:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+ 207:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Parameters:
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccmGLtBH.s 			page 8
+
+
+ 208:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   None
+ 209:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+ 210:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Return:
+ 211:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   Address of the ISR in the interrupt vector table.
+ 212:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+ 213:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *******************************************************************************/
+ 214:.\Generated_Source\PSoC4/Wakeup_ISR.c **** cyisraddress Wakeup_ISR_GetVector(void)
+ 215:.\Generated_Source\PSoC4/Wakeup_ISR.c **** {
+ 193              		.loc 1 215 0
+ 194              		.cfi_startproc
+ 195 0000 80B5     		push	{r7, lr}
+ 196              		.cfi_def_cfa_offset 8
+ 197              		.cfi_offset 7, -8
+ 198              		.cfi_offset 14, -4
+ 199 0002 00AF     		add	r7, sp, #0
+ 200              		.cfi_def_cfa_register 7
+ 216:.\Generated_Source\PSoC4/Wakeup_ISR.c ****     return CyRamVectors[CYINT_IRQ_BASE + Wakeup_ISR__INTC_NUMBER];
+ 201              		.loc 1 216 0
+ 202 0004 024B     		ldr	r3, .L14
+ 203 0006 9B6C     		ldr	r3, [r3, #72]
+ 217:.\Generated_Source\PSoC4/Wakeup_ISR.c **** }
+ 204              		.loc 1 217 0
+ 205 0008 181C     		mov	r0, r3
+ 206 000a BD46     		mov	sp, r7
+ 207              		@ sp needed
+ 208 000c 80BD     		pop	{r7, pc}
+ 209              	.L15:
+ 210 000e C046     		.align	2
+ 211              	.L14:
+ 212 0010 00000000 		.word	CyRamVectors
+ 213              		.cfi_endproc
+ 214              	.LFE7:
+ 215              		.size	Wakeup_ISR_GetVector, .-Wakeup_ISR_GetVector
+ 216              		.section	.text.Wakeup_ISR_SetPriority,"ax",%progbits
+ 217              		.align	2
+ 218              		.global	Wakeup_ISR_SetPriority
+ 219              		.code	16
+ 220              		.thumb_func
+ 221              		.type	Wakeup_ISR_SetPriority, %function
+ 222              	Wakeup_ISR_SetPriority:
+ 223              	.LFB8:
+ 218:.\Generated_Source\PSoC4/Wakeup_ISR.c **** 
+ 219:.\Generated_Source\PSoC4/Wakeup_ISR.c **** 
+ 220:.\Generated_Source\PSoC4/Wakeup_ISR.c **** /*******************************************************************************
+ 221:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Function Name: Wakeup_ISR_SetPriority
+ 222:.\Generated_Source\PSoC4/Wakeup_ISR.c **** ********************************************************************************
+ 223:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+ 224:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Summary:
+ 225:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   Sets the Priority of the Interrupt. 
+ 226:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+ 227:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   Note calling Wakeup_ISR_Start or Wakeup_ISR_StartEx will 
+ 228:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   override any effect this API would have had. This API should only be called
+ 229:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   after Wakeup_ISR_Start or Wakeup_ISR_StartEx has been called. 
+ 230:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   To set the initial priority for the component, use the Design-Wide Resources
+ 231:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   Interrupt Editor.
+ 232:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+ 233:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   Note This API has no effect on Non-maskable interrupt NMI).
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccmGLtBH.s 			page 9
+
+
+ 234:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+ 235:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Parameters:
+ 236:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   priority: Priority of the interrupt, 0 being the highest priority
+ 237:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *             PSoC 3 and PSoC 5LP: Priority is from 0 to 7.
+ 238:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *             PSoC 4: Priority is from 0 to 3.
+ 239:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+ 240:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Return:
+ 241:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   None
+ 242:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+ 243:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *******************************************************************************/
+ 244:.\Generated_Source\PSoC4/Wakeup_ISR.c **** void Wakeup_ISR_SetPriority(uint8 priority)
+ 245:.\Generated_Source\PSoC4/Wakeup_ISR.c **** {
+ 224              		.loc 1 245 0
+ 225              		.cfi_startproc
+ 226 0000 90B5     		push	{r4, r7, lr}
+ 227              		.cfi_def_cfa_offset 12
+ 228              		.cfi_offset 4, -12
+ 229              		.cfi_offset 7, -8
+ 230              		.cfi_offset 14, -4
+ 231 0002 85B0     		sub	sp, sp, #20
+ 232              		.cfi_def_cfa_offset 32
+ 233 0004 00AF     		add	r7, sp, #0
+ 234              		.cfi_def_cfa_register 7
+ 235 0006 021C     		mov	r2, r0
+ 236 0008 FB1D     		add	r3, r7, #7
+ 237 000a 1A70     		strb	r2, [r3]
+ 246:.\Generated_Source\PSoC4/Wakeup_ISR.c **** 	uint8 interruptState;
+ 247:.\Generated_Source\PSoC4/Wakeup_ISR.c ****     uint32 priorityOffset = ((Wakeup_ISR__INTC_NUMBER % 4u) * 8u) + 6u;
+ 238              		.loc 1 247 0
+ 239 000c 1623     		mov	r3, #22
+ 240 000e FB60     		str	r3, [r7, #12]
+ 248:.\Generated_Source\PSoC4/Wakeup_ISR.c ****     
+ 249:.\Generated_Source\PSoC4/Wakeup_ISR.c **** 	interruptState = CyEnterCriticalSection();
+ 241              		.loc 1 249 0
+ 242 0010 3C1C     		mov	r4, r7
+ 243 0012 0B34     		add	r4, r4, #11
+ 244 0014 FFF7FEFF 		bl	CyEnterCriticalSection
+ 245 0018 031C     		mov	r3, r0
+ 246 001a 2370     		strb	r3, [r4]
+ 250:.\Generated_Source\PSoC4/Wakeup_ISR.c ****     *Wakeup_ISR_INTC_PRIOR = (*Wakeup_ISR_INTC_PRIOR & (uint32)(~Wakeup_ISR__INTC_PRIOR_MASK)) |
+ 247              		.loc 1 250 0
+ 248 001c 0A4B     		ldr	r3, .L17
+ 249 001e 0A4A     		ldr	r2, .L17
+ 250 0020 1168     		ldr	r1, [r2]
+ 251 0022 0A4A     		ldr	r2, .L17+4
+ 252 0024 1140     		and	r1, r2
+ 251:.\Generated_Source\PSoC4/Wakeup_ISR.c ****                                     ((uint32)priority << priorityOffset);
+ 253              		.loc 1 251 0
+ 254 0026 FA1D     		add	r2, r7, #7
+ 255 0028 1078     		ldrb	r0, [r2]
+ 256 002a FA68     		ldr	r2, [r7, #12]
+ 257 002c 041C     		mov	r4, r0
+ 258 002e 9440     		lsl	r4, r4, r2
+ 259 0030 221C     		mov	r2, r4
+ 250:.\Generated_Source\PSoC4/Wakeup_ISR.c ****     *Wakeup_ISR_INTC_PRIOR = (*Wakeup_ISR_INTC_PRIOR & (uint32)(~Wakeup_ISR__INTC_PRIOR_MASK)) |
+ 260              		.loc 1 250 0
+ 261 0032 0A43     		orr	r2, r1
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccmGLtBH.s 			page 10
+
+
+ 262 0034 1A60     		str	r2, [r3]
+ 252:.\Generated_Source\PSoC4/Wakeup_ISR.c **** 	CyExitCriticalSection(interruptState);
+ 263              		.loc 1 252 0
+ 264 0036 3B1C     		mov	r3, r7
+ 265 0038 0B33     		add	r3, r3, #11
+ 266 003a 1B78     		ldrb	r3, [r3]
+ 267 003c 181C     		mov	r0, r3
+ 268 003e FFF7FEFF 		bl	CyExitCriticalSection
+ 253:.\Generated_Source\PSoC4/Wakeup_ISR.c **** }
+ 269              		.loc 1 253 0
+ 270 0042 BD46     		mov	sp, r7
+ 271 0044 05B0     		add	sp, sp, #20
+ 272              		@ sp needed
+ 273 0046 90BD     		pop	{r4, r7, pc}
+ 274              	.L18:
+ 275              		.align	2
+ 276              	.L17:
+ 277 0048 00E400E0 		.word	-536812544
+ 278 004c FFFF3FFF 		.word	-12582913
+ 279              		.cfi_endproc
+ 280              	.LFE8:
+ 281              		.size	Wakeup_ISR_SetPriority, .-Wakeup_ISR_SetPriority
+ 282              		.section	.text.Wakeup_ISR_GetPriority,"ax",%progbits
+ 283              		.align	2
+ 284              		.global	Wakeup_ISR_GetPriority
+ 285              		.code	16
+ 286              		.thumb_func
+ 287              		.type	Wakeup_ISR_GetPriority, %function
+ 288              	Wakeup_ISR_GetPriority:
+ 289              	.LFB9:
+ 254:.\Generated_Source\PSoC4/Wakeup_ISR.c **** 
+ 255:.\Generated_Source\PSoC4/Wakeup_ISR.c **** 
+ 256:.\Generated_Source\PSoC4/Wakeup_ISR.c **** /*******************************************************************************
+ 257:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Function Name: Wakeup_ISR_GetPriority
+ 258:.\Generated_Source\PSoC4/Wakeup_ISR.c **** ********************************************************************************
+ 259:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+ 260:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Summary:
+ 261:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   Gets the Priority of the Interrupt.
+ 262:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+ 263:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Parameters:
+ 264:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   None
+ 265:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+ 266:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Return:
+ 267:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   Priority of the interrupt, 0 being the highest priority
+ 268:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *    PSoC 3 and PSoC 5LP: Priority is from 0 to 7.
+ 269:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *    PSoC 4: Priority is from 0 to 3.
+ 270:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+ 271:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *******************************************************************************/
+ 272:.\Generated_Source\PSoC4/Wakeup_ISR.c **** uint8 Wakeup_ISR_GetPriority(void)
+ 273:.\Generated_Source\PSoC4/Wakeup_ISR.c **** {
+ 290              		.loc 1 273 0
+ 291              		.cfi_startproc
+ 292 0000 80B5     		push	{r7, lr}
+ 293              		.cfi_def_cfa_offset 8
+ 294              		.cfi_offset 7, -8
+ 295              		.cfi_offset 14, -4
+ 296 0002 82B0     		sub	sp, sp, #8
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccmGLtBH.s 			page 11
+
+
+ 297              		.cfi_def_cfa_offset 16
+ 298 0004 00AF     		add	r7, sp, #0
+ 299              		.cfi_def_cfa_register 7
+ 274:.\Generated_Source\PSoC4/Wakeup_ISR.c ****     uint32 priority;
+ 275:.\Generated_Source\PSoC4/Wakeup_ISR.c **** 	uint32 priorityOffset = ((Wakeup_ISR__INTC_NUMBER % 4u) * 8u) + 6u;
+ 300              		.loc 1 275 0
+ 301 0006 1623     		mov	r3, #22
+ 302 0008 7B60     		str	r3, [r7, #4]
+ 276:.\Generated_Source\PSoC4/Wakeup_ISR.c **** 
+ 277:.\Generated_Source\PSoC4/Wakeup_ISR.c ****     priority = (*Wakeup_ISR_INTC_PRIOR & Wakeup_ISR__INTC_PRIOR_MASK) >> priorityOffset;
+ 303              		.loc 1 277 0
+ 304 000a 084B     		ldr	r3, .L21
+ 305 000c 1A68     		ldr	r2, [r3]
+ 306 000e C023     		mov	r3, #192
+ 307 0010 1B04     		lsl	r3, r3, #16
+ 308 0012 1A40     		and	r2, r3
+ 309 0014 7B68     		ldr	r3, [r7, #4]
+ 310 0016 111C     		mov	r1, r2
+ 311 0018 D940     		lsr	r1, r1, r3
+ 312 001a 0B1C     		mov	r3, r1
+ 313 001c 3B60     		str	r3, [r7]
+ 278:.\Generated_Source\PSoC4/Wakeup_ISR.c **** 
+ 279:.\Generated_Source\PSoC4/Wakeup_ISR.c ****     return (uint8)priority;
+ 314              		.loc 1 279 0
+ 315 001e 3B68     		ldr	r3, [r7]
+ 316 0020 DBB2     		uxtb	r3, r3
+ 280:.\Generated_Source\PSoC4/Wakeup_ISR.c **** }
+ 317              		.loc 1 280 0
+ 318 0022 181C     		mov	r0, r3
+ 319 0024 BD46     		mov	sp, r7
+ 320 0026 02B0     		add	sp, sp, #8
+ 321              		@ sp needed
+ 322 0028 80BD     		pop	{r7, pc}
+ 323              	.L22:
+ 324 002a C046     		.align	2
+ 325              	.L21:
+ 326 002c 00E400E0 		.word	-536812544
+ 327              		.cfi_endproc
+ 328              	.LFE9:
+ 329              		.size	Wakeup_ISR_GetPriority, .-Wakeup_ISR_GetPriority
+ 330              		.section	.text.Wakeup_ISR_Enable,"ax",%progbits
+ 331              		.align	2
+ 332              		.global	Wakeup_ISR_Enable
+ 333              		.code	16
+ 334              		.thumb_func
+ 335              		.type	Wakeup_ISR_Enable, %function
+ 336              	Wakeup_ISR_Enable:
+ 337              	.LFB10:
+ 281:.\Generated_Source\PSoC4/Wakeup_ISR.c **** 
+ 282:.\Generated_Source\PSoC4/Wakeup_ISR.c **** 
+ 283:.\Generated_Source\PSoC4/Wakeup_ISR.c **** /*******************************************************************************
+ 284:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Function Name: Wakeup_ISR_Enable
+ 285:.\Generated_Source\PSoC4/Wakeup_ISR.c **** ********************************************************************************
+ 286:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+ 287:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Summary:
+ 288:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   Enables the interrupt to the interrupt controller. Do not call this function
+ 289:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   unless ISR_Start() has been called or the functionality of the ISR_Start() 
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccmGLtBH.s 			page 12
+
+
+ 290:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   function, which sets the vector and the priority, has been called.
+ 291:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+ 292:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Parameters:
+ 293:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   None
+ 294:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+ 295:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Return:
+ 296:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   None
+ 297:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+ 298:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *******************************************************************************/
+ 299:.\Generated_Source\PSoC4/Wakeup_ISR.c **** void Wakeup_ISR_Enable(void)
+ 300:.\Generated_Source\PSoC4/Wakeup_ISR.c **** {
+ 338              		.loc 1 300 0
+ 339              		.cfi_startproc
+ 340 0000 80B5     		push	{r7, lr}
+ 341              		.cfi_def_cfa_offset 8
+ 342              		.cfi_offset 7, -8
+ 343              		.cfi_offset 14, -4
+ 344 0002 00AF     		add	r7, sp, #0
+ 345              		.cfi_def_cfa_register 7
+ 301:.\Generated_Source\PSoC4/Wakeup_ISR.c ****     /* Enable the general interrupt. */
+ 302:.\Generated_Source\PSoC4/Wakeup_ISR.c ****     *Wakeup_ISR_INTC_SET_EN = Wakeup_ISR__INTC_MASK;
+ 346              		.loc 1 302 0
+ 347 0004 024B     		ldr	r3, .L24
+ 348 0006 0422     		mov	r2, #4
+ 349 0008 1A60     		str	r2, [r3]
+ 303:.\Generated_Source\PSoC4/Wakeup_ISR.c **** }
+ 350              		.loc 1 303 0
+ 351 000a BD46     		mov	sp, r7
+ 352              		@ sp needed
+ 353 000c 80BD     		pop	{r7, pc}
+ 354              	.L25:
+ 355 000e C046     		.align	2
+ 356              	.L24:
+ 357 0010 00E100E0 		.word	-536813312
+ 358              		.cfi_endproc
+ 359              	.LFE10:
+ 360              		.size	Wakeup_ISR_Enable, .-Wakeup_ISR_Enable
+ 361              		.section	.text.Wakeup_ISR_GetState,"ax",%progbits
+ 362              		.align	2
+ 363              		.global	Wakeup_ISR_GetState
+ 364              		.code	16
+ 365              		.thumb_func
+ 366              		.type	Wakeup_ISR_GetState, %function
+ 367              	Wakeup_ISR_GetState:
+ 368              	.LFB11:
+ 304:.\Generated_Source\PSoC4/Wakeup_ISR.c **** 
+ 305:.\Generated_Source\PSoC4/Wakeup_ISR.c **** 
+ 306:.\Generated_Source\PSoC4/Wakeup_ISR.c **** /*******************************************************************************
+ 307:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Function Name: Wakeup_ISR_GetState
+ 308:.\Generated_Source\PSoC4/Wakeup_ISR.c **** ********************************************************************************
+ 309:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+ 310:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Summary:
+ 311:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   Gets the state (enabled, disabled) of the Interrupt.
+ 312:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+ 313:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Parameters:
+ 314:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   None
+ 315:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccmGLtBH.s 			page 13
+
+
+ 316:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Return:
+ 317:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   1 if enabled, 0 if disabled.
+ 318:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+ 319:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *******************************************************************************/
+ 320:.\Generated_Source\PSoC4/Wakeup_ISR.c **** uint8 Wakeup_ISR_GetState(void)
+ 321:.\Generated_Source\PSoC4/Wakeup_ISR.c **** {
+ 369              		.loc 1 321 0
+ 370              		.cfi_startproc
+ 371 0000 80B5     		push	{r7, lr}
+ 372              		.cfi_def_cfa_offset 8
+ 373              		.cfi_offset 7, -8
+ 374              		.cfi_offset 14, -4
+ 375 0002 00AF     		add	r7, sp, #0
+ 376              		.cfi_def_cfa_register 7
+ 322:.\Generated_Source\PSoC4/Wakeup_ISR.c ****     /* Get the state of the general interrupt. */
+ 323:.\Generated_Source\PSoC4/Wakeup_ISR.c ****     return ((*Wakeup_ISR_INTC_SET_EN & (uint32)Wakeup_ISR__INTC_MASK) != 0u) ? 1u:0u;
+ 377              		.loc 1 323 0
+ 378 0004 054B     		ldr	r3, .L30
+ 379 0006 1A68     		ldr	r2, [r3]
+ 380 0008 0423     		mov	r3, #4
+ 381 000a 1340     		and	r3, r2
+ 382 000c 01D0     		beq	.L27
+ 383              		.loc 1 323 0 is_stmt 0 discriminator 1
+ 384 000e 0123     		mov	r3, #1
+ 385 0010 00E0     		b	.L28
+ 386              	.L27:
+ 387              		.loc 1 323 0 discriminator 2
+ 388 0012 0023     		mov	r3, #0
+ 389              	.L28:
+ 324:.\Generated_Source\PSoC4/Wakeup_ISR.c **** }
+ 390              		.loc 1 324 0 is_stmt 1 discriminator 3
+ 391 0014 181C     		mov	r0, r3
+ 392 0016 BD46     		mov	sp, r7
+ 393              		@ sp needed
+ 394 0018 80BD     		pop	{r7, pc}
+ 395              	.L31:
+ 396 001a C046     		.align	2
+ 397              	.L30:
+ 398 001c 00E100E0 		.word	-536813312
+ 399              		.cfi_endproc
+ 400              	.LFE11:
+ 401              		.size	Wakeup_ISR_GetState, .-Wakeup_ISR_GetState
+ 402              		.section	.text.Wakeup_ISR_Disable,"ax",%progbits
+ 403              		.align	2
+ 404              		.global	Wakeup_ISR_Disable
+ 405              		.code	16
+ 406              		.thumb_func
+ 407              		.type	Wakeup_ISR_Disable, %function
+ 408              	Wakeup_ISR_Disable:
+ 409              	.LFB12:
+ 325:.\Generated_Source\PSoC4/Wakeup_ISR.c **** 
+ 326:.\Generated_Source\PSoC4/Wakeup_ISR.c **** 
+ 327:.\Generated_Source\PSoC4/Wakeup_ISR.c **** /*******************************************************************************
+ 328:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Function Name: Wakeup_ISR_Disable
+ 329:.\Generated_Source\PSoC4/Wakeup_ISR.c **** ********************************************************************************
+ 330:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+ 331:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Summary:
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccmGLtBH.s 			page 14
+
+
+ 332:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   Disables the Interrupt in the interrupt controller.
+ 333:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+ 334:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Parameters:
+ 335:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   None
+ 336:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+ 337:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Return:
+ 338:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   None
+ 339:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+ 340:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *******************************************************************************/
+ 341:.\Generated_Source\PSoC4/Wakeup_ISR.c **** void Wakeup_ISR_Disable(void)
+ 342:.\Generated_Source\PSoC4/Wakeup_ISR.c **** {
+ 410              		.loc 1 342 0
+ 411              		.cfi_startproc
+ 412 0000 80B5     		push	{r7, lr}
+ 413              		.cfi_def_cfa_offset 8
+ 414              		.cfi_offset 7, -8
+ 415              		.cfi_offset 14, -4
+ 416 0002 00AF     		add	r7, sp, #0
+ 417              		.cfi_def_cfa_register 7
+ 343:.\Generated_Source\PSoC4/Wakeup_ISR.c ****     /* Disable the general interrupt. */
+ 344:.\Generated_Source\PSoC4/Wakeup_ISR.c ****     *Wakeup_ISR_INTC_CLR_EN = Wakeup_ISR__INTC_MASK;
+ 418              		.loc 1 344 0
+ 419 0004 024B     		ldr	r3, .L33
+ 420 0006 0422     		mov	r2, #4
+ 421 0008 1A60     		str	r2, [r3]
+ 345:.\Generated_Source\PSoC4/Wakeup_ISR.c **** }
+ 422              		.loc 1 345 0
+ 423 000a BD46     		mov	sp, r7
+ 424              		@ sp needed
+ 425 000c 80BD     		pop	{r7, pc}
+ 426              	.L34:
+ 427 000e C046     		.align	2
+ 428              	.L33:
+ 429 0010 80E100E0 		.word	-536813184
+ 430              		.cfi_endproc
+ 431              	.LFE12:
+ 432              		.size	Wakeup_ISR_Disable, .-Wakeup_ISR_Disable
+ 433              		.section	.text.Wakeup_ISR_SetPending,"ax",%progbits
+ 434              		.align	2
+ 435              		.global	Wakeup_ISR_SetPending
+ 436              		.code	16
+ 437              		.thumb_func
+ 438              		.type	Wakeup_ISR_SetPending, %function
+ 439              	Wakeup_ISR_SetPending:
+ 440              	.LFB13:
+ 346:.\Generated_Source\PSoC4/Wakeup_ISR.c **** 
+ 347:.\Generated_Source\PSoC4/Wakeup_ISR.c **** 
+ 348:.\Generated_Source\PSoC4/Wakeup_ISR.c **** /*******************************************************************************
+ 349:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Function Name: Wakeup_ISR_SetPending
+ 350:.\Generated_Source\PSoC4/Wakeup_ISR.c **** ********************************************************************************
+ 351:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+ 352:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Summary:
+ 353:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   Causes the Interrupt to enter the pending state, a software method of
+ 354:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   generating the interrupt.
+ 355:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+ 356:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Parameters:
+ 357:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   None
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccmGLtBH.s 			page 15
+
+
+ 358:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+ 359:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Return:
+ 360:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   None
+ 361:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+ 362:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Side Effects:
+ 363:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   If interrupts are enabled and the interrupt is set up properly, the ISR is
+ 364:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   entered (depending on the priority of this interrupt and other pending 
+ 365:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   interrupts).
+ 366:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+ 367:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *******************************************************************************/
+ 368:.\Generated_Source\PSoC4/Wakeup_ISR.c **** void Wakeup_ISR_SetPending(void)
+ 369:.\Generated_Source\PSoC4/Wakeup_ISR.c **** {
+ 441              		.loc 1 369 0
+ 442              		.cfi_startproc
+ 443 0000 80B5     		push	{r7, lr}
+ 444              		.cfi_def_cfa_offset 8
+ 445              		.cfi_offset 7, -8
+ 446              		.cfi_offset 14, -4
+ 447 0002 00AF     		add	r7, sp, #0
+ 448              		.cfi_def_cfa_register 7
+ 370:.\Generated_Source\PSoC4/Wakeup_ISR.c ****     *Wakeup_ISR_INTC_SET_PD = Wakeup_ISR__INTC_MASK;
+ 449              		.loc 1 370 0
+ 450 0004 024B     		ldr	r3, .L36
+ 451 0006 0422     		mov	r2, #4
+ 452 0008 1A60     		str	r2, [r3]
+ 371:.\Generated_Source\PSoC4/Wakeup_ISR.c **** }
+ 453              		.loc 1 371 0
+ 454 000a BD46     		mov	sp, r7
+ 455              		@ sp needed
+ 456 000c 80BD     		pop	{r7, pc}
+ 457              	.L37:
+ 458 000e C046     		.align	2
+ 459              	.L36:
+ 460 0010 00E200E0 		.word	-536813056
+ 461              		.cfi_endproc
+ 462              	.LFE13:
+ 463              		.size	Wakeup_ISR_SetPending, .-Wakeup_ISR_SetPending
+ 464              		.section	.text.Wakeup_ISR_ClearPending,"ax",%progbits
+ 465              		.align	2
+ 466              		.global	Wakeup_ISR_ClearPending
+ 467              		.code	16
+ 468              		.thumb_func
+ 469              		.type	Wakeup_ISR_ClearPending, %function
+ 470              	Wakeup_ISR_ClearPending:
+ 471              	.LFB14:
+ 372:.\Generated_Source\PSoC4/Wakeup_ISR.c **** 
+ 373:.\Generated_Source\PSoC4/Wakeup_ISR.c **** 
+ 374:.\Generated_Source\PSoC4/Wakeup_ISR.c **** /*******************************************************************************
+ 375:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Function Name: Wakeup_ISR_ClearPending
+ 376:.\Generated_Source\PSoC4/Wakeup_ISR.c **** ********************************************************************************
+ 377:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+ 378:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Summary:
+ 379:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   Clears a pending interrupt in the interrupt controller.
+ 380:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+ 381:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   Note Some interrupt sources are clear-on-read and require the block 
+ 382:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   interrupt/status register to be read/cleared with the appropriate block API 
+ 383:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   (GPIO, UART, and so on). Otherwise the ISR will continue to remain in 
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccmGLtBH.s 			page 16
+
+
+ 384:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   pending state even though the interrupt itself is cleared using this API.
+ 385:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+ 386:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Parameters:
+ 387:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   None
+ 388:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+ 389:.\Generated_Source\PSoC4/Wakeup_ISR.c **** * Return:
+ 390:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *   None
+ 391:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *
+ 392:.\Generated_Source\PSoC4/Wakeup_ISR.c **** *******************************************************************************/
+ 393:.\Generated_Source\PSoC4/Wakeup_ISR.c **** void Wakeup_ISR_ClearPending(void)
+ 394:.\Generated_Source\PSoC4/Wakeup_ISR.c **** {
+ 472              		.loc 1 394 0
+ 473              		.cfi_startproc
+ 474 0000 80B5     		push	{r7, lr}
+ 475              		.cfi_def_cfa_offset 8
+ 476              		.cfi_offset 7, -8
+ 477              		.cfi_offset 14, -4
+ 478 0002 00AF     		add	r7, sp, #0
+ 479              		.cfi_def_cfa_register 7
+ 395:.\Generated_Source\PSoC4/Wakeup_ISR.c ****     *Wakeup_ISR_INTC_CLR_PD = Wakeup_ISR__INTC_MASK;
+ 480              		.loc 1 395 0
+ 481 0004 024B     		ldr	r3, .L39
+ 482 0006 0422     		mov	r2, #4
+ 483 0008 1A60     		str	r2, [r3]
+ 396:.\Generated_Source\PSoC4/Wakeup_ISR.c **** }
+ 484              		.loc 1 396 0
+ 485 000a BD46     		mov	sp, r7
+ 486              		@ sp needed
+ 487 000c 80BD     		pop	{r7, pc}
+ 488              	.L40:
+ 489 000e C046     		.align	2
+ 490              	.L39:
+ 491 0010 80E200E0 		.word	-536812928
+ 492              		.cfi_endproc
+ 493              	.LFE14:
+ 494              		.size	Wakeup_ISR_ClearPending, .-Wakeup_ISR_ClearPending
+ 495              		.text
+ 496              	.Letext0:
+ 497              		.file 2 ".\\Generated_Source\\PSoC4/cytypes.h"
+ 498              		.section	.debug_info,"",%progbits
+ 499              	.Ldebug_info0:
+ 500 0000 40020000 		.4byte	0x240
+ 501 0004 0400     		.2byte	0x4
+ 502 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 503 000a 04       		.byte	0x4
+ 504 000b 01       		.uleb128 0x1
+ 505 000c B8000000 		.4byte	.LASF33
+ 506 0010 01       		.byte	0x1
+ 507 0011 69010000 		.4byte	.LASF34
+ 508 0015 65000000 		.4byte	.LASF35
+ 509 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 510 001d 00000000 		.4byte	0
+ 511 0021 00000000 		.4byte	.Ldebug_line0
+ 512 0025 02       		.uleb128 0x2
+ 513 0026 01       		.byte	0x1
+ 514 0027 06       		.byte	0x6
+ 515 0028 D3020000 		.4byte	.LASF0
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccmGLtBH.s 			page 17
+
+
+ 516 002c 02       		.uleb128 0x2
+ 517 002d 01       		.byte	0x1
+ 518 002e 08       		.byte	0x8
+ 519 002f 34010000 		.4byte	.LASF1
+ 520 0033 02       		.uleb128 0x2
+ 521 0034 02       		.byte	0x2
+ 522 0035 05       		.byte	0x5
+ 523 0036 73020000 		.4byte	.LASF2
+ 524 003a 02       		.uleb128 0x2
+ 525 003b 02       		.byte	0x2
+ 526 003c 07       		.byte	0x7
+ 527 003d 52000000 		.4byte	.LASF3
+ 528 0041 02       		.uleb128 0x2
+ 529 0042 04       		.byte	0x4
+ 530 0043 05       		.byte	0x5
+ 531 0044 B5020000 		.4byte	.LASF4
+ 532 0048 02       		.uleb128 0x2
+ 533 0049 04       		.byte	0x4
+ 534 004a 07       		.byte	0x7
+ 535 004b 51010000 		.4byte	.LASF5
+ 536 004f 02       		.uleb128 0x2
+ 537 0050 08       		.byte	0x8
+ 538 0051 05       		.byte	0x5
+ 539 0052 24020000 		.4byte	.LASF6
+ 540 0056 02       		.uleb128 0x2
+ 541 0057 08       		.byte	0x8
+ 542 0058 07       		.byte	0x7
+ 543 0059 E6010000 		.4byte	.LASF7
+ 544 005d 03       		.uleb128 0x3
+ 545 005e 04       		.byte	0x4
+ 546 005f 05       		.byte	0x5
+ 547 0060 696E7400 		.ascii	"int\000"
+ 548 0064 02       		.uleb128 0x2
+ 549 0065 04       		.byte	0x4
+ 550 0066 07       		.byte	0x7
+ 551 0067 D1010000 		.4byte	.LASF8
+ 552 006b 04       		.uleb128 0x4
+ 553 006c 63010000 		.4byte	.LASF9
+ 554 0070 02       		.byte	0x2
+ 555 0071 A1       		.byte	0xa1
+ 556 0072 2C000000 		.4byte	0x2c
+ 557 0076 04       		.uleb128 0x4
+ 558 0077 CA010000 		.4byte	.LASF10
+ 559 007b 02       		.byte	0x2
+ 560 007c A3       		.byte	0xa3
+ 561 007d 48000000 		.4byte	0x48
+ 562 0081 02       		.uleb128 0x2
+ 563 0082 04       		.byte	0x4
+ 564 0083 04       		.byte	0x4
+ 565 0084 B2000000 		.4byte	.LASF11
+ 566 0088 02       		.uleb128 0x2
+ 567 0089 08       		.byte	0x8
+ 568 008a 04       		.byte	0x4
+ 569 008b 98010000 		.4byte	.LASF12
+ 570 008f 02       		.uleb128 0x2
+ 571 0090 01       		.byte	0x1
+ 572 0091 08       		.byte	0x8
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccmGLtBH.s 			page 18
+
+
+ 573 0092 5C020000 		.4byte	.LASF13
+ 574 0096 05       		.uleb128 0x5
+ 575 0097 18000000 		.4byte	.LASF14
+ 576 009b 02       		.byte	0x2
+ 577 009c 4D01     		.2byte	0x14d
+ 578 009e A2000000 		.4byte	0xa2
+ 579 00a2 06       		.uleb128 0x6
+ 580 00a3 76000000 		.4byte	0x76
+ 581 00a7 05       		.uleb128 0x5
+ 582 00a8 0E020000 		.4byte	.LASF15
+ 583 00ac 02       		.byte	0x2
+ 584 00ad 5D01     		.2byte	0x15d
+ 585 00af B3000000 		.4byte	0xb3
+ 586 00b3 07       		.uleb128 0x7
+ 587 00b4 04       		.byte	0x4
+ 588 00b5 B9000000 		.4byte	0xb9
+ 589 00b9 08       		.uleb128 0x8
+ 590 00ba 02       		.uleb128 0x2
+ 591 00bb 04       		.byte	0x4
+ 592 00bc 07       		.byte	0x7
+ 593 00bd 1B020000 		.4byte	.LASF16
+ 594 00c1 09       		.uleb128 0x9
+ 595 00c2 FD010000 		.4byte	.LASF17
+ 596 00c6 01       		.byte	0x1
+ 597 00c7 37       		.byte	0x37
+ 598 00c8 00000000 		.4byte	.LFB2
+ 599 00cc 24000000 		.4byte	.LFE2-.LFB2
+ 600 00d0 01       		.uleb128 0x1
+ 601 00d1 9C       		.byte	0x9c
+ 602 00d2 0A       		.uleb128 0xa
+ 603 00d3 DF020000 		.4byte	.LASF20
+ 604 00d7 01       		.byte	0x1
+ 605 00d8 62       		.byte	0x62
+ 606 00d9 00000000 		.4byte	.LFB3
+ 607 00dd 24000000 		.4byte	.LFE3-.LFB3
+ 608 00e1 01       		.uleb128 0x1
+ 609 00e2 9C       		.byte	0x9c
+ 610 00e3 F6000000 		.4byte	0xf6
+ 611 00e7 0B       		.uleb128 0xb
+ 612 00e8 DE010000 		.4byte	.LASF22
+ 613 00ec 01       		.byte	0x1
+ 614 00ed 62       		.byte	0x62
+ 615 00ee A7000000 		.4byte	0xa7
+ 616 00f2 02       		.uleb128 0x2
+ 617 00f3 91       		.byte	0x91
+ 618 00f4 74       		.sleb128 -12
+ 619 00f5 00       		.byte	0
+ 620 00f6 09       		.uleb128 0x9
+ 621 00f7 42000000 		.4byte	.LASF18
+ 622 00fb 01       		.byte	0x1
+ 623 00fc 80       		.byte	0x80
+ 624 00fd 00000000 		.4byte	.LFB4
+ 625 0101 18000000 		.4byte	.LFE4-.LFB4
+ 626 0105 01       		.uleb128 0x1
+ 627 0106 9C       		.byte	0x9c
+ 628 0107 0C       		.uleb128 0xc
+ 629 0108 BE020000 		.4byte	.LASF19
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccmGLtBH.s 			page 19
+
+
+ 630 010c 01       		.byte	0x1
+ 631 010d 9E       		.byte	0x9e
+ 632 010e 00000000 		.4byte	.LFB5
+ 633 0112 08000000 		.4byte	.LFE5-.LFB5
+ 634 0116 01       		.uleb128 0x1
+ 635 0117 9C       		.byte	0x9c
+ 636 0118 0D       		.uleb128 0xd
+ 637 0119 9F010000 		.4byte	.LASF21
+ 638 011d 01       		.byte	0x1
+ 639 011e C2       		.byte	0xc2
+ 640 011f 00000000 		.4byte	.LFB6
+ 641 0123 18000000 		.4byte	.LFE6-.LFB6
+ 642 0127 01       		.uleb128 0x1
+ 643 0128 9C       		.byte	0x9c
+ 644 0129 3C010000 		.4byte	0x13c
+ 645 012d 0B       		.uleb128 0xb
+ 646 012e DE010000 		.4byte	.LASF22
+ 647 0132 01       		.byte	0x1
+ 648 0133 C2       		.byte	0xc2
+ 649 0134 A7000000 		.4byte	0xa7
+ 650 0138 02       		.uleb128 0x2
+ 651 0139 91       		.byte	0x91
+ 652 013a 74       		.sleb128 -12
+ 653 013b 00       		.byte	0
+ 654 013c 0E       		.uleb128 0xe
+ 655 013d A0020000 		.4byte	.LASF28
+ 656 0141 01       		.byte	0x1
+ 657 0142 D6       		.byte	0xd6
+ 658 0143 A7000000 		.4byte	0xa7
+ 659 0147 00000000 		.4byte	.LFB7
+ 660 014b 14000000 		.4byte	.LFE7-.LFB7
+ 661 014f 01       		.uleb128 0x1
+ 662 0150 9C       		.byte	0x9c
+ 663 0151 0A       		.uleb128 0xa
+ 664 0152 1E000000 		.4byte	.LASF23
+ 665 0156 01       		.byte	0x1
+ 666 0157 F4       		.byte	0xf4
+ 667 0158 00000000 		.4byte	.LFB8
+ 668 015c 50000000 		.4byte	.LFE8-.LFB8
+ 669 0160 01       		.uleb128 0x1
+ 670 0161 9C       		.byte	0x9c
+ 671 0162 91010000 		.4byte	0x191
+ 672 0166 0B       		.uleb128 0xb
+ 673 0167 8F010000 		.4byte	.LASF24
+ 674 016b 01       		.byte	0x1
+ 675 016c F4       		.byte	0xf4
+ 676 016d 6B000000 		.4byte	0x6b
+ 677 0171 02       		.uleb128 0x2
+ 678 0172 91       		.byte	0x91
+ 679 0173 67       		.sleb128 -25
+ 680 0174 0F       		.uleb128 0xf
+ 681 0175 42010000 		.4byte	.LASF25
+ 682 0179 01       		.byte	0x1
+ 683 017a F6       		.byte	0xf6
+ 684 017b 6B000000 		.4byte	0x6b
+ 685 017f 02       		.uleb128 0x2
+ 686 0180 91       		.byte	0x91
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccmGLtBH.s 			page 20
+
+
+ 687 0181 6B       		.sleb128 -21
+ 688 0182 0F       		.uleb128 0xf
+ 689 0183 91020000 		.4byte	.LASF26
+ 690 0187 01       		.byte	0x1
+ 691 0188 F7       		.byte	0xf7
+ 692 0189 76000000 		.4byte	0x76
+ 693 018d 02       		.uleb128 0x2
+ 694 018e 91       		.byte	0x91
+ 695 018f 6C       		.sleb128 -20
+ 696 0190 00       		.byte	0
+ 697 0191 10       		.uleb128 0x10
+ 698 0192 45020000 		.4byte	.LASF36
+ 699 0196 01       		.byte	0x1
+ 700 0197 1001     		.2byte	0x110
+ 701 0199 6B000000 		.4byte	0x6b
+ 702 019d 00000000 		.4byte	.LFB9
+ 703 01a1 30000000 		.4byte	.LFE9-.LFB9
+ 704 01a5 01       		.uleb128 0x1
+ 705 01a6 9C       		.byte	0x9c
+ 706 01a7 CA010000 		.4byte	0x1ca
+ 707 01ab 11       		.uleb128 0x11
+ 708 01ac 8F010000 		.4byte	.LASF24
+ 709 01b0 01       		.byte	0x1
+ 710 01b1 1201     		.2byte	0x112
+ 711 01b3 76000000 		.4byte	0x76
+ 712 01b7 02       		.uleb128 0x2
+ 713 01b8 91       		.byte	0x91
+ 714 01b9 70       		.sleb128 -16
+ 715 01ba 11       		.uleb128 0x11
+ 716 01bb 91020000 		.4byte	.LASF26
+ 717 01bf 01       		.byte	0x1
+ 718 01c0 1301     		.2byte	0x113
+ 719 01c2 76000000 		.4byte	0x76
+ 720 01c6 02       		.uleb128 0x2
+ 721 01c7 91       		.byte	0x91
+ 722 01c8 74       		.sleb128 -12
+ 723 01c9 00       		.byte	0
+ 724 01ca 12       		.uleb128 0x12
+ 725 01cb 61020000 		.4byte	.LASF27
+ 726 01cf 01       		.byte	0x1
+ 727 01d0 2B01     		.2byte	0x12b
+ 728 01d2 00000000 		.4byte	.LFB10
+ 729 01d6 14000000 		.4byte	.LFE10-.LFB10
+ 730 01da 01       		.uleb128 0x1
+ 731 01db 9C       		.byte	0x9c
+ 732 01dc 13       		.uleb128 0x13
+ 733 01dd 7D020000 		.4byte	.LASF29
+ 734 01e1 01       		.byte	0x1
+ 735 01e2 4001     		.2byte	0x140
+ 736 01e4 6B000000 		.4byte	0x6b
+ 737 01e8 00000000 		.4byte	.LFB11
+ 738 01ec 20000000 		.4byte	.LFE11-.LFB11
+ 739 01f0 01       		.uleb128 0x1
+ 740 01f1 9C       		.byte	0x9c
+ 741 01f2 12       		.uleb128 0x12
+ 742 01f3 32020000 		.4byte	.LASF30
+ 743 01f7 01       		.byte	0x1
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccmGLtBH.s 			page 21
+
+
+ 744 01f8 5501     		.2byte	0x155
+ 745 01fa 00000000 		.4byte	.LFB12
+ 746 01fe 14000000 		.4byte	.LFE12-.LFB12
+ 747 0202 01       		.uleb128 0x1
+ 748 0203 9C       		.byte	0x9c
+ 749 0204 12       		.uleb128 0x12
+ 750 0205 B4010000 		.4byte	.LASF31
+ 751 0209 01       		.byte	0x1
+ 752 020a 7001     		.2byte	0x170
+ 753 020c 00000000 		.4byte	.LFB13
+ 754 0210 14000000 		.4byte	.LFE13-.LFB13
+ 755 0214 01       		.uleb128 0x1
+ 756 0215 9C       		.byte	0x9c
+ 757 0216 12       		.uleb128 0x12
+ 758 0217 00000000 		.4byte	.LASF32
+ 759 021b 01       		.byte	0x1
+ 760 021c 8901     		.2byte	0x189
+ 761 021e 00000000 		.4byte	.LFB14
+ 762 0222 14000000 		.4byte	.LFE14-.LFB14
+ 763 0226 01       		.uleb128 0x1
+ 764 0227 9C       		.byte	0x9c
+ 765 0228 14       		.uleb128 0x14
+ 766 0229 A7000000 		.4byte	0xa7
+ 767 022d 38020000 		.4byte	0x238
+ 768 0231 15       		.uleb128 0x15
+ 769 0232 BA000000 		.4byte	0xba
+ 770 0236 2F       		.byte	0x2f
+ 771 0237 00       		.byte	0
+ 772 0238 16       		.uleb128 0x16
+ 773 0239 35000000 		.4byte	.LASF37
+ 774 023d 01       		.byte	0x1
+ 775 023e 20       		.byte	0x20
+ 776 023f 28020000 		.4byte	0x228
+ 777 0243 00       		.byte	0
+ 778              		.section	.debug_abbrev,"",%progbits
+ 779              	.Ldebug_abbrev0:
+ 780 0000 01       		.uleb128 0x1
+ 781 0001 11       		.uleb128 0x11
+ 782 0002 01       		.byte	0x1
+ 783 0003 25       		.uleb128 0x25
+ 784 0004 0E       		.uleb128 0xe
+ 785 0005 13       		.uleb128 0x13
+ 786 0006 0B       		.uleb128 0xb
+ 787 0007 03       		.uleb128 0x3
+ 788 0008 0E       		.uleb128 0xe
+ 789 0009 1B       		.uleb128 0x1b
+ 790 000a 0E       		.uleb128 0xe
+ 791 000b 55       		.uleb128 0x55
+ 792 000c 17       		.uleb128 0x17
+ 793 000d 11       		.uleb128 0x11
+ 794 000e 01       		.uleb128 0x1
+ 795 000f 10       		.uleb128 0x10
+ 796 0010 17       		.uleb128 0x17
+ 797 0011 00       		.byte	0
+ 798 0012 00       		.byte	0
+ 799 0013 02       		.uleb128 0x2
+ 800 0014 24       		.uleb128 0x24
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccmGLtBH.s 			page 22
+
+
+ 801 0015 00       		.byte	0
+ 802 0016 0B       		.uleb128 0xb
+ 803 0017 0B       		.uleb128 0xb
+ 804 0018 3E       		.uleb128 0x3e
+ 805 0019 0B       		.uleb128 0xb
+ 806 001a 03       		.uleb128 0x3
+ 807 001b 0E       		.uleb128 0xe
+ 808 001c 00       		.byte	0
+ 809 001d 00       		.byte	0
+ 810 001e 03       		.uleb128 0x3
+ 811 001f 24       		.uleb128 0x24
+ 812 0020 00       		.byte	0
+ 813 0021 0B       		.uleb128 0xb
+ 814 0022 0B       		.uleb128 0xb
+ 815 0023 3E       		.uleb128 0x3e
+ 816 0024 0B       		.uleb128 0xb
+ 817 0025 03       		.uleb128 0x3
+ 818 0026 08       		.uleb128 0x8
+ 819 0027 00       		.byte	0
+ 820 0028 00       		.byte	0
+ 821 0029 04       		.uleb128 0x4
+ 822 002a 16       		.uleb128 0x16
+ 823 002b 00       		.byte	0
+ 824 002c 03       		.uleb128 0x3
+ 825 002d 0E       		.uleb128 0xe
+ 826 002e 3A       		.uleb128 0x3a
+ 827 002f 0B       		.uleb128 0xb
+ 828 0030 3B       		.uleb128 0x3b
+ 829 0031 0B       		.uleb128 0xb
+ 830 0032 49       		.uleb128 0x49
+ 831 0033 13       		.uleb128 0x13
+ 832 0034 00       		.byte	0
+ 833 0035 00       		.byte	0
+ 834 0036 05       		.uleb128 0x5
+ 835 0037 16       		.uleb128 0x16
+ 836 0038 00       		.byte	0
+ 837 0039 03       		.uleb128 0x3
+ 838 003a 0E       		.uleb128 0xe
+ 839 003b 3A       		.uleb128 0x3a
+ 840 003c 0B       		.uleb128 0xb
+ 841 003d 3B       		.uleb128 0x3b
+ 842 003e 05       		.uleb128 0x5
+ 843 003f 49       		.uleb128 0x49
+ 844 0040 13       		.uleb128 0x13
+ 845 0041 00       		.byte	0
+ 846 0042 00       		.byte	0
+ 847 0043 06       		.uleb128 0x6
+ 848 0044 35       		.uleb128 0x35
+ 849 0045 00       		.byte	0
+ 850 0046 49       		.uleb128 0x49
+ 851 0047 13       		.uleb128 0x13
+ 852 0048 00       		.byte	0
+ 853 0049 00       		.byte	0
+ 854 004a 07       		.uleb128 0x7
+ 855 004b 0F       		.uleb128 0xf
+ 856 004c 00       		.byte	0
+ 857 004d 0B       		.uleb128 0xb
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccmGLtBH.s 			page 23
+
+
+ 858 004e 0B       		.uleb128 0xb
+ 859 004f 49       		.uleb128 0x49
+ 860 0050 13       		.uleb128 0x13
+ 861 0051 00       		.byte	0
+ 862 0052 00       		.byte	0
+ 863 0053 08       		.uleb128 0x8
+ 864 0054 15       		.uleb128 0x15
+ 865 0055 00       		.byte	0
+ 866 0056 27       		.uleb128 0x27
+ 867 0057 19       		.uleb128 0x19
+ 868 0058 00       		.byte	0
+ 869 0059 00       		.byte	0
+ 870 005a 09       		.uleb128 0x9
+ 871 005b 2E       		.uleb128 0x2e
+ 872 005c 00       		.byte	0
+ 873 005d 3F       		.uleb128 0x3f
+ 874 005e 19       		.uleb128 0x19
+ 875 005f 03       		.uleb128 0x3
+ 876 0060 0E       		.uleb128 0xe
+ 877 0061 3A       		.uleb128 0x3a
+ 878 0062 0B       		.uleb128 0xb
+ 879 0063 3B       		.uleb128 0x3b
+ 880 0064 0B       		.uleb128 0xb
+ 881 0065 27       		.uleb128 0x27
+ 882 0066 19       		.uleb128 0x19
+ 883 0067 11       		.uleb128 0x11
+ 884 0068 01       		.uleb128 0x1
+ 885 0069 12       		.uleb128 0x12
+ 886 006a 06       		.uleb128 0x6
+ 887 006b 40       		.uleb128 0x40
+ 888 006c 18       		.uleb128 0x18
+ 889 006d 9642     		.uleb128 0x2116
+ 890 006f 19       		.uleb128 0x19
+ 891 0070 00       		.byte	0
+ 892 0071 00       		.byte	0
+ 893 0072 0A       		.uleb128 0xa
+ 894 0073 2E       		.uleb128 0x2e
+ 895 0074 01       		.byte	0x1
+ 896 0075 3F       		.uleb128 0x3f
+ 897 0076 19       		.uleb128 0x19
+ 898 0077 03       		.uleb128 0x3
+ 899 0078 0E       		.uleb128 0xe
+ 900 0079 3A       		.uleb128 0x3a
+ 901 007a 0B       		.uleb128 0xb
+ 902 007b 3B       		.uleb128 0x3b
+ 903 007c 0B       		.uleb128 0xb
+ 904 007d 27       		.uleb128 0x27
+ 905 007e 19       		.uleb128 0x19
+ 906 007f 11       		.uleb128 0x11
+ 907 0080 01       		.uleb128 0x1
+ 908 0081 12       		.uleb128 0x12
+ 909 0082 06       		.uleb128 0x6
+ 910 0083 40       		.uleb128 0x40
+ 911 0084 18       		.uleb128 0x18
+ 912 0085 9642     		.uleb128 0x2116
+ 913 0087 19       		.uleb128 0x19
+ 914 0088 01       		.uleb128 0x1
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccmGLtBH.s 			page 24
+
+
+ 915 0089 13       		.uleb128 0x13
+ 916 008a 00       		.byte	0
+ 917 008b 00       		.byte	0
+ 918 008c 0B       		.uleb128 0xb
+ 919 008d 05       		.uleb128 0x5
+ 920 008e 00       		.byte	0
+ 921 008f 03       		.uleb128 0x3
+ 922 0090 0E       		.uleb128 0xe
+ 923 0091 3A       		.uleb128 0x3a
+ 924 0092 0B       		.uleb128 0xb
+ 925 0093 3B       		.uleb128 0x3b
+ 926 0094 0B       		.uleb128 0xb
+ 927 0095 49       		.uleb128 0x49
+ 928 0096 13       		.uleb128 0x13
+ 929 0097 02       		.uleb128 0x2
+ 930 0098 18       		.uleb128 0x18
+ 931 0099 00       		.byte	0
+ 932 009a 00       		.byte	0
+ 933 009b 0C       		.uleb128 0xc
+ 934 009c 2E       		.uleb128 0x2e
+ 935 009d 00       		.byte	0
+ 936 009e 3F       		.uleb128 0x3f
+ 937 009f 19       		.uleb128 0x19
+ 938 00a0 03       		.uleb128 0x3
+ 939 00a1 0E       		.uleb128 0xe
+ 940 00a2 3A       		.uleb128 0x3a
+ 941 00a3 0B       		.uleb128 0xb
+ 942 00a4 3B       		.uleb128 0x3b
+ 943 00a5 0B       		.uleb128 0xb
+ 944 00a6 27       		.uleb128 0x27
+ 945 00a7 19       		.uleb128 0x19
+ 946 00a8 11       		.uleb128 0x11
+ 947 00a9 01       		.uleb128 0x1
+ 948 00aa 12       		.uleb128 0x12
+ 949 00ab 06       		.uleb128 0x6
+ 950 00ac 40       		.uleb128 0x40
+ 951 00ad 18       		.uleb128 0x18
+ 952 00ae 9742     		.uleb128 0x2117
+ 953 00b0 19       		.uleb128 0x19
+ 954 00b1 00       		.byte	0
+ 955 00b2 00       		.byte	0
+ 956 00b3 0D       		.uleb128 0xd
+ 957 00b4 2E       		.uleb128 0x2e
+ 958 00b5 01       		.byte	0x1
+ 959 00b6 3F       		.uleb128 0x3f
+ 960 00b7 19       		.uleb128 0x19
+ 961 00b8 03       		.uleb128 0x3
+ 962 00b9 0E       		.uleb128 0xe
+ 963 00ba 3A       		.uleb128 0x3a
+ 964 00bb 0B       		.uleb128 0xb
+ 965 00bc 3B       		.uleb128 0x3b
+ 966 00bd 0B       		.uleb128 0xb
+ 967 00be 27       		.uleb128 0x27
+ 968 00bf 19       		.uleb128 0x19
+ 969 00c0 11       		.uleb128 0x11
+ 970 00c1 01       		.uleb128 0x1
+ 971 00c2 12       		.uleb128 0x12
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccmGLtBH.s 			page 25
+
+
+ 972 00c3 06       		.uleb128 0x6
+ 973 00c4 40       		.uleb128 0x40
+ 974 00c5 18       		.uleb128 0x18
+ 975 00c6 9742     		.uleb128 0x2117
+ 976 00c8 19       		.uleb128 0x19
+ 977 00c9 01       		.uleb128 0x1
+ 978 00ca 13       		.uleb128 0x13
+ 979 00cb 00       		.byte	0
+ 980 00cc 00       		.byte	0
+ 981 00cd 0E       		.uleb128 0xe
+ 982 00ce 2E       		.uleb128 0x2e
+ 983 00cf 00       		.byte	0
+ 984 00d0 3F       		.uleb128 0x3f
+ 985 00d1 19       		.uleb128 0x19
+ 986 00d2 03       		.uleb128 0x3
+ 987 00d3 0E       		.uleb128 0xe
+ 988 00d4 3A       		.uleb128 0x3a
+ 989 00d5 0B       		.uleb128 0xb
+ 990 00d6 3B       		.uleb128 0x3b
+ 991 00d7 0B       		.uleb128 0xb
+ 992 00d8 27       		.uleb128 0x27
+ 993 00d9 19       		.uleb128 0x19
+ 994 00da 49       		.uleb128 0x49
+ 995 00db 13       		.uleb128 0x13
+ 996 00dc 11       		.uleb128 0x11
+ 997 00dd 01       		.uleb128 0x1
+ 998 00de 12       		.uleb128 0x12
+ 999 00df 06       		.uleb128 0x6
+ 1000 00e0 40       		.uleb128 0x40
+ 1001 00e1 18       		.uleb128 0x18
+ 1002 00e2 9742     		.uleb128 0x2117
+ 1003 00e4 19       		.uleb128 0x19
+ 1004 00e5 00       		.byte	0
+ 1005 00e6 00       		.byte	0
+ 1006 00e7 0F       		.uleb128 0xf
+ 1007 00e8 34       		.uleb128 0x34
+ 1008 00e9 00       		.byte	0
+ 1009 00ea 03       		.uleb128 0x3
+ 1010 00eb 0E       		.uleb128 0xe
+ 1011 00ec 3A       		.uleb128 0x3a
+ 1012 00ed 0B       		.uleb128 0xb
+ 1013 00ee 3B       		.uleb128 0x3b
+ 1014 00ef 0B       		.uleb128 0xb
+ 1015 00f0 49       		.uleb128 0x49
+ 1016 00f1 13       		.uleb128 0x13
+ 1017 00f2 02       		.uleb128 0x2
+ 1018 00f3 18       		.uleb128 0x18
+ 1019 00f4 00       		.byte	0
+ 1020 00f5 00       		.byte	0
+ 1021 00f6 10       		.uleb128 0x10
+ 1022 00f7 2E       		.uleb128 0x2e
+ 1023 00f8 01       		.byte	0x1
+ 1024 00f9 3F       		.uleb128 0x3f
+ 1025 00fa 19       		.uleb128 0x19
+ 1026 00fb 03       		.uleb128 0x3
+ 1027 00fc 0E       		.uleb128 0xe
+ 1028 00fd 3A       		.uleb128 0x3a
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccmGLtBH.s 			page 26
+
+
+ 1029 00fe 0B       		.uleb128 0xb
+ 1030 00ff 3B       		.uleb128 0x3b
+ 1031 0100 05       		.uleb128 0x5
+ 1032 0101 27       		.uleb128 0x27
+ 1033 0102 19       		.uleb128 0x19
+ 1034 0103 49       		.uleb128 0x49
+ 1035 0104 13       		.uleb128 0x13
+ 1036 0105 11       		.uleb128 0x11
+ 1037 0106 01       		.uleb128 0x1
+ 1038 0107 12       		.uleb128 0x12
+ 1039 0108 06       		.uleb128 0x6
+ 1040 0109 40       		.uleb128 0x40
+ 1041 010a 18       		.uleb128 0x18
+ 1042 010b 9742     		.uleb128 0x2117
+ 1043 010d 19       		.uleb128 0x19
+ 1044 010e 01       		.uleb128 0x1
+ 1045 010f 13       		.uleb128 0x13
+ 1046 0110 00       		.byte	0
+ 1047 0111 00       		.byte	0
+ 1048 0112 11       		.uleb128 0x11
+ 1049 0113 34       		.uleb128 0x34
+ 1050 0114 00       		.byte	0
+ 1051 0115 03       		.uleb128 0x3
+ 1052 0116 0E       		.uleb128 0xe
+ 1053 0117 3A       		.uleb128 0x3a
+ 1054 0118 0B       		.uleb128 0xb
+ 1055 0119 3B       		.uleb128 0x3b
+ 1056 011a 05       		.uleb128 0x5
+ 1057 011b 49       		.uleb128 0x49
+ 1058 011c 13       		.uleb128 0x13
+ 1059 011d 02       		.uleb128 0x2
+ 1060 011e 18       		.uleb128 0x18
+ 1061 011f 00       		.byte	0
+ 1062 0120 00       		.byte	0
+ 1063 0121 12       		.uleb128 0x12
+ 1064 0122 2E       		.uleb128 0x2e
+ 1065 0123 00       		.byte	0
+ 1066 0124 3F       		.uleb128 0x3f
+ 1067 0125 19       		.uleb128 0x19
+ 1068 0126 03       		.uleb128 0x3
+ 1069 0127 0E       		.uleb128 0xe
+ 1070 0128 3A       		.uleb128 0x3a
+ 1071 0129 0B       		.uleb128 0xb
+ 1072 012a 3B       		.uleb128 0x3b
+ 1073 012b 05       		.uleb128 0x5
+ 1074 012c 27       		.uleb128 0x27
+ 1075 012d 19       		.uleb128 0x19
+ 1076 012e 11       		.uleb128 0x11
+ 1077 012f 01       		.uleb128 0x1
+ 1078 0130 12       		.uleb128 0x12
+ 1079 0131 06       		.uleb128 0x6
+ 1080 0132 40       		.uleb128 0x40
+ 1081 0133 18       		.uleb128 0x18
+ 1082 0134 9742     		.uleb128 0x2117
+ 1083 0136 19       		.uleb128 0x19
+ 1084 0137 00       		.byte	0
+ 1085 0138 00       		.byte	0
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccmGLtBH.s 			page 27
+
+
+ 1086 0139 13       		.uleb128 0x13
+ 1087 013a 2E       		.uleb128 0x2e
+ 1088 013b 00       		.byte	0
+ 1089 013c 3F       		.uleb128 0x3f
+ 1090 013d 19       		.uleb128 0x19
+ 1091 013e 03       		.uleb128 0x3
+ 1092 013f 0E       		.uleb128 0xe
+ 1093 0140 3A       		.uleb128 0x3a
+ 1094 0141 0B       		.uleb128 0xb
+ 1095 0142 3B       		.uleb128 0x3b
+ 1096 0143 05       		.uleb128 0x5
+ 1097 0144 27       		.uleb128 0x27
+ 1098 0145 19       		.uleb128 0x19
+ 1099 0146 49       		.uleb128 0x49
+ 1100 0147 13       		.uleb128 0x13
+ 1101 0148 11       		.uleb128 0x11
+ 1102 0149 01       		.uleb128 0x1
+ 1103 014a 12       		.uleb128 0x12
+ 1104 014b 06       		.uleb128 0x6
+ 1105 014c 40       		.uleb128 0x40
+ 1106 014d 18       		.uleb128 0x18
+ 1107 014e 9742     		.uleb128 0x2117
+ 1108 0150 19       		.uleb128 0x19
+ 1109 0151 00       		.byte	0
+ 1110 0152 00       		.byte	0
+ 1111 0153 14       		.uleb128 0x14
+ 1112 0154 01       		.uleb128 0x1
+ 1113 0155 01       		.byte	0x1
+ 1114 0156 49       		.uleb128 0x49
+ 1115 0157 13       		.uleb128 0x13
+ 1116 0158 01       		.uleb128 0x1
+ 1117 0159 13       		.uleb128 0x13
+ 1118 015a 00       		.byte	0
+ 1119 015b 00       		.byte	0
+ 1120 015c 15       		.uleb128 0x15
+ 1121 015d 21       		.uleb128 0x21
+ 1122 015e 00       		.byte	0
+ 1123 015f 49       		.uleb128 0x49
+ 1124 0160 13       		.uleb128 0x13
+ 1125 0161 2F       		.uleb128 0x2f
+ 1126 0162 0B       		.uleb128 0xb
+ 1127 0163 00       		.byte	0
+ 1128 0164 00       		.byte	0
+ 1129 0165 16       		.uleb128 0x16
+ 1130 0166 34       		.uleb128 0x34
+ 1131 0167 00       		.byte	0
+ 1132 0168 03       		.uleb128 0x3
+ 1133 0169 0E       		.uleb128 0xe
+ 1134 016a 3A       		.uleb128 0x3a
+ 1135 016b 0B       		.uleb128 0xb
+ 1136 016c 3B       		.uleb128 0x3b
+ 1137 016d 0B       		.uleb128 0xb
+ 1138 016e 49       		.uleb128 0x49
+ 1139 016f 13       		.uleb128 0x13
+ 1140 0170 3F       		.uleb128 0x3f
+ 1141 0171 19       		.uleb128 0x19
+ 1142 0172 3C       		.uleb128 0x3c
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccmGLtBH.s 			page 28
+
+
+ 1143 0173 19       		.uleb128 0x19
+ 1144 0174 00       		.byte	0
+ 1145 0175 00       		.byte	0
+ 1146 0176 00       		.byte	0
+ 1147              		.section	.debug_aranges,"",%progbits
+ 1148 0000 7C000000 		.4byte	0x7c
+ 1149 0004 0200     		.2byte	0x2
+ 1150 0006 00000000 		.4byte	.Ldebug_info0
+ 1151 000a 04       		.byte	0x4
+ 1152 000b 00       		.byte	0
+ 1153 000c 0000     		.2byte	0
+ 1154 000e 0000     		.2byte	0
+ 1155 0010 00000000 		.4byte	.LFB2
+ 1156 0014 24000000 		.4byte	.LFE2-.LFB2
+ 1157 0018 00000000 		.4byte	.LFB3
+ 1158 001c 24000000 		.4byte	.LFE3-.LFB3
+ 1159 0020 00000000 		.4byte	.LFB4
+ 1160 0024 18000000 		.4byte	.LFE4-.LFB4
+ 1161 0028 00000000 		.4byte	.LFB5
+ 1162 002c 08000000 		.4byte	.LFE5-.LFB5
+ 1163 0030 00000000 		.4byte	.LFB6
+ 1164 0034 18000000 		.4byte	.LFE6-.LFB6
+ 1165 0038 00000000 		.4byte	.LFB7
+ 1166 003c 14000000 		.4byte	.LFE7-.LFB7
+ 1167 0040 00000000 		.4byte	.LFB8
+ 1168 0044 50000000 		.4byte	.LFE8-.LFB8
+ 1169 0048 00000000 		.4byte	.LFB9
+ 1170 004c 30000000 		.4byte	.LFE9-.LFB9
+ 1171 0050 00000000 		.4byte	.LFB10
+ 1172 0054 14000000 		.4byte	.LFE10-.LFB10
+ 1173 0058 00000000 		.4byte	.LFB11
+ 1174 005c 20000000 		.4byte	.LFE11-.LFB11
+ 1175 0060 00000000 		.4byte	.LFB12
+ 1176 0064 14000000 		.4byte	.LFE12-.LFB12
+ 1177 0068 00000000 		.4byte	.LFB13
+ 1178 006c 14000000 		.4byte	.LFE13-.LFB13
+ 1179 0070 00000000 		.4byte	.LFB14
+ 1180 0074 14000000 		.4byte	.LFE14-.LFB14
+ 1181 0078 00000000 		.4byte	0
+ 1182 007c 00000000 		.4byte	0
+ 1183              		.section	.debug_ranges,"",%progbits
+ 1184              	.Ldebug_ranges0:
+ 1185 0000 00000000 		.4byte	.LFB2
+ 1186 0004 24000000 		.4byte	.LFE2
+ 1187 0008 00000000 		.4byte	.LFB3
+ 1188 000c 24000000 		.4byte	.LFE3
+ 1189 0010 00000000 		.4byte	.LFB4
+ 1190 0014 18000000 		.4byte	.LFE4
+ 1191 0018 00000000 		.4byte	.LFB5
+ 1192 001c 08000000 		.4byte	.LFE5
+ 1193 0020 00000000 		.4byte	.LFB6
+ 1194 0024 18000000 		.4byte	.LFE6
+ 1195 0028 00000000 		.4byte	.LFB7
+ 1196 002c 14000000 		.4byte	.LFE7
+ 1197 0030 00000000 		.4byte	.LFB8
+ 1198 0034 50000000 		.4byte	.LFE8
+ 1199 0038 00000000 		.4byte	.LFB9
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccmGLtBH.s 			page 29
+
+
+ 1200 003c 30000000 		.4byte	.LFE9
+ 1201 0040 00000000 		.4byte	.LFB10
+ 1202 0044 14000000 		.4byte	.LFE10
+ 1203 0048 00000000 		.4byte	.LFB11
+ 1204 004c 20000000 		.4byte	.LFE11
+ 1205 0050 00000000 		.4byte	.LFB12
+ 1206 0054 14000000 		.4byte	.LFE12
+ 1207 0058 00000000 		.4byte	.LFB13
+ 1208 005c 14000000 		.4byte	.LFE13
+ 1209 0060 00000000 		.4byte	.LFB14
+ 1210 0064 14000000 		.4byte	.LFE14
+ 1211 0068 00000000 		.4byte	0
+ 1212 006c 00000000 		.4byte	0
+ 1213              		.section	.debug_line,"",%progbits
+ 1214              	.Ldebug_line0:
+ 1215 0000 55010000 		.section	.debug_str,"MS",%progbits,1
+ 1215      02004900 
+ 1215      00000201 
+ 1215      FB0E0D00 
+ 1215      01010101 
+ 1216              	.LASF32:
+ 1217 0000 57616B65 		.ascii	"Wakeup_ISR_ClearPending\000"
+ 1217      75705F49 
+ 1217      53525F43 
+ 1217      6C656172 
+ 1217      50656E64 
+ 1218              	.LASF14:
+ 1219 0018 72656733 		.ascii	"reg32\000"
+ 1219      3200
+ 1220              	.LASF23:
+ 1221 001e 57616B65 		.ascii	"Wakeup_ISR_SetPriority\000"
+ 1221      75705F49 
+ 1221      53525F53 
+ 1221      65745072 
+ 1221      696F7269 
+ 1222              	.LASF37:
+ 1223 0035 43795261 		.ascii	"CyRamVectors\000"
+ 1223      6D566563 
+ 1223      746F7273 
+ 1223      00
+ 1224              	.LASF18:
+ 1225 0042 57616B65 		.ascii	"Wakeup_ISR_Stop\000"
+ 1225      75705F49 
+ 1225      53525F53 
+ 1225      746F7000 
+ 1226              	.LASF3:
+ 1227 0052 73686F72 		.ascii	"short unsigned int\000"
+ 1227      7420756E 
+ 1227      7369676E 
+ 1227      65642069 
+ 1227      6E7400
+ 1228              	.LASF35:
+ 1229 0065 433A5C55 		.ascii	"C:\\Users\\Manisha Goyal\\Desktop\\safe_3\\lab3_man"
+ 1229      73657273 
+ 1229      5C4D616E 
+ 1229      69736861 
+ 1229      20476F79 
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccmGLtBH.s 			page 30
+
+
+ 1230 0093 69736861 		.ascii	"isha\\BLE Lab 3\\BLE Lab 3.cydsn\000"
+ 1230      5C424C45 
+ 1230      204C6162 
+ 1230      20335C42 
+ 1230      4C45204C 
+ 1231              	.LASF11:
+ 1232 00b2 666C6F61 		.ascii	"float\000"
+ 1232      7400
+ 1233              	.LASF33:
+ 1234 00b8 474E5520 		.ascii	"GNU C 4.8.4 20140526 (release) [ARM/embedded-4_8-br"
+ 1234      4320342E 
+ 1234      382E3420 
+ 1234      32303134 
+ 1234      30353236 
+ 1235 00eb 616E6368 		.ascii	"anch revision 211358] -mcpu=cortex-m0 -mthumb -g -O"
+ 1235      20726576 
+ 1235      6973696F 
+ 1235      6E203231 
+ 1235      31333538 
+ 1236 011e 30202D66 		.ascii	"0 -ffunction-sections\000"
+ 1236      66756E63 
+ 1236      74696F6E 
+ 1236      2D736563 
+ 1236      74696F6E 
+ 1237              	.LASF1:
+ 1238 0134 756E7369 		.ascii	"unsigned char\000"
+ 1238      676E6564 
+ 1238      20636861 
+ 1238      7200
+ 1239              	.LASF25:
+ 1240 0142 696E7465 		.ascii	"interruptState\000"
+ 1240      72727570 
+ 1240      74537461 
+ 1240      746500
+ 1241              	.LASF5:
+ 1242 0151 6C6F6E67 		.ascii	"long unsigned int\000"
+ 1242      20756E73 
+ 1242      69676E65 
+ 1242      6420696E 
+ 1242      7400
+ 1243              	.LASF9:
+ 1244 0163 75696E74 		.ascii	"uint8\000"
+ 1244      3800
+ 1245              	.LASF34:
+ 1246 0169 2E5C4765 		.ascii	".\\Generated_Source\\PSoC4\\Wakeup_ISR.c\000"
+ 1246      6E657261 
+ 1246      7465645F 
+ 1246      536F7572 
+ 1246      63655C50 
+ 1247              	.LASF24:
+ 1248 018f 7072696F 		.ascii	"priority\000"
+ 1248      72697479 
+ 1248      00
+ 1249              	.LASF12:
+ 1250 0198 646F7562 		.ascii	"double\000"
+ 1250      6C6500
+ 1251              	.LASF21:
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccmGLtBH.s 			page 31
+
+
+ 1252 019f 57616B65 		.ascii	"Wakeup_ISR_SetVector\000"
+ 1252      75705F49 
+ 1252      53525F53 
+ 1252      65745665 
+ 1252      63746F72 
+ 1253              	.LASF31:
+ 1254 01b4 57616B65 		.ascii	"Wakeup_ISR_SetPending\000"
+ 1254      75705F49 
+ 1254      53525F53 
+ 1254      65745065 
+ 1254      6E64696E 
+ 1255              	.LASF10:
+ 1256 01ca 75696E74 		.ascii	"uint32\000"
+ 1256      333200
+ 1257              	.LASF8:
+ 1258 01d1 756E7369 		.ascii	"unsigned int\000"
+ 1258      676E6564 
+ 1258      20696E74 
+ 1258      00
+ 1259              	.LASF22:
+ 1260 01de 61646472 		.ascii	"address\000"
+ 1260      65737300 
+ 1261              	.LASF7:
+ 1262 01e6 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 1262      206C6F6E 
+ 1262      6720756E 
+ 1262      7369676E 
+ 1262      65642069 
+ 1263              	.LASF17:
+ 1264 01fd 57616B65 		.ascii	"Wakeup_ISR_Start\000"
+ 1264      75705F49 
+ 1264      53525F53 
+ 1264      74617274 
+ 1264      00
+ 1265              	.LASF15:
+ 1266 020e 63796973 		.ascii	"cyisraddress\000"
+ 1266      72616464 
+ 1266      72657373 
+ 1266      00
+ 1267              	.LASF16:
+ 1268 021b 73697A65 		.ascii	"sizetype\000"
+ 1268      74797065 
+ 1268      00
+ 1269              	.LASF6:
+ 1270 0224 6C6F6E67 		.ascii	"long long int\000"
+ 1270      206C6F6E 
+ 1270      6720696E 
+ 1270      7400
+ 1271              	.LASF30:
+ 1272 0232 57616B65 		.ascii	"Wakeup_ISR_Disable\000"
+ 1272      75705F49 
+ 1272      53525F44 
+ 1272      69736162 
+ 1272      6C6500
+ 1273              	.LASF36:
+ 1274 0245 57616B65 		.ascii	"Wakeup_ISR_GetPriority\000"
+ 1274      75705F49 
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccmGLtBH.s 			page 32
+
+
+ 1274      53525F47 
+ 1274      65745072 
+ 1274      696F7269 
+ 1275              	.LASF13:
+ 1276 025c 63686172 		.ascii	"char\000"
+ 1276      00
+ 1277              	.LASF27:
+ 1278 0261 57616B65 		.ascii	"Wakeup_ISR_Enable\000"
+ 1278      75705F49 
+ 1278      53525F45 
+ 1278      6E61626C 
+ 1278      6500
+ 1279              	.LASF2:
+ 1280 0273 73686F72 		.ascii	"short int\000"
+ 1280      7420696E 
+ 1280      7400
+ 1281              	.LASF29:
+ 1282 027d 57616B65 		.ascii	"Wakeup_ISR_GetState\000"
+ 1282      75705F49 
+ 1282      53525F47 
+ 1282      65745374 
+ 1282      61746500 
+ 1283              	.LASF26:
+ 1284 0291 7072696F 		.ascii	"priorityOffset\000"
+ 1284      72697479 
+ 1284      4F666673 
+ 1284      657400
+ 1285              	.LASF28:
+ 1286 02a0 57616B65 		.ascii	"Wakeup_ISR_GetVector\000"
+ 1286      75705F49 
+ 1286      53525F47 
+ 1286      65745665 
+ 1286      63746F72 
+ 1287              	.LASF4:
+ 1288 02b5 6C6F6E67 		.ascii	"long int\000"
+ 1288      20696E74 
+ 1288      00
+ 1289              	.LASF19:
+ 1290 02be 57616B65 		.ascii	"Wakeup_ISR_Interrupt\000"
+ 1290      75705F49 
+ 1290      53525F49 
+ 1290      6E746572 
+ 1290      72757074 
+ 1291              	.LASF0:
+ 1292 02d3 7369676E 		.ascii	"signed char\000"
+ 1292      65642063 
+ 1292      68617200 
+ 1293              	.LASF20:
+ 1294 02df 57616B65 		.ascii	"Wakeup_ISR_StartEx\000"
+ 1294      75705F49 
+ 1294      53525F53 
+ 1294      74617274 
+ 1294      457800
+ 1295              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.8.4 20140526 (release) [ARM/embedded-4_8-br

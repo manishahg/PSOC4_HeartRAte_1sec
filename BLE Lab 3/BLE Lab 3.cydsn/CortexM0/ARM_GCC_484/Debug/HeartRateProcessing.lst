@@ -1,0 +1,1483 @@
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\cc8BQaFu.s 			page 1
+
+
+   1              		.cpu cortex-m0
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.code	16
+  13              		.file	"HeartRateProcessing.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.global	heartRate
+  18              		.bss
+  19              		.type	heartRate, %object
+  20              		.size	heartRate, 1
+  21              	heartRate:
+  22 0000 00       		.space	1
+  23              		.global	__aeabi_uidiv
+  24              		.section	.text.ProcessHeartRateSignal,"ax",%progbits
+  25              		.align	2
+  26              		.global	ProcessHeartRateSignal
+  27              		.code	16
+  28              		.thumb_func
+  29              		.type	ProcessHeartRateSignal, %function
+  30              	ProcessHeartRateSignal:
+  31              	.LFB35:
+  32              		.file 1 ".\\HeartRateProcessing.c"
+   1:.\HeartRateProcessing.c **** /*****************************************************************************
+   2:.\HeartRateProcessing.c **** * File Name: HeartRateProcessing.c
+   3:.\HeartRateProcessing.c **** *
+   4:.\HeartRateProcessing.c **** * Version: 1.0
+   5:.\HeartRateProcessing.c **** *
+   6:.\HeartRateProcessing.c **** * Description:
+   7:.\HeartRateProcessing.c **** * This file implements the heart rate measurement capability in the the PSoC 4 
+   8:.\HeartRateProcessing.c **** * BLE Lab 3.
+   9:.\HeartRateProcessing.c **** *
+  10:.\HeartRateProcessing.c **** * Hardware Dependency:
+  11:.\HeartRateProcessing.c **** * CY8CKIT-042 BLE Pioneer Kit
+  12:.\HeartRateProcessing.c **** *
+  13:.\HeartRateProcessing.c **** ******************************************************************************
+  14:.\HeartRateProcessing.c **** * Copyright (2014), Cypress Semiconductor Corporation.
+  15:.\HeartRateProcessing.c **** ******************************************************************************
+  16:.\HeartRateProcessing.c **** * This software is owned by Cypress Semiconductor Corporation (Cypress) and is
+  17:.\HeartRateProcessing.c **** * protected by and subject to worldwide patent protection (United States and
+  18:.\HeartRateProcessing.c **** * foreign), United States copyright laws and international treaty provisions.
+  19:.\HeartRateProcessing.c **** * Cypress hereby grants to licensee a personal, non-exclusive, non-transferable
+  20:.\HeartRateProcessing.c **** * license to copy, use, modify, create derivative works of, and compile the
+  21:.\HeartRateProcessing.c **** * Cypress Source Code and derivative works for the sole purpose of creating
+  22:.\HeartRateProcessing.c **** * custom software in support of licensee product to be used only in conjunction
+  23:.\HeartRateProcessing.c **** * with a Cypress integrated circuit as specified in the applicable agreement.
+  24:.\HeartRateProcessing.c **** * Any reproduction, modification, translation, compilation, or representation of
+  25:.\HeartRateProcessing.c **** * this software except as specified above is prohibited without the express
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\cc8BQaFu.s 			page 2
+
+
+  26:.\HeartRateProcessing.c **** * written permission of Cypress.
+  27:.\HeartRateProcessing.c **** *
+  28:.\HeartRateProcessing.c **** * Disclaimer: CYPRESS MAKES NO WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, WITH
+  29:.\HeartRateProcessing.c **** * REGARD TO THIS MATERIAL, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+  30:.\HeartRateProcessing.c **** * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+  31:.\HeartRateProcessing.c **** * Cypress reserves the right to make changes without further notice to the
+  32:.\HeartRateProcessing.c **** * materials described herein. Cypress does not assume any liability arising out
+  33:.\HeartRateProcessing.c **** * of the application or use of any product or circuit described herein. Cypress
+  34:.\HeartRateProcessing.c **** * does not authorize its products for use as critical components in life-support
+  35:.\HeartRateProcessing.c **** * systems where a malfunction or failure may reasonably be expected to result in
+  36:.\HeartRateProcessing.c **** * significant injury to the user. The inclusion of Cypress' product in a life-
+  37:.\HeartRateProcessing.c **** * support systems application implies that the manufacturer assumes all risk of
+  38:.\HeartRateProcessing.c **** * such use and in doing so indemnifies Cypress against all charges. Use may be
+  39:.\HeartRateProcessing.c **** * limited by and subject to the applicable Cypress software license agreement.
+  40:.\HeartRateProcessing.c **** *****************************************************************************/
+  41:.\HeartRateProcessing.c **** 
+  42:.\HeartRateProcessing.c **** 
+  43:.\HeartRateProcessing.c **** /*****************************************************************************
+  44:.\HeartRateProcessing.c **** * Included headers
+  45:.\HeartRateProcessing.c **** *****************************************************************************/
+  46:.\HeartRateProcessing.c **** #include <project.h>
+  47:.\HeartRateProcessing.c **** #include <stdbool.h>
+  48:.\HeartRateProcessing.c **** #include "WatchdogTimer.h"
+  49:.\HeartRateProcessing.c **** 
+  50:.\HeartRateProcessing.c **** 
+  51:.\HeartRateProcessing.c **** /*****************************************************************************
+  52:.\HeartRateProcessing.c **** * Macros 
+  53:.\HeartRateProcessing.c **** *****************************************************************************/
+  54:.\HeartRateProcessing.c **** #define HEART_RATE_CHANNEL			        (0)
+  55:.\HeartRateProcessing.c **** #define ADC_THRESHOLD 			            (0x06A0)
+  56:.\HeartRateProcessing.c **** #define SEC_IN_MIN							(60)
+  57:.\HeartRateProcessing.c **** #define MS_TO_SECOND                        (1000)
+  58:.\HeartRateProcessing.c **** 
+  59:.\HeartRateProcessing.c **** 
+  60:.\HeartRateProcessing.c **** /*****************************************************************************
+  61:.\HeartRateProcessing.c **** * Public variables 
+  62:.\HeartRateProcessing.c **** *****************************************************************************/
+  63:.\HeartRateProcessing.c **** uint8 heartRate = 0;
+  64:.\HeartRateProcessing.c **** 
+  65:.\HeartRateProcessing.c **** 
+  66:.\HeartRateProcessing.c **** /*****************************************************************************
+  67:.\HeartRateProcessing.c **** * Public function definitions
+  68:.\HeartRateProcessing.c **** *****************************************************************************/
+  69:.\HeartRateProcessing.c **** 
+  70:.\HeartRateProcessing.c **** /*****************************************************************************
+  71:.\HeartRateProcessing.c **** * Function Name: ProcessHeartRateSignal
+  72:.\HeartRateProcessing.c **** ******************************************************************************
+  73:.\HeartRateProcessing.c **** * Summary:
+  74:.\HeartRateProcessing.c **** * Measures the heart rate of the user.
+  75:.\HeartRateProcessing.c **** *
+  76:.\HeartRateProcessing.c **** * Parameters:
+  77:.\HeartRateProcessing.c **** * None
+  78:.\HeartRateProcessing.c **** *
+  79:.\HeartRateProcessing.c **** * Return:
+  80:.\HeartRateProcessing.c **** * None
+  81:.\HeartRateProcessing.c **** *
+  82:.\HeartRateProcessing.c **** * Theory:
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\cc8BQaFu.s 			page 3
+
+
+  83:.\HeartRateProcessing.c **** * This function acts as a simple model for heart rate measurement.
+  84:.\HeartRateProcessing.c **** * The function takes the ADC sampled output and compares it to a threshold.
+  85:.\HeartRateProcessing.c **** * If the ADC output is more than the threshold then it is considered as a 
+  86:.\HeartRateProcessing.c **** * valid beat (R peak). The rising edge of this R peak is identified and the 
+  87:.\HeartRateProcessing.c **** * corresponding system timestamp is noted. The RR-interval between two 
+  88:.\HeartRateProcessing.c **** * peaks is then calculated and converted to a heart rate value in beats per
+  89:.\HeartRateProcessing.c **** * minute. The RR-interval period is calculated over a rolling window.
+  90:.\HeartRateProcessing.c **** *
+  91:.\HeartRateProcessing.c **** * Side Effects:
+  92:.\HeartRateProcessing.c **** * None
+  93:.\HeartRateProcessing.c **** *
+  94:.\HeartRateProcessing.c **** *****************************************************************************/
+  95:.\HeartRateProcessing.c **** void ProcessHeartRateSignal(void)
+  96:.\HeartRateProcessing.c **** {
+  33              		.loc 1 96 0
+  34              		.cfi_startproc
+  35 0000 90B5     		push	{r4, r7, lr}
+  36              		.cfi_def_cfa_offset 12
+  37              		.cfi_offset 4, -12
+  38              		.cfi_offset 7, -8
+  39              		.cfi_offset 14, -4
+  40 0002 83B0     		sub	sp, sp, #12
+  41              		.cfi_def_cfa_offset 24
+  42 0004 00AF     		add	r7, sp, #0
+  43              		.cfi_def_cfa_register 7
+  97:.\HeartRateProcessing.c ****     static bool newBeat = true;
+  98:.\HeartRateProcessing.c ****     static bool firstTime = true;
+  99:.\HeartRateProcessing.c ****     static uint32 previousBeatTime = 0;
+ 100:.\HeartRateProcessing.c ****     static uint32 newBeatTime = 0;
+ 101:.\HeartRateProcessing.c ****     int16 adcOut;
+ 102:.\HeartRateProcessing.c ****     uint32 twoSampleTime = 0;
+  44              		.loc 1 102 0
+  45 0006 0023     		mov	r3, #0
+  46 0008 7B60     		str	r3, [r7, #4]
+ 103:.\HeartRateProcessing.c **** 
+ 104:.\HeartRateProcessing.c ****     /* Get the ADC output */
+ 105:.\HeartRateProcessing.c ****     ADC_StartConvert();
+  47              		.loc 1 105 0
+  48 000a FFF7FEFF 		bl	ADC_StartConvert
+ 106:.\HeartRateProcessing.c ****     ADC_IsEndConversion(ADC_WAIT_FOR_RESULT);
+  49              		.loc 1 106 0
+  50 000e 0220     		mov	r0, #2
+  51 0010 FFF7FEFF 		bl	ADC_IsEndConversion
+ 107:.\HeartRateProcessing.c ****     adcOut = ADC_GetResult16(HEART_RATE_CHANNEL);
+  52              		.loc 1 107 0
+  53 0014 BC1C     		add	r4, r7, #2
+  54 0016 0020     		mov	r0, #0
+  55 0018 FFF7FEFF 		bl	ADC_GetResult16
+  56 001c 031C     		mov	r3, r0
+  57 001e 2380     		strh	r3, [r4]
+ 108:.\HeartRateProcessing.c ****     
+ 109:.\HeartRateProcessing.c ****     /* If the ADC output is more than a fixed threshold, consider that a 
+ 110:.\HeartRateProcessing.c ****      * valid R peak */
+ 111:.\HeartRateProcessing.c ****     if (adcOut > ADC_THRESHOLD)
+  58              		.loc 1 111 0
+  59 0020 BB1C     		add	r3, r7, #2
+  60 0022 0021     		mov	r1, #0
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\cc8BQaFu.s 			page 4
+
+
+  61 0024 5A5E     		ldrsh	r2, [r3, r1]
+  62 0026 D423     		mov	r3, #212
+  63 0028 DB00     		lsl	r3, r3, #3
+  64 002a 9A42     		cmp	r2, r3
+  65 002c 2EDD     		ble	.L2
+ 112:.\HeartRateProcessing.c ****     {
+ 113:.\HeartRateProcessing.c ****         /* Check if the R peak just started - i.e. identify the rising 
+ 114:.\HeartRateProcessing.c ****          * edge of the R peak */
+ 115:.\HeartRateProcessing.c ****         if(newBeat)
+  66              		.loc 1 115 0
+  67 002e 1A4B     		ldr	r3, .L7
+  68 0030 1B78     		ldrb	r3, [r3]
+  69 0032 002B     		cmp	r3, #0
+  70 0034 26D0     		beq	.L3
+ 116:.\HeartRateProcessing.c ****         {
+ 117:.\HeartRateProcessing.c ****             /* Check if this is the first R-peak seen by the device yet.
+ 118:.\HeartRateProcessing.c ****              * If that is the case, we cannot calculate a heart rate value 
+ 119:.\HeartRateProcessing.c ****              * yet since a minimum of two peak time interval is required. 
+ 120:.\HeartRateProcessing.c ****              * Just note the timestamp of this peak.
+ 121:.\HeartRateProcessing.c ****              */
+ 122:.\HeartRateProcessing.c ****     		if(firstTime == true)
+  71              		.loc 1 122 0
+  72 0036 194B     		ldr	r3, .L7+4
+  73 0038 1B78     		ldrb	r3, [r3]
+  74 003a 002B     		cmp	r3, #0
+  75 003c 08D0     		beq	.L4
+ 123:.\HeartRateProcessing.c ****     		{
+ 124:.\HeartRateProcessing.c ****     			firstTime = false;
+  76              		.loc 1 124 0
+  77 003e 174B     		ldr	r3, .L7+4
+  78 0040 0022     		mov	r2, #0
+  79 0042 1A70     		strb	r2, [r3]
+ 125:.\HeartRateProcessing.c ****     			previousBeatTime = WatchdogTimer_GetTimestamp();
+  80              		.loc 1 125 0
+  81 0044 FFF7FEFF 		bl	WatchdogTimer_GetTimestamp
+  82 0048 021C     		mov	r2, r0
+  83 004a 154B     		ldr	r3, .L7+8
+  84 004c 1A60     		str	r2, [r3]
+  85 004e 19E0     		b	.L3
+  86              	.L4:
+ 126:.\HeartRateProcessing.c ****     		}
+ 127:.\HeartRateProcessing.c ****     		else
+ 128:.\HeartRateProcessing.c ****     		{
+ 129:.\HeartRateProcessing.c ****                 /* Rolling window of two samples. Note the timestamp of 
+ 130:.\HeartRateProcessing.c ****                  * the new peak and subtract the timestamp of the previous
+ 131:.\HeartRateProcessing.c ****                  * to obtain the RR-interval. Extrapolate it to get a heart
+ 132:.\HeartRateProcessing.c ****                  * beat value in beats per minute.
+ 133:.\HeartRateProcessing.c ****                  */
+ 134:.\HeartRateProcessing.c ****     			newBeatTime = WatchdogTimer_GetTimestamp();
+  87              		.loc 1 134 0
+  88 0050 FFF7FEFF 		bl	WatchdogTimer_GetTimestamp
+  89 0054 021C     		mov	r2, r0
+  90 0056 134B     		ldr	r3, .L7+12
+  91 0058 1A60     		str	r2, [r3]
+ 135:.\HeartRateProcessing.c ****     			twoSampleTime = newBeatTime - previousBeatTime;
+  92              		.loc 1 135 0
+  93 005a 124B     		ldr	r3, .L7+12
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\cc8BQaFu.s 			page 5
+
+
+  94 005c 1A68     		ldr	r2, [r3]
+  95 005e 104B     		ldr	r3, .L7+8
+  96 0060 1B68     		ldr	r3, [r3]
+  97 0062 D31A     		sub	r3, r2, r3
+  98 0064 7B60     		str	r3, [r7, #4]
+ 136:.\HeartRateProcessing.c ****                 
+ 137:.\HeartRateProcessing.c ****                 if(twoSampleTime != 0)
+  99              		.loc 1 137 0
+ 100 0066 7B68     		ldr	r3, [r7, #4]
+ 101 0068 002B     		cmp	r3, #0
+ 102 006a 07D0     		beq	.L5
+ 138:.\HeartRateProcessing.c ****                 {
+ 139:.\HeartRateProcessing.c ****                     heartRate = (uint32)SEC_IN_MIN * MS_TO_SECOND / twoSampleTime;
+ 103              		.loc 1 139 0
+ 104 006c 0E48     		ldr	r0, .L7+16
+ 105 006e 7968     		ldr	r1, [r7, #4]
+ 106 0070 FFF7FEFF 		bl	__aeabi_uidiv
+ 107 0074 031C     		mov	r3, r0
+ 108 0076 DAB2     		uxtb	r2, r3
+ 109 0078 0C4B     		ldr	r3, .L7+20
+ 110 007a 1A70     		strb	r2, [r3]
+ 111              	.L5:
+ 140:.\HeartRateProcessing.c ****                 }
+ 141:.\HeartRateProcessing.c ****                 
+ 142:.\HeartRateProcessing.c ****                 previousBeatTime = newBeatTime;
+ 112              		.loc 1 142 0
+ 113 007c 094B     		ldr	r3, .L7+12
+ 114 007e 1A68     		ldr	r2, [r3]
+ 115 0080 074B     		ldr	r3, .L7+8
+ 116 0082 1A60     		str	r2, [r3]
+ 117              	.L3:
+ 143:.\HeartRateProcessing.c ****     		}
+ 144:.\HeartRateProcessing.c ****         }
+ 145:.\HeartRateProcessing.c ****         
+ 146:.\HeartRateProcessing.c ****         /* Clear the flag to indicate next time that this R peak has already
+ 147:.\HeartRateProcessing.c ****          * been accounted for and we need to wait for the next peak. 
+ 148:.\HeartRateProcessing.c ****          */
+ 149:.\HeartRateProcessing.c ****         newBeat = false;
+ 118              		.loc 1 149 0 discriminator 1
+ 119 0084 044B     		ldr	r3, .L7
+ 120 0086 0022     		mov	r2, #0
+ 121 0088 1A70     		strb	r2, [r3]
+ 122 008a 02E0     		b	.L1
+ 123              	.L2:
+ 150:.\HeartRateProcessing.c ****     }
+ 151:.\HeartRateProcessing.c ****     else
+ 152:.\HeartRateProcessing.c ****     {
+ 153:.\HeartRateProcessing.c ****         /* Set the flag to indicate that there is no R-peak going on right now.
+ 154:.\HeartRateProcessing.c ****          * So it is expected that the next time the ADC output is more than 
+ 155:.\HeartRateProcessing.c ****          * the threshold, it will be a new peak. 
+ 156:.\HeartRateProcessing.c ****          */
+ 157:.\HeartRateProcessing.c ****         newBeat = true;
+ 124              		.loc 1 157 0
+ 125 008c 024B     		ldr	r3, .L7
+ 126 008e 0122     		mov	r2, #1
+ 127 0090 1A70     		strb	r2, [r3]
+ 128              	.L1:
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\cc8BQaFu.s 			page 6
+
+
+ 158:.\HeartRateProcessing.c ****     }
+ 159:.\HeartRateProcessing.c **** }
+ 129              		.loc 1 159 0
+ 130 0092 BD46     		mov	sp, r7
+ 131 0094 03B0     		add	sp, sp, #12
+ 132              		@ sp needed
+ 133 0096 90BD     		pop	{r4, r7, pc}
+ 134              	.L8:
+ 135              		.align	2
+ 136              	.L7:
+ 137 0098 00000000 		.word	newBeat.6467
+ 138 009c 01000000 		.word	firstTime.6468
+ 139 00a0 04000000 		.word	previousBeatTime.6469
+ 140 00a4 08000000 		.word	newBeatTime.6470
+ 141 00a8 60EA0000 		.word	60000
+ 142 00ac 00000000 		.word	heartRate
+ 143              		.cfi_endproc
+ 144              	.LFE35:
+ 145              		.size	ProcessHeartRateSignal, .-ProcessHeartRateSignal
+ 146              		.data
+ 147              		.type	newBeat.6467, %object
+ 148              		.size	newBeat.6467, 1
+ 149              	newBeat.6467:
+ 150 0000 01       		.byte	1
+ 151              		.type	firstTime.6468, %object
+ 152              		.size	firstTime.6468, 1
+ 153              	firstTime.6468:
+ 154 0001 01       		.byte	1
+ 155              		.bss
+ 156 0001 000000   		.align	2
+ 157              	previousBeatTime.6469:
+ 158 0004 00000000 		.space	4
+ 159              		.align	2
+ 160              	newBeatTime.6470:
+ 161 0008 00000000 		.space	4
+ 162              		.text
+ 163              	.Letext0:
+ 164              		.file 2 ".\\Generated_Source\\PSoC4/cytypes.h"
+ 165              		.file 3 ".\\Generated_Source\\PSoC4/BLE_Stack.h"
+ 166              		.file 4 ".\\Generated_Source\\PSoC4/BLE_hrs.h"
+ 167              		.file 5 ".\\Generated_Source\\PSoC4/BLE_dis.h"
+ 168              		.section	.debug_info,"",%progbits
+ 169              	.Ldebug_info0:
+ 170 0000 09030000 		.4byte	0x309
+ 171 0004 0400     		.2byte	0x4
+ 172 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 173 000a 04       		.byte	0x4
+ 174 000b 01       		.uleb128 0x1
+ 175 000c D8080000 		.4byte	.LASF91
+ 176 0010 01       		.byte	0x1
+ 177 0011 5C050000 		.4byte	.LASF92
+ 178 0015 33020000 		.4byte	.LASF93
+ 179 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 180 001d 00000000 		.4byte	0
+ 181 0021 00000000 		.4byte	.Ldebug_line0
+ 182 0025 02       		.uleb128 0x2
+ 183 0026 01       		.byte	0x1
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\cc8BQaFu.s 			page 7
+
+
+ 184 0027 06       		.byte	0x6
+ 185 0028 64040000 		.4byte	.LASF0
+ 186 002c 02       		.uleb128 0x2
+ 187 002d 01       		.byte	0x1
+ 188 002e 08       		.byte	0x8
+ 189 002f 21040000 		.4byte	.LASF1
+ 190 0033 02       		.uleb128 0x2
+ 191 0034 02       		.byte	0x2
+ 192 0035 05       		.byte	0x5
+ 193 0036 3B000000 		.4byte	.LASF2
+ 194 003a 02       		.uleb128 0x2
+ 195 003b 02       		.byte	0x2
+ 196 003c 07       		.byte	0x7
+ 197 003d CF050000 		.4byte	.LASF3
+ 198 0041 02       		.uleb128 0x2
+ 199 0042 04       		.byte	0x4
+ 200 0043 05       		.byte	0x5
+ 201 0044 DE020000 		.4byte	.LASF4
+ 202 0048 02       		.uleb128 0x2
+ 203 0049 04       		.byte	0x4
+ 204 004a 07       		.byte	0x7
+ 205 004b F5040000 		.4byte	.LASF5
+ 206 004f 02       		.uleb128 0x2
+ 207 0050 08       		.byte	0x8
+ 208 0051 05       		.byte	0x5
+ 209 0052 B9020000 		.4byte	.LASF6
+ 210 0056 02       		.uleb128 0x2
+ 211 0057 08       		.byte	0x8
+ 212 0058 07       		.byte	0x7
+ 213 0059 C7020000 		.4byte	.LASF7
+ 214 005d 03       		.uleb128 0x3
+ 215 005e 04       		.byte	0x4
+ 216 005f 05       		.byte	0x5
+ 217 0060 696E7400 		.ascii	"int\000"
+ 218 0064 02       		.uleb128 0x2
+ 219 0065 04       		.byte	0x4
+ 220 0066 07       		.byte	0x7
+ 221 0067 CD040000 		.4byte	.LASF8
+ 222 006b 04       		.uleb128 0x4
+ 223 006c E9030000 		.4byte	.LASF9
+ 224 0070 02       		.byte	0x2
+ 225 0071 A1       		.byte	0xa1
+ 226 0072 2C000000 		.4byte	0x2c
+ 227 0076 04       		.uleb128 0x4
+ 228 0077 3D060000 		.4byte	.LASF10
+ 229 007b 02       		.byte	0x2
+ 230 007c A3       		.byte	0xa3
+ 231 007d 48000000 		.4byte	0x48
+ 232 0081 04       		.uleb128 0x4
+ 233 0082 73010000 		.4byte	.LASF11
+ 234 0086 02       		.byte	0x2
+ 235 0087 A5       		.byte	0xa5
+ 236 0088 33000000 		.4byte	0x33
+ 237 008c 02       		.uleb128 0x2
+ 238 008d 04       		.byte	0x4
+ 239 008e 04       		.byte	0x4
+ 240 008f 80020000 		.4byte	.LASF12
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\cc8BQaFu.s 			page 8
+
+
+ 241 0093 02       		.uleb128 0x2
+ 242 0094 08       		.byte	0x8
+ 243 0095 04       		.byte	0x4
+ 244 0096 85060000 		.4byte	.LASF13
+ 245 009a 02       		.uleb128 0x2
+ 246 009b 01       		.byte	0x1
+ 247 009c 08       		.byte	0x8
+ 248 009d AE050000 		.4byte	.LASF14
+ 249 00a1 02       		.uleb128 0x2
+ 250 00a2 04       		.byte	0x4
+ 251 00a3 07       		.byte	0x7
+ 252 00a4 7D000000 		.4byte	.LASF15
+ 253 00a8 05       		.uleb128 0x5
+ 254 00a9 01       		.byte	0x1
+ 255 00aa 03       		.byte	0x3
+ 256 00ab 58       		.byte	0x58
+ 257 00ac 18020000 		.4byte	0x218
+ 258 00b0 06       		.uleb128 0x6
+ 259 00b1 DD010000 		.4byte	.LASF16
+ 260 00b5 00       		.sleb128 0
+ 261 00b6 06       		.uleb128 0x6
+ 262 00b7 38010000 		.4byte	.LASF17
+ 263 00bb 01       		.sleb128 1
+ 264 00bc 06       		.uleb128 0x6
+ 265 00bd EF070000 		.4byte	.LASF18
+ 266 00c1 02       		.sleb128 2
+ 267 00c2 06       		.uleb128 0x6
+ 268 00c3 FA060000 		.4byte	.LASF19
+ 269 00c7 03       		.sleb128 3
+ 270 00c8 06       		.uleb128 0x6
+ 271 00c9 02010000 		.4byte	.LASF20
+ 272 00cd 04       		.sleb128 4
+ 273 00ce 06       		.uleb128 0x6
+ 274 00cf 56030000 		.4byte	.LASF21
+ 275 00d3 05       		.sleb128 5
+ 276 00d4 06       		.uleb128 0x6
+ 277 00d5 58070000 		.4byte	.LASF22
+ 278 00d9 20       		.sleb128 32
+ 279 00da 06       		.uleb128 0x6
+ 280 00db 07050000 		.4byte	.LASF23
+ 281 00df 21       		.sleb128 33
+ 282 00e0 06       		.uleb128 0x6
+ 283 00e1 00000000 		.4byte	.LASF24
+ 284 00e5 22       		.sleb128 34
+ 285 00e6 06       		.uleb128 0x6
+ 286 00e7 89030000 		.4byte	.LASF25
+ 287 00eb 23       		.sleb128 35
+ 288 00ec 06       		.uleb128 0x6
+ 289 00ed B1040000 		.4byte	.LASF26
+ 290 00f1 24       		.sleb128 36
+ 291 00f2 06       		.uleb128 0x6
+ 292 00f3 45000000 		.4byte	.LASF27
+ 293 00f7 25       		.sleb128 37
+ 294 00f8 06       		.uleb128 0x6
+ 295 00f9 D2060000 		.4byte	.LASF28
+ 296 00fd 26       		.sleb128 38
+ 297 00fe 06       		.uleb128 0x6
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\cc8BQaFu.s 			page 9
+
+
+ 298 00ff 08030000 		.4byte	.LASF29
+ 299 0103 27       		.sleb128 39
+ 300 0104 06       		.uleb128 0x6
+ 301 0105 92080000 		.4byte	.LASF30
+ 302 0109 28       		.sleb128 40
+ 303 010a 06       		.uleb128 0x6
+ 304 010b 3F050000 		.4byte	.LASF31
+ 305 010f 29       		.sleb128 41
+ 306 0110 06       		.uleb128 0x6
+ 307 0111 74050000 		.4byte	.LASF32
+ 308 0115 2A       		.sleb128 42
+ 309 0116 06       		.uleb128 0x6
+ 310 0117 25080000 		.4byte	.LASF33
+ 311 011b 2B       		.sleb128 43
+ 312 011c 06       		.uleb128 0x6
+ 313 011d 79010000 		.4byte	.LASF34
+ 314 0121 2C       		.sleb128 44
+ 315 0122 06       		.uleb128 0x6
+ 316 0123 B3000000 		.4byte	.LASF35
+ 317 0127 C000     		.sleb128 64
+ 318 0129 06       		.uleb128 0x6
+ 319 012a DA040000 		.4byte	.LASF36
+ 320 012e C100     		.sleb128 65
+ 321 0130 06       		.uleb128 0x6
+ 322 0131 5F000000 		.4byte	.LASF37
+ 323 0135 C200     		.sleb128 66
+ 324 0137 06       		.uleb128 0x6
+ 325 0138 4B010000 		.4byte	.LASF38
+ 326 013c C300     		.sleb128 67
+ 327 013e 06       		.uleb128 0x6
+ 328 013f BA070000 		.4byte	.LASF39
+ 329 0143 C400     		.sleb128 68
+ 330 0145 06       		.uleb128 0x6
+ 331 0146 7C070000 		.4byte	.LASF40
+ 332 014a C500     		.sleb128 69
+ 333 014c 06       		.uleb128 0x6
+ 334 014d 17010000 		.4byte	.LASF41
+ 335 0151 C600     		.sleb128 70
+ 336 0153 06       		.uleb128 0x6
+ 337 0154 4B080000 		.4byte	.LASF42
+ 338 0158 C700     		.sleb128 71
+ 339 015a 06       		.uleb128 0x6
+ 340 015b 8A040000 		.4byte	.LASF43
+ 341 015f C800     		.sleb128 72
+ 342 0161 06       		.uleb128 0x6
+ 343 0162 86020000 		.4byte	.LASF44
+ 344 0166 C900     		.sleb128 73
+ 345 0168 06       		.uleb128 0x6
+ 346 0169 00060000 		.4byte	.LASF45
+ 347 016d CA00     		.sleb128 74
+ 348 016f 06       		.uleb128 0x6
+ 349 0170 9D010000 		.4byte	.LASF46
+ 350 0174 CB00     		.sleb128 75
+ 351 0176 06       		.uleb128 0x6
+ 352 0177 70040000 		.4byte	.LASF47
+ 353 017b CC00     		.sleb128 76
+ 354 017d 06       		.uleb128 0x6
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\cc8BQaFu.s 			page 10
+
+
+ 355 017e 9F020000 		.4byte	.LASF48
+ 356 0182 CD00     		.sleb128 77
+ 357 0184 06       		.uleb128 0x6
+ 358 0185 E4000000 		.4byte	.LASF49
+ 359 0189 CE00     		.sleb128 78
+ 360 018b 06       		.uleb128 0x6
+ 361 018c 2F040000 		.4byte	.LASF50
+ 362 0190 CF00     		.sleb128 79
+ 363 0192 06       		.uleb128 0x6
+ 364 0193 73080000 		.4byte	.LASF51
+ 365 0197 D000     		.sleb128 80
+ 366 0199 06       		.uleb128 0x6
+ 367 019a 1E060000 		.4byte	.LASF52
+ 368 019e D100     		.sleb128 81
+ 369 01a0 06       		.uleb128 0x6
+ 370 01a1 35030000 		.4byte	.LASF53
+ 371 01a5 D200     		.sleb128 82
+ 372 01a7 06       		.uleb128 0x6
+ 373 01a8 E7020000 		.4byte	.LASF54
+ 374 01ac D300     		.sleb128 83
+ 375 01ae 06       		.uleb128 0x6
+ 376 01af BC010000 		.4byte	.LASF55
+ 377 01b3 D400     		.sleb128 84
+ 378 01b5 06       		.uleb128 0x6
+ 379 01b6 B4080000 		.4byte	.LASF56
+ 380 01ba D500     		.sleb128 85
+ 381 01bc 06       		.uleb128 0x6
+ 382 01bd FB030000 		.4byte	.LASF57
+ 383 01c1 F000     		.sleb128 112
+ 384 01c3 06       		.uleb128 0x6
+ 385 01c4 32070000 		.4byte	.LASF58
+ 386 01c8 F100     		.sleb128 113
+ 387 01ca 06       		.uleb128 0x6
+ 388 01cb B3050000 		.4byte	.LASF59
+ 389 01cf F200     		.sleb128 114
+ 390 01d1 06       		.uleb128 0x6
+ 391 01d2 F4010000 		.4byte	.LASF60
+ 392 01d6 F300     		.sleb128 115
+ 393 01d8 06       		.uleb128 0x6
+ 394 01d9 BD030000 		.4byte	.LASF61
+ 395 01dd F400     		.sleb128 116
+ 396 01df 06       		.uleb128 0x6
+ 397 01e0 1E050000 		.4byte	.LASF62
+ 398 01e4 F500     		.sleb128 117
+ 399 01e6 06       		.uleb128 0x6
+ 400 01e7 12020000 		.4byte	.LASF63
+ 401 01eb F600     		.sleb128 118
+ 402 01ed 06       		.uleb128 0x6
+ 403 01ee 13070000 		.4byte	.LASF64
+ 404 01f2 F700     		.sleb128 119
+ 405 01f4 06       		.uleb128 0x6
+ 406 01f5 62060000 		.4byte	.LASF65
+ 407 01f9 F800     		.sleb128 120
+ 408 01fb 06       		.uleb128 0x6
+ 409 01fc 9A060000 		.4byte	.LASF66
+ 410 0200 F900     		.sleb128 121
+ 411 0202 06       		.uleb128 0x6
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\cc8BQaFu.s 			page 11
+
+
+ 412 0203 01080000 		.4byte	.LASF67
+ 413 0207 FA00     		.sleb128 122
+ 414 0209 06       		.uleb128 0x6
+ 415 020a 44060000 		.4byte	.LASF68
+ 416 020e FA01     		.sleb128 250
+ 417 0210 06       		.uleb128 0x6
+ 418 0211 DB030000 		.4byte	.LASF69
+ 419 0215 FF01     		.sleb128 255
+ 420 0217 00       		.byte	0
+ 421 0218 05       		.uleb128 0x5
+ 422 0219 01       		.byte	0x1
+ 423 021a 04       		.byte	0x4
+ 424 021b 22       		.byte	0x22
+ 425 021c 39020000 		.4byte	0x239
+ 426 0220 06       		.uleb128 0x6
+ 427 0221 AF030000 		.4byte	.LASF70
+ 428 0225 00       		.sleb128 0
+ 429 0226 06       		.uleb128 0x6
+ 430 0227 27030000 		.4byte	.LASF71
+ 431 022b 01       		.sleb128 1
+ 432 022c 06       		.uleb128 0x6
+ 433 022d 56040000 		.4byte	.LASF72
+ 434 0231 02       		.sleb128 2
+ 435 0232 06       		.uleb128 0x6
+ 436 0233 86000000 		.4byte	.LASF73
+ 437 0237 03       		.sleb128 3
+ 438 0238 00       		.byte	0
+ 439 0239 05       		.uleb128 0x5
+ 440 023a 01       		.byte	0x1
+ 441 023b 05       		.byte	0x5
+ 442 023c 1D       		.byte	0x1d
+ 443 023d 7E020000 		.4byte	0x27e
+ 444 0241 06       		.uleb128 0x6
+ 445 0242 68090000 		.4byte	.LASF74
+ 446 0246 00       		.sleb128 0
+ 447 0247 06       		.uleb128 0x6
+ 448 0248 72030000 		.4byte	.LASF75
+ 449 024c 01       		.sleb128 1
+ 450 024d 06       		.uleb128 0x6
+ 451 024e 9B000000 		.4byte	.LASF76
+ 452 0252 02       		.sleb128 2
+ 453 0253 06       		.uleb128 0x6
+ 454 0254 D8070000 		.4byte	.LASF77
+ 455 0258 03       		.sleb128 3
+ 456 0259 06       		.uleb128 0x6
+ 457 025a A3070000 		.4byte	.LASF78
+ 458 025e 04       		.sleb128 4
+ 459 025f 06       		.uleb128 0x6
+ 460 0260 CD000000 		.4byte	.LASF79
+ 461 0264 05       		.sleb128 5
+ 462 0265 06       		.uleb128 0x6
+ 463 0266 54090000 		.4byte	.LASF80
+ 464 026a 06       		.sleb128 6
+ 465 026b 06       		.uleb128 0x6
+ 466 026c E8050000 		.4byte	.LASF81
+ 467 0270 07       		.sleb128 7
+ 468 0271 06       		.uleb128 0x6
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\cc8BQaFu.s 			page 12
+
+
+ 469 0272 84090000 		.4byte	.LASF82
+ 470 0276 08       		.sleb128 8
+ 471 0277 06       		.uleb128 0x6
+ 472 0278 BD060000 		.4byte	.LASF83
+ 473 027c 09       		.sleb128 9
+ 474 027d 00       		.byte	0
+ 475 027e 07       		.uleb128 0x7
+ 476 027f 24000000 		.4byte	.LASF94
+ 477 0283 01       		.byte	0x1
+ 478 0284 5F       		.byte	0x5f
+ 479 0285 00000000 		.4byte	.LFB35
+ 480 0289 B0000000 		.4byte	.LFE35-.LFB35
+ 481 028d 01       		.uleb128 0x1
+ 482 028e 9C       		.byte	0x9c
+ 483 028f F4020000 		.4byte	0x2f4
+ 484 0293 08       		.uleb128 0x8
+ 485 0294 4E040000 		.4byte	.LASF84
+ 486 0298 01       		.byte	0x1
+ 487 0299 61       		.byte	0x61
+ 488 029a F4020000 		.4byte	0x2f4
+ 489 029e 05       		.uleb128 0x5
+ 490 029f 03       		.byte	0x3
+ 491 02a0 00000000 		.4byte	newBeat.6467
+ 492 02a4 08       		.uleb128 0x8
+ 493 02a5 69010000 		.4byte	.LASF85
+ 494 02a9 01       		.byte	0x1
+ 495 02aa 62       		.byte	0x62
+ 496 02ab F4020000 		.4byte	0x2f4
+ 497 02af 05       		.uleb128 0x5
+ 498 02b0 03       		.byte	0x3
+ 499 02b1 01000000 		.4byte	firstTime.6468
+ 500 02b5 08       		.uleb128 0x8
+ 501 02b6 9D050000 		.4byte	.LASF86
+ 502 02ba 01       		.byte	0x1
+ 503 02bb 63       		.byte	0x63
+ 504 02bc 76000000 		.4byte	0x76
+ 505 02c0 05       		.uleb128 0x5
+ 506 02c1 03       		.byte	0x3
+ 507 02c2 04000000 		.4byte	previousBeatTime.6469
+ 508 02c6 08       		.uleb128 0x8
+ 509 02c7 EF030000 		.4byte	.LASF87
+ 510 02cb 01       		.byte	0x1
+ 511 02cc 64       		.byte	0x64
+ 512 02cd 76000000 		.4byte	0x76
+ 513 02d1 05       		.uleb128 0x5
+ 514 02d2 03       		.byte	0x3
+ 515 02d3 08000000 		.4byte	newBeatTime.6470
+ 516 02d7 08       		.uleb128 0x8
+ 517 02d8 44080000 		.4byte	.LASF88
+ 518 02dc 01       		.byte	0x1
+ 519 02dd 65       		.byte	0x65
+ 520 02de 81000000 		.4byte	0x81
+ 521 02e2 02       		.uleb128 0x2
+ 522 02e3 91       		.byte	0x91
+ 523 02e4 6A       		.sleb128 -22
+ 524 02e5 08       		.uleb128 0x8
+ 525 02e6 8C060000 		.4byte	.LASF89
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\cc8BQaFu.s 			page 13
+
+
+ 526 02ea 01       		.byte	0x1
+ 527 02eb 66       		.byte	0x66
+ 528 02ec 76000000 		.4byte	0x76
+ 529 02f0 02       		.uleb128 0x2
+ 530 02f1 91       		.byte	0x91
+ 531 02f2 6C       		.sleb128 -20
+ 532 02f3 00       		.byte	0
+ 533 02f4 02       		.uleb128 0x2
+ 534 02f5 01       		.byte	0x1
+ 535 02f6 02       		.byte	0x2
+ 536 02f7 E2050000 		.4byte	.LASF90
+ 537 02fb 09       		.uleb128 0x9
+ 538 02fc 69080000 		.4byte	.LASF95
+ 539 0300 01       		.byte	0x1
+ 540 0301 3F       		.byte	0x3f
+ 541 0302 6B000000 		.4byte	0x6b
+ 542 0306 05       		.uleb128 0x5
+ 543 0307 03       		.byte	0x3
+ 544 0308 00000000 		.4byte	heartRate
+ 545 030c 00       		.byte	0
+ 546              		.section	.debug_abbrev,"",%progbits
+ 547              	.Ldebug_abbrev0:
+ 548 0000 01       		.uleb128 0x1
+ 549 0001 11       		.uleb128 0x11
+ 550 0002 01       		.byte	0x1
+ 551 0003 25       		.uleb128 0x25
+ 552 0004 0E       		.uleb128 0xe
+ 553 0005 13       		.uleb128 0x13
+ 554 0006 0B       		.uleb128 0xb
+ 555 0007 03       		.uleb128 0x3
+ 556 0008 0E       		.uleb128 0xe
+ 557 0009 1B       		.uleb128 0x1b
+ 558 000a 0E       		.uleb128 0xe
+ 559 000b 55       		.uleb128 0x55
+ 560 000c 17       		.uleb128 0x17
+ 561 000d 11       		.uleb128 0x11
+ 562 000e 01       		.uleb128 0x1
+ 563 000f 10       		.uleb128 0x10
+ 564 0010 17       		.uleb128 0x17
+ 565 0011 00       		.byte	0
+ 566 0012 00       		.byte	0
+ 567 0013 02       		.uleb128 0x2
+ 568 0014 24       		.uleb128 0x24
+ 569 0015 00       		.byte	0
+ 570 0016 0B       		.uleb128 0xb
+ 571 0017 0B       		.uleb128 0xb
+ 572 0018 3E       		.uleb128 0x3e
+ 573 0019 0B       		.uleb128 0xb
+ 574 001a 03       		.uleb128 0x3
+ 575 001b 0E       		.uleb128 0xe
+ 576 001c 00       		.byte	0
+ 577 001d 00       		.byte	0
+ 578 001e 03       		.uleb128 0x3
+ 579 001f 24       		.uleb128 0x24
+ 580 0020 00       		.byte	0
+ 581 0021 0B       		.uleb128 0xb
+ 582 0022 0B       		.uleb128 0xb
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\cc8BQaFu.s 			page 14
+
+
+ 583 0023 3E       		.uleb128 0x3e
+ 584 0024 0B       		.uleb128 0xb
+ 585 0025 03       		.uleb128 0x3
+ 586 0026 08       		.uleb128 0x8
+ 587 0027 00       		.byte	0
+ 588 0028 00       		.byte	0
+ 589 0029 04       		.uleb128 0x4
+ 590 002a 16       		.uleb128 0x16
+ 591 002b 00       		.byte	0
+ 592 002c 03       		.uleb128 0x3
+ 593 002d 0E       		.uleb128 0xe
+ 594 002e 3A       		.uleb128 0x3a
+ 595 002f 0B       		.uleb128 0xb
+ 596 0030 3B       		.uleb128 0x3b
+ 597 0031 0B       		.uleb128 0xb
+ 598 0032 49       		.uleb128 0x49
+ 599 0033 13       		.uleb128 0x13
+ 600 0034 00       		.byte	0
+ 601 0035 00       		.byte	0
+ 602 0036 05       		.uleb128 0x5
+ 603 0037 04       		.uleb128 0x4
+ 604 0038 01       		.byte	0x1
+ 605 0039 0B       		.uleb128 0xb
+ 606 003a 0B       		.uleb128 0xb
+ 607 003b 3A       		.uleb128 0x3a
+ 608 003c 0B       		.uleb128 0xb
+ 609 003d 3B       		.uleb128 0x3b
+ 610 003e 0B       		.uleb128 0xb
+ 611 003f 01       		.uleb128 0x1
+ 612 0040 13       		.uleb128 0x13
+ 613 0041 00       		.byte	0
+ 614 0042 00       		.byte	0
+ 615 0043 06       		.uleb128 0x6
+ 616 0044 28       		.uleb128 0x28
+ 617 0045 00       		.byte	0
+ 618 0046 03       		.uleb128 0x3
+ 619 0047 0E       		.uleb128 0xe
+ 620 0048 1C       		.uleb128 0x1c
+ 621 0049 0D       		.uleb128 0xd
+ 622 004a 00       		.byte	0
+ 623 004b 00       		.byte	0
+ 624 004c 07       		.uleb128 0x7
+ 625 004d 2E       		.uleb128 0x2e
+ 626 004e 01       		.byte	0x1
+ 627 004f 3F       		.uleb128 0x3f
+ 628 0050 19       		.uleb128 0x19
+ 629 0051 03       		.uleb128 0x3
+ 630 0052 0E       		.uleb128 0xe
+ 631 0053 3A       		.uleb128 0x3a
+ 632 0054 0B       		.uleb128 0xb
+ 633 0055 3B       		.uleb128 0x3b
+ 634 0056 0B       		.uleb128 0xb
+ 635 0057 27       		.uleb128 0x27
+ 636 0058 19       		.uleb128 0x19
+ 637 0059 11       		.uleb128 0x11
+ 638 005a 01       		.uleb128 0x1
+ 639 005b 12       		.uleb128 0x12
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\cc8BQaFu.s 			page 15
+
+
+ 640 005c 06       		.uleb128 0x6
+ 641 005d 40       		.uleb128 0x40
+ 642 005e 18       		.uleb128 0x18
+ 643 005f 9642     		.uleb128 0x2116
+ 644 0061 19       		.uleb128 0x19
+ 645 0062 01       		.uleb128 0x1
+ 646 0063 13       		.uleb128 0x13
+ 647 0064 00       		.byte	0
+ 648 0065 00       		.byte	0
+ 649 0066 08       		.uleb128 0x8
+ 650 0067 34       		.uleb128 0x34
+ 651 0068 00       		.byte	0
+ 652 0069 03       		.uleb128 0x3
+ 653 006a 0E       		.uleb128 0xe
+ 654 006b 3A       		.uleb128 0x3a
+ 655 006c 0B       		.uleb128 0xb
+ 656 006d 3B       		.uleb128 0x3b
+ 657 006e 0B       		.uleb128 0xb
+ 658 006f 49       		.uleb128 0x49
+ 659 0070 13       		.uleb128 0x13
+ 660 0071 02       		.uleb128 0x2
+ 661 0072 18       		.uleb128 0x18
+ 662 0073 00       		.byte	0
+ 663 0074 00       		.byte	0
+ 664 0075 09       		.uleb128 0x9
+ 665 0076 34       		.uleb128 0x34
+ 666 0077 00       		.byte	0
+ 667 0078 03       		.uleb128 0x3
+ 668 0079 0E       		.uleb128 0xe
+ 669 007a 3A       		.uleb128 0x3a
+ 670 007b 0B       		.uleb128 0xb
+ 671 007c 3B       		.uleb128 0x3b
+ 672 007d 0B       		.uleb128 0xb
+ 673 007e 49       		.uleb128 0x49
+ 674 007f 13       		.uleb128 0x13
+ 675 0080 3F       		.uleb128 0x3f
+ 676 0081 19       		.uleb128 0x19
+ 677 0082 02       		.uleb128 0x2
+ 678 0083 18       		.uleb128 0x18
+ 679 0084 00       		.byte	0
+ 680 0085 00       		.byte	0
+ 681 0086 00       		.byte	0
+ 682              		.section	.debug_aranges,"",%progbits
+ 683 0000 1C000000 		.4byte	0x1c
+ 684 0004 0200     		.2byte	0x2
+ 685 0006 00000000 		.4byte	.Ldebug_info0
+ 686 000a 04       		.byte	0x4
+ 687 000b 00       		.byte	0
+ 688 000c 0000     		.2byte	0
+ 689 000e 0000     		.2byte	0
+ 690 0010 00000000 		.4byte	.LFB35
+ 691 0014 B0000000 		.4byte	.LFE35-.LFB35
+ 692 0018 00000000 		.4byte	0
+ 693 001c 00000000 		.4byte	0
+ 694              		.section	.debug_ranges,"",%progbits
+ 695              	.Ldebug_ranges0:
+ 696 0000 00000000 		.4byte	.LFB35
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\cc8BQaFu.s 			page 16
+
+
+ 697 0004 B0000000 		.4byte	.LFE35
+ 698 0008 00000000 		.4byte	0
+ 699 000c 00000000 		.4byte	0
+ 700              		.section	.debug_line,"",%progbits
+ 701              	.Ldebug_line0:
+ 702 0000 AA000000 		.section	.debug_str,"MS",%progbits,1
+ 702      02007D00 
+ 702      00000201 
+ 702      FB0E0D00 
+ 702      01010101 
+ 703              	.LASF24:
+ 704 0000 4359424C 		.ascii	"CYBLE_EVT_GAP_PASSKEY_ENTRY_REQUEST\000"
+ 704      455F4556 
+ 704      545F4741 
+ 704      505F5041 
+ 704      53534B45 
+ 705              	.LASF94:
+ 706 0024 50726F63 		.ascii	"ProcessHeartRateSignal\000"
+ 706      65737348 
+ 706      65617274 
+ 706      52617465 
+ 706      5369676E 
+ 707              	.LASF2:
+ 708 003b 73686F72 		.ascii	"short int\000"
+ 708      7420696E 
+ 708      7400
+ 709              	.LASF27:
+ 710 0045 4359424C 		.ascii	"CYBLE_EVT_GAP_AUTH_FAILED\000"
+ 710      455F4556 
+ 710      545F4741 
+ 710      505F4155 
+ 710      54485F46 
+ 711              	.LASF37:
+ 712 005f 4359424C 		.ascii	"CYBLE_EVT_GATT_DISCONNECT_IND\000"
+ 712      455F4556 
+ 712      545F4741 
+ 712      54545F44 
+ 712      4953434F 
+ 713              	.LASF15:
+ 714 007d 73697A65 		.ascii	"sizetype\000"
+ 714      74797065 
+ 714      00
+ 715              	.LASF73:
+ 716 0086 4359424C 		.ascii	"CYBLE_HRS_CHAR_COUNT\000"
+ 716      455F4852 
+ 716      535F4348 
+ 716      41525F43 
+ 716      4F554E54 
+ 717              	.LASF76:
+ 718 009b 4359424C 		.ascii	"CYBLE_DIS_SERIAL_NUMBER\000"
+ 718      455F4449 
+ 718      535F5345 
+ 718      5249414C 
+ 718      5F4E554D 
+ 719              	.LASF35:
+ 720 00b3 4359424C 		.ascii	"CYBLE_EVT_GATTC_ERROR_RSP\000"
+ 720      455F4556 
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\cc8BQaFu.s 			page 17
+
+
+ 720      545F4741 
+ 720      5454435F 
+ 720      4552524F 
+ 721              	.LASF79:
+ 722 00cd 4359424C 		.ascii	"CYBLE_DIS_SOFTWARE_REV\000"
+ 722      455F4449 
+ 722      535F534F 
+ 722      46545741 
+ 722      52455F52 
+ 723              	.LASF49:
+ 724 00e4 4359424C 		.ascii	"CYBLE_EVT_GATTS_WRITE_CMD_REQ\000"
+ 724      455F4556 
+ 724      545F4741 
+ 724      5454535F 
+ 724      57524954 
+ 725              	.LASF20:
+ 726 0102 4359424C 		.ascii	"CYBLE_EVT_HCI_STATUS\000"
+ 726      455F4556 
+ 726      545F4843 
+ 726      495F5354 
+ 726      41545553 
+ 727              	.LASF41:
+ 728 0117 4359424C 		.ascii	"CYBLE_EVT_GATTC_READ_BY_TYPE_RSP\000"
+ 728      455F4556 
+ 728      545F4741 
+ 728      5454435F 
+ 728      52454144 
+ 729              	.LASF17:
+ 730 0138 4359424C 		.ascii	"CYBLE_EVT_STACK_ON\000"
+ 730      455F4556 
+ 730      545F5354 
+ 730      41434B5F 
+ 730      4F4E00
+ 731              	.LASF38:
+ 732 014b 4359424C 		.ascii	"CYBLE_EVT_GATTS_XCNHG_MTU_REQ\000"
+ 732      455F4556 
+ 732      545F4741 
+ 732      5454535F 
+ 732      58434E48 
+ 733              	.LASF85:
+ 734 0169 66697273 		.ascii	"firstTime\000"
+ 734      7454696D 
+ 734      6500
+ 735              	.LASF11:
+ 736 0173 696E7431 		.ascii	"int16\000"
+ 736      3600
+ 737              	.LASF34:
+ 738 0179 4359424C 		.ascii	"CYBLE_EVT_GAP_KEYINFO_EXCHNGE_CMPLT\000"
+ 738      455F4556 
+ 738      545F4741 
+ 738      505F4B45 
+ 738      59494E46 
+ 739              	.LASF46:
+ 740 019d 4359424C 		.ascii	"CYBLE_EVT_GATTC_READ_MULTI_RSP\000"
+ 740      455F4556 
+ 740      545F4741 
+ 740      5454435F 
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\cc8BQaFu.s 			page 18
+
+
+ 740      52454144 
+ 741              	.LASF55:
+ 742 01bc 4359424C 		.ascii	"CYBLE_EVT_GATTS_HANDLE_VALUE_CNF\000"
+ 742      455F4556 
+ 742      545F4741 
+ 742      5454535F 
+ 742      48414E44 
+ 743              	.LASF16:
+ 744 01dd 4359424C 		.ascii	"CYBLE_EVT_HOST_INVALID\000"
+ 744      455F4556 
+ 744      545F484F 
+ 744      53545F49 
+ 744      4E56414C 
+ 745              	.LASF60:
+ 746 01f4 4359424C 		.ascii	"CYBLE_EVT_L2CAP_CBFC_CONN_IND\000"
+ 746      455F4556 
+ 746      545F4C32 
+ 746      4341505F 
+ 746      43424643 
+ 747              	.LASF63:
+ 748 0212 4359424C 		.ascii	"CYBLE_EVT_L2CAP_CBFC_DISCONN_CNF\000"
+ 748      455F4556 
+ 748      545F4C32 
+ 748      4341505F 
+ 748      43424643 
+ 749              	.LASF93:
+ 750 0233 433A5C55 		.ascii	"C:\\Users\\Manisha Goyal\\Desktop\\safe_3\\lab3_man"
+ 750      73657273 
+ 750      5C4D616E 
+ 750      69736861 
+ 750      20476F79 
+ 751 0261 69736861 		.ascii	"isha\\BLE Lab 3\\BLE Lab 3.cydsn\000"
+ 751      5C424C45 
+ 751      204C6162 
+ 751      20335C42 
+ 751      4C45204C 
+ 752              	.LASF12:
+ 753 0280 666C6F61 		.ascii	"float\000"
+ 753      7400
+ 754              	.LASF44:
+ 755 0286 4359424C 		.ascii	"CYBLE_EVT_GATTC_READ_RSP\000"
+ 755      455F4556 
+ 755      545F4741 
+ 755      5454435F 
+ 755      52454144 
+ 756              	.LASF48:
+ 757 029f 4359424C 		.ascii	"CYBLE_EVT_GATTC_WRITE_RSP\000"
+ 757      455F4556 
+ 757      545F4741 
+ 757      5454435F 
+ 757      57524954 
+ 758              	.LASF6:
+ 759 02b9 6C6F6E67 		.ascii	"long long int\000"
+ 759      206C6F6E 
+ 759      6720696E 
+ 759      7400
+ 760              	.LASF7:
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\cc8BQaFu.s 			page 19
+
+
+ 761 02c7 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 761      206C6F6E 
+ 761      6720756E 
+ 761      7369676E 
+ 761      65642069 
+ 762              	.LASF4:
+ 763 02de 6C6F6E67 		.ascii	"long int\000"
+ 763      20696E74 
+ 763      00
+ 764              	.LASF54:
+ 765 02e7 4359424C 		.ascii	"CYBLE_EVT_GATTC_HANDLE_VALUE_IND\000"
+ 765      455F4556 
+ 765      545F4741 
+ 765      5454435F 
+ 765      48414E44 
+ 766              	.LASF29:
+ 767 0308 4359424C 		.ascii	"CYBLE_EVT_GAP_DEVICE_CONNECTED\000"
+ 767      455F4556 
+ 767      545F4741 
+ 767      505F4445 
+ 767      56494345 
+ 768              	.LASF71:
+ 769 0327 4359424C 		.ascii	"CYBLE_HRS_BSL\000"
+ 769      455F4852 
+ 769      535F4253 
+ 769      4C00
+ 770              	.LASF53:
+ 771 0335 4359424C 		.ascii	"CYBLE_EVT_GATTC_HANDLE_VALUE_NTF\000"
+ 771      455F4556 
+ 771      545F4741 
+ 771      5454435F 
+ 771      48414E44 
+ 772              	.LASF21:
+ 773 0356 4359424C 		.ascii	"CYBLE_EVT_STACK_BUSY_STATUS\000"
+ 773      455F4556 
+ 773      545F5354 
+ 773      41434B5F 
+ 773      42555359 
+ 774              	.LASF75:
+ 775 0372 4359424C 		.ascii	"CYBLE_DIS_MODEL_NUMBER\000"
+ 775      455F4449 
+ 775      535F4D4F 
+ 775      44454C5F 
+ 775      4E554D42 
+ 776              	.LASF25:
+ 777 0389 4359424C 		.ascii	"CYBLE_EVT_GAP_PASSKEY_DISPLAY_REQUEST\000"
+ 777      455F4556 
+ 777      545F4741 
+ 777      505F5041 
+ 777      53534B45 
+ 778              	.LASF70:
+ 779 03af 4359424C 		.ascii	"CYBLE_HRS_HRM\000"
+ 779      455F4852 
+ 779      535F4852 
+ 779      4D00
+ 780              	.LASF61:
+ 781 03bd 4359424C 		.ascii	"CYBLE_EVT_L2CAP_CBFC_CONN_CNF\000"
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\cc8BQaFu.s 			page 20
+
+
+ 781      455F4556 
+ 781      545F4C32 
+ 781      4341505F 
+ 781      43424643 
+ 782              	.LASF69:
+ 783 03db 4359424C 		.ascii	"CYBLE_EVT_MAX\000"
+ 783      455F4556 
+ 783      545F4D41 
+ 783      5800
+ 784              	.LASF9:
+ 785 03e9 75696E74 		.ascii	"uint8\000"
+ 785      3800
+ 786              	.LASF87:
+ 787 03ef 6E657742 		.ascii	"newBeatTime\000"
+ 787      65617454 
+ 787      696D6500 
+ 788              	.LASF57:
+ 789 03fb 4359424C 		.ascii	"CYBLE_EVT_L2CAP_CONN_PARAM_UPDATE_REQ\000"
+ 789      455F4556 
+ 789      545F4C32 
+ 789      4341505F 
+ 789      434F4E4E 
+ 790              	.LASF1:
+ 791 0421 756E7369 		.ascii	"unsigned char\000"
+ 791      676E6564 
+ 791      20636861 
+ 791      7200
+ 792              	.LASF50:
+ 793 042f 4359424C 		.ascii	"CYBLE_EVT_GATTS_PREP_WRITE_REQ\000"
+ 793      455F4556 
+ 793      545F4741 
+ 793      5454535F 
+ 793      50524550 
+ 794              	.LASF84:
+ 795 044e 6E657742 		.ascii	"newBeat\000"
+ 795      65617400 
+ 796              	.LASF72:
+ 797 0456 4359424C 		.ascii	"CYBLE_HRS_CPT\000"
+ 797      455F4852 
+ 797      535F4350 
+ 797      5400
+ 798              	.LASF0:
+ 799 0464 7369676E 		.ascii	"signed char\000"
+ 799      65642063 
+ 799      68617200 
+ 800              	.LASF47:
+ 801 0470 4359424C 		.ascii	"CYBLE_EVT_GATTS_WRITE_REQ\000"
+ 801      455F4556 
+ 801      545F4741 
+ 801      5454535F 
+ 801      57524954 
+ 802              	.LASF43:
+ 803 048a 4359424C 		.ascii	"CYBLE_EVT_GATTC_FIND_BY_TYPE_VALUE_RSP\000"
+ 803      455F4556 
+ 803      545F4741 
+ 803      5454435F 
+ 803      46494E44 
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\cc8BQaFu.s 			page 21
+
+
+ 804              	.LASF26:
+ 805 04b1 4359424C 		.ascii	"CYBLE_EVT_GAP_AUTH_COMPLETE\000"
+ 805      455F4556 
+ 805      545F4741 
+ 805      505F4155 
+ 805      54485F43 
+ 806              	.LASF8:
+ 807 04cd 756E7369 		.ascii	"unsigned int\000"
+ 807      676E6564 
+ 807      20696E74 
+ 807      00
+ 808              	.LASF36:
+ 809 04da 4359424C 		.ascii	"CYBLE_EVT_GATT_CONNECT_IND\000"
+ 809      455F4556 
+ 809      545F4741 
+ 809      54545F43 
+ 809      4F4E4E45 
+ 810              	.LASF5:
+ 811 04f5 6C6F6E67 		.ascii	"long unsigned int\000"
+ 811      20756E73 
+ 811      69676E65 
+ 811      6420696E 
+ 811      7400
+ 812              	.LASF23:
+ 813 0507 4359424C 		.ascii	"CYBLE_EVT_GAP_AUTH_REQ\000"
+ 813      455F4556 
+ 813      545F4741 
+ 813      505F4155 
+ 813      54485F52 
+ 814              	.LASF62:
+ 815 051e 4359424C 		.ascii	"CYBLE_EVT_L2CAP_CBFC_DISCONN_IND\000"
+ 815      455F4556 
+ 815      545F4C32 
+ 815      4341505F 
+ 815      43424643 
+ 816              	.LASF31:
+ 817 053f 4359424C 		.ascii	"CYBLE_EVT_GAP_ENCRYPT_CHANGE\000"
+ 817      455F4556 
+ 817      545F4741 
+ 817      505F454E 
+ 817      43525950 
+ 818              	.LASF92:
+ 819 055c 2E5C4865 		.ascii	".\\HeartRateProcessing.c\000"
+ 819      61727452 
+ 819      61746550 
+ 819      726F6365 
+ 819      7373696E 
+ 820              	.LASF32:
+ 821 0574 4359424C 		.ascii	"CYBLE_EVT_GAP_CONNECTION_UPDATE_COMPLETE\000"
+ 821      455F4556 
+ 821      545F4741 
+ 821      505F434F 
+ 821      4E4E4543 
+ 822              	.LASF86:
+ 823 059d 70726576 		.ascii	"previousBeatTime\000"
+ 823      696F7573 
+ 823      42656174 
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\cc8BQaFu.s 			page 22
+
+
+ 823      54696D65 
+ 823      00
+ 824              	.LASF14:
+ 825 05ae 63686172 		.ascii	"char\000"
+ 825      00
+ 826              	.LASF59:
+ 827 05b3 4359424C 		.ascii	"CYBLE_EVT_L2CAP_COMMAND_REJ\000"
+ 827      455F4556 
+ 827      545F4C32 
+ 827      4341505F 
+ 827      434F4D4D 
+ 828              	.LASF3:
+ 829 05cf 73686F72 		.ascii	"short unsigned int\000"
+ 829      7420756E 
+ 829      7369676E 
+ 829      65642069 
+ 829      6E7400
+ 830              	.LASF90:
+ 831 05e2 5F426F6F 		.ascii	"_Bool\000"
+ 831      6C00
+ 832              	.LASF81:
+ 833 05e8 4359424C 		.ascii	"CYBLE_DIS_REG_CERT_DATA\000"
+ 833      455F4449 
+ 833      535F5245 
+ 833      475F4345 
+ 833      52545F44 
+ 834              	.LASF45:
+ 835 0600 4359424C 		.ascii	"CYBLE_EVT_GATTC_READ_BLOB_RSP\000"
+ 835      455F4556 
+ 835      545F4741 
+ 835      5454435F 
+ 835      52454144 
+ 836              	.LASF52:
+ 837 061e 4359424C 		.ascii	"CYBLE_EVT_GATTC_EXEC_WRITE_RSP\000"
+ 837      455F4556 
+ 837      545F4741 
+ 837      5454435F 
+ 837      45584543 
+ 838              	.LASF10:
+ 839 063d 75696E74 		.ascii	"uint32\000"
+ 839      333200
+ 840              	.LASF68:
+ 841 0644 4359424C 		.ascii	"CYBLE_EVT_PENDING_FLASH_WRITE\000"
+ 841      455F4556 
+ 841      545F5045 
+ 841      4E44494E 
+ 841      475F464C 
+ 842              	.LASF65:
+ 843 0662 4359424C 		.ascii	"CYBLE_EVT_L2CAP_CBFC_RX_CREDIT_IND\000"
+ 843      455F4556 
+ 843      545F4C32 
+ 843      4341505F 
+ 843      43424643 
+ 844              	.LASF13:
+ 845 0685 646F7562 		.ascii	"double\000"
+ 845      6C6500
+ 846              	.LASF89:
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\cc8BQaFu.s 			page 23
+
+
+ 847 068c 74776F53 		.ascii	"twoSampleTime\000"
+ 847      616D706C 
+ 847      6554696D 
+ 847      6500
+ 848              	.LASF66:
+ 849 069a 4359424C 		.ascii	"CYBLE_EVT_L2CAP_CBFC_TX_CREDIT_IND\000"
+ 849      455F4556 
+ 849      545F4C32 
+ 849      4341505F 
+ 849      43424643 
+ 850              	.LASF83:
+ 851 06bd 4359424C 		.ascii	"CYBLE_DIS_CHAR_COUNT\000"
+ 851      455F4449 
+ 851      535F4348 
+ 851      41525F43 
+ 851      4F554E54 
+ 852              	.LASF28:
+ 853 06d2 4359424C 		.ascii	"CYBLE_EVT_GAPP_ADVERTISEMENT_START_STOP\000"
+ 853      455F4556 
+ 853      545F4741 
+ 853      50505F41 
+ 853      44564552 
+ 854              	.LASF19:
+ 855 06fa 4359424C 		.ascii	"CYBLE_EVT_HARDWARE_ERROR\000"
+ 855      455F4556 
+ 855      545F4841 
+ 855      52445741 
+ 855      52455F45 
+ 856              	.LASF64:
+ 857 0713 4359424C 		.ascii	"CYBLE_EVT_L2CAP_CBFC_DATA_READ\000"
+ 857      455F4556 
+ 857      545F4C32 
+ 857      4341505F 
+ 857      43424643 
+ 858              	.LASF58:
+ 859 0732 4359424C 		.ascii	"CYBLE_EVT_L2CAP_CONN_PARAM_UPDATE_RSP\000"
+ 859      455F4556 
+ 859      545F4C32 
+ 859      4341505F 
+ 859      434F4E4E 
+ 860              	.LASF22:
+ 861 0758 4359424C 		.ascii	"CYBLE_EVT_GAPC_SCAN_PROGRESS_RESULT\000"
+ 861      455F4556 
+ 861      545F4741 
+ 861      50435F53 
+ 861      43414E5F 
+ 862              	.LASF40:
+ 863 077c 4359424C 		.ascii	"CYBLE_EVT_GATTC_READ_BY_GROUP_TYPE_RSP\000"
+ 863      455F4556 
+ 863      545F4741 
+ 863      5454435F 
+ 863      52454144 
+ 864              	.LASF78:
+ 865 07a3 4359424C 		.ascii	"CYBLE_DIS_FIRMWARE_REV\000"
+ 865      455F4449 
+ 865      535F4649 
+ 865      524D5741 
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\cc8BQaFu.s 			page 24
+
+
+ 865      52455F52 
+ 866              	.LASF39:
+ 867 07ba 4359424C 		.ascii	"CYBLE_EVT_GATTC_XCHNG_MTU_RSP\000"
+ 867      455F4556 
+ 867      545F4741 
+ 867      5454435F 
+ 867      5843484E 
+ 868              	.LASF77:
+ 869 07d8 4359424C 		.ascii	"CYBLE_DIS_HARDWARE_REV\000"
+ 869      455F4449 
+ 869      535F4841 
+ 869      52445741 
+ 869      52455F52 
+ 870              	.LASF18:
+ 871 07ef 4359424C 		.ascii	"CYBLE_EVT_TIMEOUT\000"
+ 871      455F4556 
+ 871      545F5449 
+ 871      4D454F55 
+ 871      5400
+ 872              	.LASF67:
+ 873 0801 4359424C 		.ascii	"CYBLE_EVT_L2CAP_CBFC_DATA_WRITE_IND\000"
+ 873      455F4556 
+ 873      545F4C32 
+ 873      4341505F 
+ 873      43424643 
+ 874              	.LASF33:
+ 875 0825 4359424C 		.ascii	"CYBLE_EVT_GAPC_SCAN_START_STOP\000"
+ 875      455F4556 
+ 875      545F4741 
+ 875      50435F53 
+ 875      43414E5F 
+ 876              	.LASF88:
+ 877 0844 6164634F 		.ascii	"adcOut\000"
+ 877      757400
+ 878              	.LASF42:
+ 879 084b 4359424C 		.ascii	"CYBLE_EVT_GATTC_FIND_INFO_RSP\000"
+ 879      455F4556 
+ 879      545F4741 
+ 879      5454435F 
+ 879      46494E44 
+ 880              	.LASF95:
+ 881 0869 68656172 		.ascii	"heartRate\000"
+ 881      74526174 
+ 881      6500
+ 882              	.LASF51:
+ 883 0873 4359424C 		.ascii	"CYBLE_EVT_GATTS_EXEC_WRITE_REQ\000"
+ 883      455F4556 
+ 883      545F4741 
+ 883      5454535F 
+ 883      45584543 
+ 884              	.LASF30:
+ 885 0892 4359424C 		.ascii	"CYBLE_EVT_GAP_DEVICE_DISCONNECTED\000"
+ 885      455F4556 
+ 885      545F4741 
+ 885      505F4445 
+ 885      56494345 
+ 886              	.LASF56:
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\cc8BQaFu.s 			page 25
+
+
+ 887 08b4 4359424C 		.ascii	"CYBLE_EVT_GATTS_DATA_SIGNED_CMD_REQ\000"
+ 887      455F4556 
+ 887      545F4741 
+ 887      5454535F 
+ 887      44415441 
+ 888              	.LASF91:
+ 889 08d8 474E5520 		.ascii	"GNU C 4.8.4 20140526 (release) [ARM/embedded-4_8-br"
+ 889      4320342E 
+ 889      382E3420 
+ 889      32303134 
+ 889      30353236 
+ 890 090b 616E6368 		.ascii	"anch revision 211358] -mcpu=cortex-m0 -mthumb -g -O"
+ 890      20726576 
+ 890      6973696F 
+ 890      6E203231 
+ 890      31333538 
+ 891 093e 30202D66 		.ascii	"0 -ffunction-sections\000"
+ 891      66756E63 
+ 891      74696F6E 
+ 891      2D736563 
+ 891      74696F6E 
+ 892              	.LASF80:
+ 893 0954 4359424C 		.ascii	"CYBLE_DIS_SYSTEM_ID\000"
+ 893      455F4449 
+ 893      535F5359 
+ 893      5354454D 
+ 893      5F494400 
+ 894              	.LASF74:
+ 895 0968 4359424C 		.ascii	"CYBLE_DIS_MANUFACTURER_NAME\000"
+ 895      455F4449 
+ 895      535F4D41 
+ 895      4E554641 
+ 895      43545552 
+ 896              	.LASF82:
+ 897 0984 4359424C 		.ascii	"CYBLE_DIS_PNP_ID\000"
+ 897      455F4449 
+ 897      535F504E 
+ 897      505F4944 
+ 897      00
+ 898              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.8.4 20140526 (release) [ARM/embedded-4_8-br

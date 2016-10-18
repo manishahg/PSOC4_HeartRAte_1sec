@@ -1,0 +1,2274 @@
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccAi6Wbc.s 			page 1
+
+
+   1              		.cpu cortex-m0
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.code	16
+  13              		.file	"main.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.data
+  18              		.align	2
+  19              		.type	hrmConnectionParam, %object
+  20              		.size	hrmConnectionParam, 8
+  21              	hrmConnectionParam:
+  22 0000 2003     		.short	800
+  23 0002 2003     		.short	800
+  24 0004 3100     		.short	49
+  25 0006 F401     		.short	500
+  26              		.section	.text.InitializeSystem,"ax",%progbits
+  27              		.align	2
+  28              		.code	16
+  29              		.thumb_func
+  30              		.type	InitializeSystem, %function
+  31              	InitializeSystem:
+  32              	.LFB35:
+  33              		.file 1 ".\\main.c"
+   1:.\main.c      **** /*****************************************************************************
+   2:.\main.c      **** * File Name: main.c
+   3:.\main.c      **** *
+   4:.\main.c      **** * Version: 1.0
+   5:.\main.c      **** *
+   6:.\main.c      **** * Description:
+   7:.\main.c      **** * This is the top level file for the PSoC 4 BLE Lab 3.
+   8:.\main.c      **** *
+   9:.\main.c      **** * Hardware Dependency:
+  10:.\main.c      **** * CY8CKIT-042 BLE Pioneer Kit
+  11:.\main.c      **** *
+  12:.\main.c      **** ******************************************************************************
+  13:.\main.c      **** * Copyright (2014), Cypress Semiconductor Corporation.
+  14:.\main.c      **** ******************************************************************************
+  15:.\main.c      **** * This software is owned by Cypress Semiconductor Corporation (Cypress) and is
+  16:.\main.c      **** * protected by and subject to worldwide patent protection (United States and
+  17:.\main.c      **** * foreign), United States copyright laws and international treaty provisions.
+  18:.\main.c      **** * Cypress hereby grants to licensee a personal, non-exclusive, non-transferable
+  19:.\main.c      **** * license to copy, use, modify, create derivative works of, and compile the
+  20:.\main.c      **** * Cypress Source Code and derivative works for the sole purpose of creating
+  21:.\main.c      **** * custom software in support of licensee product to be used only in conjunction
+  22:.\main.c      **** * with a Cypress integrated circuit as specified in the applicable agreement.
+  23:.\main.c      **** * Any reproduction, modification, translation, compilation, or representation of
+  24:.\main.c      **** * this software except as specified above is prohibited without the express
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccAi6Wbc.s 			page 2
+
+
+  25:.\main.c      **** * written permission of Cypress.
+  26:.\main.c      **** *
+  27:.\main.c      **** * Disclaimer: CYPRESS MAKES NO WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, WITH
+  28:.\main.c      **** * REGARD TO THIS MATERIAL, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+  29:.\main.c      **** * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+  30:.\main.c      **** * Cypress reserves the right to make changes without further notice to the
+  31:.\main.c      **** * materials described herein. Cypress does not assume any liability arising out
+  32:.\main.c      **** * of the application or use of any product or circuit described herein. Cypress
+  33:.\main.c      **** * does not authorize its products for use as critical components in life-support
+  34:.\main.c      **** * systems where a malfunction or failure may reasonably be expected to result in
+  35:.\main.c      **** * significant injury to the user. The inclusion of Cypress' product in a life-
+  36:.\main.c      **** * support systems application implies that the manufacturer assumes all risk of
+  37:.\main.c      **** * such use and in doing so indemnifies Cypress against all charges. Use may be
+  38:.\main.c      **** * limited by and subject to the applicable Cypress software license agreement.
+  39:.\main.c      **** *****************************************************************************/
+  40:.\main.c      **** 
+  41:.\main.c      **** 
+  42:.\main.c      **** /*****************************************************************************
+  43:.\main.c      **** * Included headers
+  44:.\main.c      **** *****************************************************************************/
+  45:.\main.c      **** #include <project.h>
+  46:.\main.c      **** #include <stdbool.h>
+  47:.\main.c      **** #include "main.h"
+  48:.\main.c      **** #include "HeartRateProcessing.h"
+  49:.\main.c      **** #include "BleProcessing.h"
+  50:.\main.c      **** #include "WatchdogTimer.h"
+  51:.\main.c      **** 
+  52:.\main.c      **** 
+  53:.\main.c      **** /*****************************************************************************
+  54:.\main.c      **** * Macros
+  55:.\main.c      **** *****************************************************************************/
+  56:.\main.c      **** #define TIME_SINCE_CONNECTED_MS         (5000)
+  57:.\main.c      **** 
+  58:.\main.c      **** 
+  59:.\main.c      **** /*****************************************************************************
+  60:.\main.c      **** * Global variables
+  61:.\main.c      **** *****************************************************************************/
+  62:.\main.c      **** static CYBLE_GAP_CONN_UPDATE_PARAM_T hrmConnectionParam =
+  63:.\main.c      **** {
+  64:.\main.c      ****     800,         /* Minimum connection interval of 1000 ms */ //manisha
+  65:.\main.c      ****     800,         /* Maximum connection interval of 1000 ms */
+  66:.\main.c      ****     49,         /* Slave latency of 49 */
+  67:.\main.c      ****     500         /* Supervision timeout of 5 seconds */
+  68:.\main.c      **** };
+  69:.\main.c      **** 
+  70:.\main.c      **** 
+  71:.\main.c      **** /*****************************************************************************
+  72:.\main.c      **** * Static function definitions
+  73:.\main.c      **** *****************************************************************************/
+  74:.\main.c      **** 
+  75:.\main.c      **** /*****************************************************************************
+  76:.\main.c      **** * Function Name: InitializeSystem
+  77:.\main.c      **** ******************************************************************************
+  78:.\main.c      **** * Summary:
+  79:.\main.c      **** * Initializes all the blocks of the system.
+  80:.\main.c      **** *
+  81:.\main.c      **** * Parameters:
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccAi6Wbc.s 			page 3
+
+
+  82:.\main.c      **** * None
+  83:.\main.c      **** *
+  84:.\main.c      **** * Return:
+  85:.\main.c      **** * None
+  86:.\main.c      **** *
+  87:.\main.c      **** * Theory:
+  88:.\main.c      **** * The function enables the Opamp and ADC for the heart rate measurement, and 
+  89:.\main.c      **** * setups the BLE component. It also starts the watchdog timer and ensures that 
+  90:.\main.c      **** * all the status LEDs are off at system startup. 
+  91:.\main.c      **** *
+  92:.\main.c      **** * Side Effects:
+  93:.\main.c      **** * None
+  94:.\main.c      **** *
+  95:.\main.c      **** *****************************************************************************/
+  96:.\main.c      **** static void InitializeSystem(void)
+  97:.\main.c      **** {
+  34              		.loc 1 97 0
+  35              		.cfi_startproc
+  36 0000 80B5     		push	{r7, lr}
+  37              		.cfi_def_cfa_offset 8
+  38              		.cfi_offset 7, -8
+  39              		.cfi_offset 14, -4
+  40 0002 00AF     		add	r7, sp, #0
+  41              		.cfi_def_cfa_register 7
+  98:.\main.c      ****     #if (RGB_LED_IN_PROJECT)
+  99:.\main.c      ****         /* Turn off all LEDs */
+ 100:.\main.c      ****         Led_Advertising_Green_Write(1);
+  42              		.loc 1 100 0
+  43 0004 0120     		mov	r0, #1
+  44 0006 FFF7FEFF 		bl	Led_Advertising_Green_Write
+ 101:.\main.c      ****         Led_Connected_Blue_Write(1);
+  45              		.loc 1 101 0
+  46 000a 0120     		mov	r0, #1
+  47 000c FFF7FEFF 		bl	Led_Connected_Blue_Write
+ 102:.\main.c      ****     #endif  /* #if (RGB_LED_IN_PROJECT) */
+ 103:.\main.c      **** 
+ 104:.\main.c      ****     /* Enabling Global interrupts */
+ 105:.\main.c      ****     CyGlobalIntEnable; 
+  48              		.loc 1 105 0
+  49              	@ 105 ".\main.c" 1
+  50 0010 62B6     		CPSIE   i
+  51              	@ 0 "" 2
+ 106:.\main.c      **** 	
+ 107:.\main.c      ****     /* Start Opamp and ADC components */
+ 108:.\main.c      **** 	Opamp_Start();
+  52              		.loc 1 108 0
+  53              		.code	16
+  54 0012 FFF7FEFF 		bl	Opamp_Start
+ 109:.\main.c      ****     ADC_Start();
+  55              		.loc 1 109 0
+  56 0016 FFF7FEFF 		bl	ADC_Start
+ 110:.\main.c      **** 	
+ 111:.\main.c      ****     /* Start BLE component */
+ 112:.\main.c      ****     CyBle_Start(GeneralEventHandler);
+  57              		.loc 1 112 0
+  58 001a 064B     		ldr	r3, .L2
+  59 001c 181C     		mov	r0, r3
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccAi6Wbc.s 			page 4
+
+
+  60 001e FFF7FEFF 		bl	CyBle_Start
+ 113:.\main.c      ****     
+ 114:.\main.c      ****     
+ 115:.\main.c      ****     /* Register the Heart Rate Service event handler callback. The function
+ 116:.\main.c      ****      * to be registered is HrsEventHandler().
+ 117:.\main.c      ****      */
+ 118:.\main.c      **** 	CyBle_HrsRegisterAttrCallback(HrsEventHandler);
+  61              		.loc 1 118 0
+  62 0022 054B     		ldr	r3, .L2+4
+  63 0024 181C     		mov	r0, r3
+  64 0026 FFF7FEFF 		bl	CyBle_HrsRegisterAttrCallback
+ 119:.\main.c      ****     
+ 120:.\main.c      ****     
+ 121:.\main.c      ****     /* Start the Watchdog Timer */
+ 122:.\main.c      **** 	WatchdogTimer_Start();
+  65              		.loc 1 122 0
+  66 002a FFF7FEFF 		bl	WatchdogTimer_Start
+ 123:.\main.c      **** }
+  67              		.loc 1 123 0
+  68 002e BD46     		mov	sp, r7
+  69              		@ sp needed
+  70 0030 80BD     		pop	{r7, pc}
+  71              	.L3:
+  72 0032 C046     		.align	2
+  73              	.L2:
+  74 0034 00000000 		.word	GeneralEventHandler
+  75 0038 00000000 		.word	HrsEventHandler
+  76              		.cfi_endproc
+  77              	.LFE35:
+  78              		.size	InitializeSystem, .-InitializeSystem
+  79              		.section	.text.main,"ax",%progbits
+  80              		.align	2
+  81              		.global	main
+  82              		.code	16
+  83              		.thumb_func
+  84              		.type	main, %function
+  85              	main:
+  86              	.LFB36:
+ 124:.\main.c      **** 
+ 125:.\main.c      **** 
+ 126:.\main.c      **** /*****************************************************************************
+ 127:.\main.c      **** * Public function definitions
+ 128:.\main.c      **** *****************************************************************************/
+ 129:.\main.c      **** 
+ 130:.\main.c      **** /*****************************************************************************
+ 131:.\main.c      **** * Function Name: main
+ 132:.\main.c      **** ******************************************************************************
+ 133:.\main.c      **** * Summary:
+ 134:.\main.c      **** * The main function for the project.
+ 135:.\main.c      **** *
+ 136:.\main.c      **** * Parameters:
+ 137:.\main.c      **** * None
+ 138:.\main.c      **** *
+ 139:.\main.c      **** * Return:
+ 140:.\main.c      **** * None
+ 141:.\main.c      **** *
+ 142:.\main.c      **** * Theory:
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccAi6Wbc.s 			page 5
+
+
+ 143:.\main.c      **** * The main function first calls the initialization function to start the 
+ 144:.\main.c      **** * system, and then enters a loop to run forever. In the main loop, it scans
+ 145:.\main.c      **** * the heart rate first, then sends a notification packet every second to a 
+ 146:.\main.c      **** * BLE connected device. It then enters low power (deep sleep) state, waiting
+ 147:.\main.c      **** * for the periodic wakeup interrupt from watchdog timer.
+ 148:.\main.c      **** * When the device is disconnected or when advertisement timeout happens, 
+ 149:.\main.c      **** * the device enters Hibernate mode, waiting for the SW2 switch press to wakeup.
+ 150:.\main.c      **** *
+ 151:.\main.c      **** * Side Effects:
+ 152:.\main.c      **** * None
+ 153:.\main.c      **** *
+ 154:.\main.c      **** *****************************************************************************/
+ 155:.\main.c      **** int main()
+ 156:.\main.c      **** {
+  87              		.loc 1 156 0
+  88              		.cfi_startproc
+  89 0000 90B5     		push	{r4, r7, lr}
+  90              		.cfi_def_cfa_offset 12
+  91              		.cfi_offset 4, -12
+  92              		.cfi_offset 7, -8
+  93              		.cfi_offset 14, -4
+  94 0002 83B0     		sub	sp, sp, #12
+  95              		.cfi_def_cfa_offset 24
+  96 0004 00AF     		add	r7, sp, #0
+  97              		.cfi_def_cfa_register 7
+ 157:.\main.c      ****     static uint32 previousTimestamp = 0;
+ 158:.\main.c      ****     static uint32 currentTimestamp = 0;
+ 159:.\main.c      ****     CYBLE_LP_MODE_T bleMode;
+ 160:.\main.c      ****     uint8 interruptStatus;
+ 161:.\main.c      ****     
+ 162:.\main.c      ****     /* Initialize all blocks of the system */
+ 163:.\main.c      **** 	InitializeSystem();
+  98              		.loc 1 163 0
+  99 0006 FFF7FEFF 		bl	InitializeSystem
+ 100              	.L14:
+ 164:.\main.c      ****     
+ 165:.\main.c      ****     /* Run forever */
+ 166:.\main.c      ****     for(;;)
+ 167:.\main.c      ****     {
+ 168:.\main.c      ****         /* Wake up ADC from low power mode */
+ 169:.\main.c      ****         ADC_Wakeup();
+ 101              		.loc 1 169 0
+ 102 000a FFF7FEFF 		bl	ADC_Wakeup
+ 170:.\main.c      ****         
+ 171:.\main.c      ****         /* Analog Front End. 
+ 172:.\main.c      ****          * Detects the input signal and measures Heart Rate 
+ 173:.\main.c      ****          */
+ 174:.\main.c      ****         ProcessHeartRateSignal();
+ 103              		.loc 1 174 0
+ 104 000e FFF7FEFF 		bl	ProcessHeartRateSignal
+ 175:.\main.c      **** 
+ 176:.\main.c      ****         /* Put ADC in low power mode */
+ 177:.\main.c      ****         ADC_Sleep();
+ 105              		.loc 1 177 0
+ 106 0012 FFF7FEFF 		bl	ADC_Sleep
+ 178:.\main.c      ****         
+ 179:.\main.c      ****         /* Measure the current system timestamp from watchdog timer */
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccAi6Wbc.s 			page 6
+
+
+ 180:.\main.c      ****         currentTimestamp = WatchdogTimer_GetTimestamp();        
+ 107              		.loc 1 180 0
+ 108 0016 FFF7FEFF 		bl	WatchdogTimer_GetTimestamp
+ 109 001a 021C     		mov	r2, r0
+ 110 001c 3B4B     		ldr	r3, .L15
+ 111 001e 1A60     		str	r2, [r3]
+ 181:.\main.c      **** 
+ 182:.\main.c      **** //        /* Update BLE connection parameters a few seconds after connection */ //manisha
+ 183:.\main.c      ****        if((CyBle_GetState() == CYBLE_STATE_CONNECTED) && 
+ 112              		.loc 1 183 0
+ 113 0020 3B4B     		ldr	r3, .L15+4
+ 114 0022 1B78     		ldrb	r3, [r3]
+ 115 0024 022B     		cmp	r3, #2
+ 116 0026 15D1     		bne	.L5
+ 184:.\main.c      ****            (connParamRequestState == CONN_PARAM_REQUEST_NOT_SENT))
+ 117              		.loc 1 184 0 discriminator 1
+ 118 0028 3A4B     		ldr	r3, .L15+8
+ 119 002a 1B78     		ldrb	r3, [r3]
+ 183:.\main.c      ****        if((CyBle_GetState() == CYBLE_STATE_CONNECTED) && 
+ 120              		.loc 1 183 0 discriminator 1
+ 121 002c 002B     		cmp	r3, #0
+ 122 002e 11D1     		bne	.L5
+ 185:.\main.c      ****         {
+ 186:.\main.c      ****             if((currentTimestamp - timestampWhenConnected) > TIME_SINCE_CONNECTED_MS)
+ 123              		.loc 1 186 0
+ 124 0030 364B     		ldr	r3, .L15
+ 125 0032 1A68     		ldr	r2, [r3]
+ 126 0034 384B     		ldr	r3, .L15+12
+ 127 0036 1B68     		ldr	r3, [r3]
+ 128 0038 D21A     		sub	r2, r2, r3
+ 129 003a 384B     		ldr	r3, .L15+16
+ 130 003c 9A42     		cmp	r2, r3
+ 131 003e 09D9     		bls	.L5
+ 187:.\main.c      ****             {
+ 188:.\main.c      ****                 CyBle_L2capLeConnectionParamUpdateRequest(cyBle_connHandle.bdHandle, &hrmConnection
+ 132              		.loc 1 188 0
+ 133 0040 374B     		ldr	r3, .L15+20
+ 134 0042 1A78     		ldrb	r2, [r3]
+ 135 0044 374B     		ldr	r3, .L15+24
+ 136 0046 101C     		mov	r0, r2
+ 137 0048 191C     		mov	r1, r3
+ 138 004a FFF7FEFF 		bl	CyBle_L2capLeConnectionParamUpdateRequest
+ 189:.\main.c      ****                 connParamRequestState = CONN_PARAM_REQUEST_SENT;
+ 139              		.loc 1 189 0
+ 140 004e 314B     		ldr	r3, .L15+8
+ 141 0050 0122     		mov	r2, #1
+ 142 0052 1A70     		strb	r2, [r3]
+ 143              	.L5:
+ 190:.\main.c      ****             }
+ 191:.\main.c      ****         }
+ 192:.\main.c      ****         
+ 193:.\main.c      ****         
+ 194:.\main.c      ****         /* Send Heart Rate notification over BLE every second.
+ 195:.\main.c      ****          * Check if the current timestamp minus previous exceeds 1000 ms.
+ 196:.\main.c      ****          */
+ 197:.\main.c      ****         if((currentTimestamp - previousTimestamp) >= 1000)
+ 144              		.loc 1 197 0
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccAi6Wbc.s 			page 7
+
+
+ 145 0054 2D4B     		ldr	r3, .L15
+ 146 0056 1A68     		ldr	r2, [r3]
+ 147 0058 334B     		ldr	r3, .L15+28
+ 148 005a 1B68     		ldr	r3, [r3]
+ 149 005c D21A     		sub	r2, r2, r3
+ 150 005e 334B     		ldr	r3, .L15+32
+ 151 0060 9A42     		cmp	r2, r3
+ 152 0062 06D9     		bls	.L6
+ 198:.\main.c      ****         {
+ 199:.\main.c      ****             /* Call API defined in BleProcessing.c to send 
+ 200:.\main.c      ****              * notification over BLE.
+ 201:.\main.c      ****              */
+ 202:.\main.c      ****             SendHeartRateOverBLE();
+ 153              		.loc 1 202 0
+ 154 0064 FFF7FEFF 		bl	SendHeartRateOverBLE
+ 203:.\main.c      ****             
+ 204:.\main.c      ****             /* Update the previous timestamp with the current timestamp. */
+ 205:.\main.c      ****             previousTimestamp = currentTimestamp;
+ 155              		.loc 1 205 0
+ 156 0068 284B     		ldr	r3, .L15
+ 157 006a 1A68     		ldr	r2, [r3]
+ 158 006c 2E4B     		ldr	r3, .L15+28
+ 159 006e 1A60     		str	r2, [r3]
+ 206:.\main.c      ****         }
+ 207:.\main.c      **** 
+ 208:.\main.c      ****         /* Try to stay in low power mode until the next watchdog interrupt */
+ 209:.\main.c      ****         while(WatchdogTimer_GetTimestamp() == currentTimestamp)
+ 160              		.loc 1 209 0
+ 161 0070 2AE0     		b	.L7
+ 162              	.L6:
+ 163 0072 29E0     		b	.L7
+ 164              	.L12:
+ 210:.\main.c      ****         {
+ 211:.\main.c      ****             /* Process any pending BLE events */
+ 212:.\main.c      ****             CyBle_ProcessEvents();
+ 165              		.loc 1 212 0
+ 166 0074 FFF7FEFF 		bl	CyBle_ProcessEvents
+ 213:.\main.c      ****             
+ 214:.\main.c      ****             /* The idea of low power operation is to first request the BLE 
+ 215:.\main.c      ****              * block go to Deep Sleep, and then check whether it actually
+ 216:.\main.c      ****              * entered Deep Sleep. This is important because the BLE block
+ 217:.\main.c      ****              * runs asynchronous to the rest of the application and thus
+ 218:.\main.c      ****              * could be busy/idle independent of the application state. 
+ 219:.\main.c      ****              * 
+ 220:.\main.c      ****              * Once the BLE block is in Deep Sleep, only then the system 
+ 221:.\main.c      ****              * can enter Deep Sleep. This is important to maintain the BLE 
+ 222:.\main.c      ****              * connection alive while being in Deep Sleep.
+ 223:.\main.c      ****              */
+ 224:.\main.c      **** 
+ 225:.\main.c      ****             
+ 226:.\main.c      ****             /* Request the BLE block to enter Deep Sleep */
+ 227:.\main.c      ****             bleMode = CyBle_EnterLPM(CYBLE_BLESS_DEEPSLEEP);
+ 167              		.loc 1 227 0
+ 168 0078 FC1D     		add	r4, r7, #7
+ 169 007a 0320     		mov	r0, #3
+ 170 007c FFF7FEFF 		bl	CyBle_EnterLPM
+ 171 0080 031C     		mov	r3, r0
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccAi6Wbc.s 			page 8
+
+
+ 172 0082 2370     		strb	r3, [r4]
+ 228:.\main.c      **** 
+ 229:.\main.c      ****             
+ 230:.\main.c      ****             /* Check if the BLE block entered Deep Sleep and if so, then the 
+ 231:.\main.c      ****              * system can enter Deep Sleep. This is done inside a Critical 
+ 232:.\main.c      ****              * Section (where global interrupts are disabled) to avoid a 
+ 233:.\main.c      ****              * race condition between application main (that wants to go to 
+ 234:.\main.c      ****              * Deep Sleep) and other interrupts (which keep the device from 
+ 235:.\main.c      ****              * going to Deep Sleep). 
+ 236:.\main.c      ****              */
+ 237:.\main.c      ****             interruptStatus = CyEnterCriticalSection();
+ 173              		.loc 1 237 0
+ 174 0084 BC1D     		add	r4, r7, #6
+ 175 0086 FFF7FEFF 		bl	CyEnterCriticalSection
+ 176 008a 031C     		mov	r3, r0
+ 177 008c 2370     		strb	r3, [r4]
+ 238:.\main.c      ****             
+ 239:.\main.c      ****             /* Check if the BLE block entered Deep Sleep */
+ 240:.\main.c      ****             if(CYBLE_BLESS_DEEPSLEEP == bleMode)
+ 178              		.loc 1 240 0
+ 179 008e FB1D     		add	r3, r7, #7
+ 180 0090 1B78     		ldrb	r3, [r3]
+ 181 0092 032B     		cmp	r3, #3
+ 182 0094 0CD1     		bne	.L8
+ 241:.\main.c      ****             {
+ 242:.\main.c      ****                 /* Check the current state of BLE - System can enter Deep Sleep
+ 243:.\main.c      ****                  * only when the BLE block is starting the ECO (during 
+ 244:.\main.c      ****                  * pre-processing for a new connection event) or when it is 
+ 245:.\main.c      ****                  * idle.
+ 246:.\main.c      ****                  */
+ 247:.\main.c      ****                 if((CyBle_GetBleSsState() == CYBLE_BLESS_STATE_ECO_ON) ||
+ 183              		.loc 1 247 0
+ 184 0096 FFF7FEFF 		bl	CyBle_GetBleSsState
+ 185 009a 031C     		mov	r3, r0
+ 186 009c 042B     		cmp	r3, #4
+ 187 009e 04D0     		beq	.L9
+ 248:.\main.c      ****                    (CyBle_GetBleSsState() == CYBLE_BLESS_STATE_DEEPSLEEP))
+ 188              		.loc 1 248 0 discriminator 1
+ 189 00a0 FFF7FEFF 		bl	CyBle_GetBleSsState
+ 190 00a4 031C     		mov	r3, r0
+ 247:.\main.c      ****                 if((CyBle_GetBleSsState() == CYBLE_BLESS_STATE_ECO_ON) ||
+ 191              		.loc 1 247 0 discriminator 1
+ 192 00a6 062B     		cmp	r3, #6
+ 193 00a8 09D1     		bne	.L11
+ 194              	.L9:
+ 249:.\main.c      ****                 {
+ 250:.\main.c      ****                     CySysPmDeepSleep();
+ 195              		.loc 1 250 0
+ 196 00aa FFF7FEFF 		bl	CySysPmDeepSleep
+ 197 00ae 06E0     		b	.L11
+ 198              	.L8:
+ 251:.\main.c      ****                 }
+ 252:.\main.c      ****             }
+ 253:.\main.c      ****             /* The else condition signifies that the BLE block cannot enter 
+ 254:.\main.c      ****              * Deep Sleep and is in Active mode.  
+ 255:.\main.c      ****              */
+ 256:.\main.c      ****             else
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccAi6Wbc.s 			page 9
+
+
+ 257:.\main.c      ****             {
+ 258:.\main.c      ****                 /* At this point, the CPU can enter Sleep, but Deep Sleep is not
+ 259:.\main.c      ****                  * allowed. 
+ 260:.\main.c      ****                  * There is one exception - at a connection event, when the BLE 
+ 261:.\main.c      ****                  * Rx/Tx has just finished, and the post processing for the 
+ 262:.\main.c      ****                  * connection event is ongoing, the CPU cannot go to sleep.
+ 263:.\main.c      ****                  * The CPU should wait in Active mode until the post processing 
+ 264:.\main.c      ****                  * is complete while continuously polling the BLE low power 
+ 265:.\main.c      ****                  * entry. As soon as post processing is complete, the BLE block 
+ 266:.\main.c      ****                  * would enter Deep Sleep (because of the polling) and the 
+ 267:.\main.c      ****                  * system Deep Sleep would then be entered. Deep Sleep is the 
+ 268:.\main.c      ****                  * preferred low power mode since it takes much lesser current.
+ 269:.\main.c      ****                  */
+ 270:.\main.c      ****                 if(CyBle_GetBleSsState() != CYBLE_BLESS_STATE_EVENT_CLOSE)
+ 199              		.loc 1 270 0
+ 200 00b0 FFF7FEFF 		bl	CyBle_GetBleSsState
+ 201 00b4 031C     		mov	r3, r0
+ 202 00b6 022B     		cmp	r3, #2
+ 203 00b8 01D0     		beq	.L11
+ 271:.\main.c      ****                 {
+ 272:.\main.c      ****                     CySysPmSleep();
+ 204              		.loc 1 272 0
+ 205 00ba FFF7FEFF 		bl	CySysPmSleep
+ 206              	.L11:
+ 273:.\main.c      ****                 }
+ 274:.\main.c      ****             }
+ 275:.\main.c      ****             
+ 276:.\main.c      ****             /* Exit Critical section - Global interrupts are enabled again */
+ 277:.\main.c      ****             CyExitCriticalSection(interruptStatus);
+ 207              		.loc 1 277 0
+ 208 00be BB1D     		add	r3, r7, #6
+ 209 00c0 1B78     		ldrb	r3, [r3]
+ 210 00c2 181C     		mov	r0, r3
+ 211 00c4 FFF7FEFF 		bl	CyExitCriticalSection
+ 212              	.L7:
+ 209:.\main.c      ****         while(WatchdogTimer_GetTimestamp() == currentTimestamp)
+ 213              		.loc 1 209 0 discriminator 1
+ 214 00c8 FFF7FEFF 		bl	WatchdogTimer_GetTimestamp
+ 215 00cc 021C     		mov	r2, r0
+ 216 00ce 0F4B     		ldr	r3, .L15
+ 217 00d0 1B68     		ldr	r3, [r3]
+ 218 00d2 9A42     		cmp	r2, r3
+ 219 00d4 CED0     		beq	.L12
+ 278:.\main.c      ****         }
+ 279:.\main.c      **** 
+ 280:.\main.c      ****         /* Hibernate entry point - Hibernate is entered upon a BLE disconnect
+ 281:.\main.c      ****          * event or advertisement timeout. Wakeup happens via SW2 switch press, 
+ 282:.\main.c      ****          * upon which the execution starts from the first line of code. 
+ 283:.\main.c      ****          * The I/O state, RAM and UDBs are retained during Hibernate.
+ 284:.\main.c      ****          */
+ 285:.\main.c      ****         if(enterHibernateFlag)
+ 220              		.loc 1 285 0
+ 221 00d6 164B     		ldr	r3, .L15+36
+ 222 00d8 1B78     		ldrb	r3, [r3]
+ 223 00da 002B     		cmp	r3, #0
+ 224 00dc 14D0     		beq	.L13
+ 286:.\main.c      ****         {
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccAi6Wbc.s 			page 10
+
+
+ 287:.\main.c      ****             /* Stop the BLE component */
+ 288:.\main.c      ****             CyBle_Stop();
+ 225              		.loc 1 288 0
+ 226 00de FFF7FEFF 		bl	CyBle_Stop
+ 289:.\main.c      ****             
+ 290:.\main.c      ****             /* Enable the Hibernate wakeup functionality */
+ 291:.\main.c      ****             SW2_Switch_ClearInterrupt();
+ 227              		.loc 1 291 0
+ 228 00e2 FFF7FEFF 		bl	SW2_Switch_ClearInterrupt
+ 292:.\main.c      ****             Wakeup_ISR_Start();
+ 229              		.loc 1 292 0
+ 230 00e6 FFF7FEFF 		bl	Wakeup_ISR_Start
+ 293:.\main.c      ****             
+ 294:.\main.c      ****             #if (RGB_LED_IN_PROJECT)
+ 295:.\main.c      ****                 /* Turn off Green and Blue LEDs to indicate Hibernate */
+ 296:.\main.c      ****                 Led_Advertising_Green_Write(1);
+ 231              		.loc 1 296 0
+ 232 00ea 0120     		mov	r0, #1
+ 233 00ec FFF7FEFF 		bl	Led_Advertising_Green_Write
+ 297:.\main.c      ****                 Led_Connected_Blue_Write(1);
+ 234              		.loc 1 297 0
+ 235 00f0 0120     		mov	r0, #1
+ 236 00f2 FFF7FEFF 		bl	Led_Connected_Blue_Write
+ 298:.\main.c      ****                 
+ 299:.\main.c      ****                 /* Change the GPIO state to High-Z */
+ 300:.\main.c      ****                 Led_Advertising_Green_SetDriveMode(Led_Advertising_Green_DM_ALG_HIZ);
+ 237              		.loc 1 300 0
+ 238 00f6 0020     		mov	r0, #0
+ 239 00f8 FFF7FEFF 		bl	Led_Advertising_Green_SetDriveMode
+ 301:.\main.c      ****                 Led_Connected_Blue_SetDriveMode(Led_Connected_Blue_DM_ALG_HIZ);
+ 240              		.loc 1 301 0
+ 241 00fc 0020     		mov	r0, #0
+ 242 00fe FFF7FEFF 		bl	Led_Connected_Blue_SetDriveMode
+ 302:.\main.c      ****             #endif  /* #if (RGB_LED_IN_PROJECT) */
+ 303:.\main.c      ****             
+ 304:.\main.c      ****             /* Enter hibernate mode */
+ 305:.\main.c      ****             CySysPmHibernate();
+ 243              		.loc 1 305 0
+ 244 0102 FFF7FEFF 		bl	CySysPmHibernate
+ 306:.\main.c      ****         }
+ 307:.\main.c      ****     }
+ 245              		.loc 1 307 0
+ 246 0106 80E7     		b	.L14
+ 247              	.L13:
+ 248 0108 7FE7     		b	.L14
+ 249              	.L16:
+ 250 010a C046     		.align	2
+ 251              	.L15:
+ 252 010c 00000000 		.word	currentTimestamp.6490
+ 253 0110 00000000 		.word	cyBle_state
+ 254 0114 00000000 		.word	connParamRequestState
+ 255 0118 00000000 		.word	timestampWhenConnected
+ 256 011c 88130000 		.word	5000
+ 257 0120 00000000 		.word	cyBle_connHandle
+ 258 0124 00000000 		.word	hrmConnectionParam
+ 259 0128 04000000 		.word	previousTimestamp.6489
+ 260 012c E7030000 		.word	999
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccAi6Wbc.s 			page 11
+
+
+ 261 0130 00000000 		.word	enterHibernateFlag
+ 262              		.cfi_endproc
+ 263              	.LFE36:
+ 264              		.size	main, .-main
+ 265              		.bss
+ 266              		.align	2
+ 267              	currentTimestamp.6490:
+ 268 0000 00000000 		.space	4
+ 269              		.align	2
+ 270              	previousTimestamp.6489:
+ 271 0004 00000000 		.space	4
+ 272              		.text
+ 273              	.Letext0:
+ 274              		.file 2 ".\\Generated_Source\\PSoC4/cytypes.h"
+ 275              		.file 3 ".\\Generated_Source\\PSoC4/BLE_Stack.h"
+ 276              		.file 4 ".\\Generated_Source\\PSoC4/BLE_StackGap.h"
+ 277              		.file 5 ".\\Generated_Source\\PSoC4/BLE_StackGatt.h"
+ 278              		.file 6 ".\\Generated_Source\\PSoC4/BLE_hrs.h"
+ 279              		.file 7 ".\\Generated_Source\\PSoC4/BLE_dis.h"
+ 280              		.file 8 ".\\Generated_Source\\PSoC4/BLE_eventHandler.h"
+ 281              		.file 9 ".\\BleProcessing.h"
+ 282              		.section	.debug_info,"",%progbits
+ 283              	.Ldebug_info0:
+ 284 0000 7F040000 		.4byte	0x47f
+ 285 0004 0400     		.2byte	0x4
+ 286 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 287 000a 04       		.byte	0x4
+ 288 000b 01       		.uleb128 0x1
+ 289 000c 59080000 		.4byte	.LASF128
+ 290 0010 01       		.byte	0x1
+ 291 0011 D2020000 		.4byte	.LASF129
+ 292 0015 A2010000 		.4byte	.LASF130
+ 293 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 294 001d 00000000 		.4byte	0
+ 295 0021 00000000 		.4byte	.Ldebug_line0
+ 296 0025 02       		.uleb128 0x2
+ 297 0026 01       		.byte	0x1
+ 298 0027 06       		.byte	0x6
+ 299 0028 9A020000 		.4byte	.LASF0
+ 300 002c 02       		.uleb128 0x2
+ 301 002d 01       		.byte	0x1
+ 302 002e 08       		.byte	0x8
+ 303 002f 1E090000 		.4byte	.LASF1
+ 304 0033 02       		.uleb128 0x2
+ 305 0034 02       		.byte	0x2
+ 306 0035 05       		.byte	0x5
+ 307 0036 59090000 		.4byte	.LASF2
+ 308 003a 02       		.uleb128 0x2
+ 309 003b 02       		.byte	0x2
+ 310 003c 07       		.byte	0x7
+ 311 003d 93050000 		.4byte	.LASF3
+ 312 0041 02       		.uleb128 0x2
+ 313 0042 04       		.byte	0x4
+ 314 0043 05       		.byte	0x5
+ 315 0044 70010000 		.4byte	.LASF4
+ 316 0048 02       		.uleb128 0x2
+ 317 0049 04       		.byte	0x4
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccAi6Wbc.s 			page 12
+
+
+ 318 004a 07       		.byte	0x7
+ 319 004b FF040000 		.4byte	.LASF5
+ 320 004f 02       		.uleb128 0x2
+ 321 0050 08       		.byte	0x8
+ 322 0051 05       		.byte	0x5
+ 323 0052 8C020000 		.4byte	.LASF6
+ 324 0056 02       		.uleb128 0x2
+ 325 0057 08       		.byte	0x8
+ 326 0058 07       		.byte	0x7
+ 327 0059 8B010000 		.4byte	.LASF7
+ 328 005d 03       		.uleb128 0x3
+ 329 005e 04       		.byte	0x4
+ 330 005f 05       		.byte	0x5
+ 331 0060 696E7400 		.ascii	"int\000"
+ 332 0064 02       		.uleb128 0x2
+ 333 0065 04       		.byte	0x4
+ 334 0066 07       		.byte	0x7
+ 335 0067 B8040000 		.4byte	.LASF8
+ 336 006b 04       		.uleb128 0x4
+ 337 006c C6030000 		.4byte	.LASF9
+ 338 0070 02       		.byte	0x2
+ 339 0071 A1       		.byte	0xa1
+ 340 0072 2C000000 		.4byte	0x2c
+ 341 0076 04       		.uleb128 0x4
+ 342 0077 2C090000 		.4byte	.LASF10
+ 343 007b 02       		.byte	0x2
+ 344 007c A2       		.byte	0xa2
+ 345 007d 3A000000 		.4byte	0x3a
+ 346 0081 04       		.uleb128 0x4
+ 347 0082 2A040000 		.4byte	.LASF11
+ 348 0086 02       		.byte	0x2
+ 349 0087 A3       		.byte	0xa3
+ 350 0088 48000000 		.4byte	0x48
+ 351 008c 02       		.uleb128 0x2
+ 352 008d 04       		.byte	0x4
+ 353 008e 04       		.byte	0x4
+ 354 008f 53080000 		.4byte	.LASF12
+ 355 0093 02       		.uleb128 0x2
+ 356 0094 08       		.byte	0x8
+ 357 0095 04       		.byte	0x4
+ 358 0096 EB030000 		.4byte	.LASF13
+ 359 009a 02       		.uleb128 0x2
+ 360 009b 01       		.byte	0x1
+ 361 009c 08       		.byte	0x8
+ 362 009d 5C0A0000 		.4byte	.LASF14
+ 363 00a1 02       		.uleb128 0x2
+ 364 00a2 04       		.byte	0x4
+ 365 00a3 07       		.byte	0x7
+ 366 00a4 57070000 		.4byte	.LASF15
+ 367 00a8 05       		.uleb128 0x5
+ 368 00a9 01       		.byte	0x1
+ 369 00aa 03       		.byte	0x3
+ 370 00ab 58       		.byte	0x58
+ 371 00ac 18020000 		.4byte	0x218
+ 372 00b0 06       		.uleb128 0x6
+ 373 00b1 A6050000 		.4byte	.LASF16
+ 374 00b5 00       		.sleb128 0
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccAi6Wbc.s 			page 13
+
+
+ 375 00b6 06       		.uleb128 0x6
+ 376 00b7 A6020000 		.4byte	.LASF17
+ 377 00bb 01       		.sleb128 1
+ 378 00bc 06       		.uleb128 0x6
+ 379 00bd 5E010000 		.4byte	.LASF18
+ 380 00c1 02       		.sleb128 2
+ 381 00c2 06       		.uleb128 0x6
+ 382 00c3 E40A0000 		.4byte	.LASF19
+ 383 00c7 03       		.sleb128 3
+ 384 00c8 06       		.uleb128 0x6
+ 385 00c9 EF010000 		.4byte	.LASF20
+ 386 00cd 04       		.sleb128 4
+ 387 00ce 06       		.uleb128 0x6
+ 388 00cf 23000000 		.4byte	.LASF21
+ 389 00d3 05       		.sleb128 5
+ 390 00d4 06       		.uleb128 0x6
+ 391 00d5 B8060000 		.4byte	.LASF22
+ 392 00d9 20       		.sleb128 32
+ 393 00da 06       		.uleb128 0x6
+ 394 00db FA020000 		.4byte	.LASF23
+ 395 00df 21       		.sleb128 33
+ 396 00e0 06       		.uleb128 0x6
+ 397 00e1 DB050000 		.4byte	.LASF24
+ 398 00e5 22       		.sleb128 34
+ 399 00e6 06       		.uleb128 0x6
+ 400 00e7 55060000 		.4byte	.LASF25
+ 401 00eb 23       		.sleb128 35
+ 402 00ec 06       		.uleb128 0x6
+ 403 00ed C8070000 		.4byte	.LASF26
+ 404 00f1 24       		.sleb128 36
+ 405 00f2 06       		.uleb128 0x6
+ 406 00f3 79070000 		.4byte	.LASF27
+ 407 00f7 25       		.sleb128 37
+ 408 00f8 06       		.uleb128 0x6
+ 409 00f9 87030000 		.4byte	.LASF28
+ 410 00fd 26       		.sleb128 38
+ 411 00fe 06       		.uleb128 0x6
+ 412 00ff FF050000 		.4byte	.LASF29
+ 413 0103 27       		.sleb128 39
+ 414 0104 06       		.uleb128 0x6
+ 415 0105 610A0000 		.4byte	.LASF30
+ 416 0109 28       		.sleb128 40
+ 417 010a 06       		.uleb128 0x6
+ 418 010b 57020000 		.4byte	.LASF31
+ 419 010f 29       		.sleb128 41
+ 420 0110 06       		.uleb128 0x6
+ 421 0111 9F000000 		.4byte	.LASF32
+ 422 0115 2A       		.sleb128 42
+ 423 0116 06       		.uleb128 0x6
+ 424 0117 DB020000 		.4byte	.LASF33
+ 425 011b 2B       		.sleb128 43
+ 426 011c 06       		.uleb128 0x6
+ 427 011d 120C0000 		.4byte	.LASF34
+ 428 0121 2C       		.sleb128 44
+ 429 0122 06       		.uleb128 0x6
+ 430 0123 0B0A0000 		.4byte	.LASF35
+ 431 0127 C000     		.sleb128 64
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccAi6Wbc.s 			page 14
+
+
+ 432 0129 06       		.uleb128 0x6
+ 433 012a 7B060000 		.4byte	.LASF36
+ 434 012e C100     		.sleb128 65
+ 435 0130 06       		.uleb128 0x6
+ 436 0131 C5040000 		.4byte	.LASF37
+ 437 0135 C200     		.sleb128 66
+ 438 0137 06       		.uleb128 0x6
+ 439 0138 1B0B0000 		.4byte	.LASF38
+ 440 013c C300     		.sleb128 67
+ 441 013e 06       		.uleb128 0x6
+ 442 013f 43050000 		.4byte	.LASF39
+ 443 0143 C400     		.sleb128 68
+ 444 0145 06       		.uleb128 0x6
+ 445 0146 37010000 		.4byte	.LASF40
+ 446 014a C500     		.sleb128 69
+ 447 014c 06       		.uleb128 0x6
+ 448 014d 36070000 		.4byte	.LASF41
+ 449 0151 C600     		.sleb128 70
+ 450 0153 06       		.uleb128 0x6
+ 451 0154 BD050000 		.4byte	.LASF42
+ 452 0158 C700     		.sleb128 71
+ 453 015a 06       		.uleb128 0x6
+ 454 015b EB0B0000 		.4byte	.LASF43
+ 455 015f C800     		.sleb128 72
+ 456 0161 06       		.uleb128 0x6
+ 457 0162 53000000 		.4byte	.LASF44
+ 458 0166 C900     		.sleb128 73
+ 459 0168 06       		.uleb128 0x6
+ 460 0169 600B0000 		.4byte	.LASF45
+ 461 016d CA00     		.sleb128 74
+ 462 016f 06       		.uleb128 0x6
+ 463 0170 E9000000 		.4byte	.LASF46
+ 464 0174 CB00     		.sleb128 75
+ 465 0176 06       		.uleb128 0x6
+ 466 0177 1E060000 		.4byte	.LASF47
+ 467 017b CC00     		.sleb128 76
+ 468 017d 06       		.uleb128 0x6
+ 469 017e 9F0A0000 		.4byte	.LASF48
+ 470 0182 CD00     		.sleb128 77
+ 471 0184 06       		.uleb128 0x6
+ 472 0185 34030000 		.4byte	.LASF49
+ 473 0189 CE00     		.sleb128 78
+ 474 018b 06       		.uleb128 0x6
+ 475 018c B1090000 		.4byte	.LASF50
+ 476 0190 CF00     		.sleb128 79
+ 477 0192 06       		.uleb128 0x6
+ 478 0193 08010000 		.4byte	.LASF51
+ 479 0197 D000     		.sleb128 80
+ 480 0199 06       		.uleb128 0x6
+ 481 019a CC030000 		.4byte	.LASF52
+ 482 019e D100     		.sleb128 81
+ 483 01a0 06       		.uleb128 0x6
+ 484 01a1 F0070000 		.4byte	.LASF53
+ 485 01a5 D200     		.sleb128 82
+ 486 01a7 06       		.uleb128 0x6
+ 487 01a8 79090000 		.4byte	.LASF54
+ 488 01ac D300     		.sleb128 83
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccAi6Wbc.s 			page 15
+
+
+ 489 01ae 06       		.uleb128 0x6
+ 490 01af EA090000 		.4byte	.LASF55
+ 491 01b3 D400     		.sleb128 84
+ 492 01b5 06       		.uleb128 0x6
+ 493 01b6 61050000 		.4byte	.LASF56
+ 494 01ba D500     		.sleb128 85
+ 495 01bc 06       		.uleb128 0x6
+ 496 01bd 56040000 		.4byte	.LASF57
+ 497 01c1 F000     		.sleb128 112
+ 498 01c3 06       		.uleb128 0x6
+ 499 01c4 3F0C0000 		.4byte	.LASF58
+ 500 01c8 F100     		.sleb128 113
+ 501 01ca 06       		.uleb128 0x6
+ 502 01cb 52030000 		.4byte	.LASF59
+ 503 01cf F200     		.sleb128 114
+ 504 01d1 06       		.uleb128 0x6
+ 505 01d2 18070000 		.4byte	.LASF60
+ 506 01d6 F300     		.sleb128 115
+ 507 01d8 06       		.uleb128 0x6
+ 508 01d9 29080000 		.4byte	.LASF61
+ 509 01dd F400     		.sleb128 116
+ 510 01df 06       		.uleb128 0x6
+ 511 01e0 F2030000 		.4byte	.LASF62
+ 512 01e4 F500     		.sleb128 117
+ 513 01e6 06       		.uleb128 0x6
+ 514 01e7 C8000000 		.4byte	.LASF63
+ 515 01eb F600     		.sleb128 118
+ 516 01ed 06       		.uleb128 0x6
+ 517 01ee 6C000000 		.4byte	.LASF64
+ 518 01f2 F700     		.sleb128 119
+ 519 01f4 06       		.uleb128 0x6
+ 520 01f5 00000000 		.4byte	.LASF65
+ 521 01f9 F800     		.sleb128 120
+ 522 01fb 06       		.uleb128 0x6
+ 523 01fc B90A0000 		.4byte	.LASF66
+ 524 0200 F900     		.sleb128 121
+ 525 0202 06       		.uleb128 0x6
+ 526 0203 94040000 		.4byte	.LASF67
+ 527 0207 FA00     		.sleb128 122
+ 528 0209 06       		.uleb128 0x6
+ 529 020a 20020000 		.4byte	.LASF68
+ 530 020e FA01     		.sleb128 250
+ 531 0210 06       		.uleb128 0x6
+ 532 0211 48040000 		.4byte	.LASF69
+ 533 0215 FF01     		.sleb128 255
+ 534 0217 00       		.byte	0
+ 535 0218 07       		.uleb128 0x7
+ 536 0219 01       		.byte	0x1
+ 537 021a 03       		.byte	0x3
+ 538 021b F801     		.2byte	0x1f8
+ 539 021d 41020000 		.4byte	0x241
+ 540 0221 06       		.uleb128 0x6
+ 541 0222 6A0C0000 		.4byte	.LASF70
+ 542 0226 01       		.sleb128 1
+ 543 0227 06       		.uleb128 0x6
+ 544 0228 330A0000 		.4byte	.LASF71
+ 545 022c 02       		.sleb128 2
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccAi6Wbc.s 			page 16
+
+
+ 546 022d 06       		.uleb128 0x6
+ 547 022e D50B0000 		.4byte	.LASF72
+ 548 0232 03       		.sleb128 3
+ 549 0233 06       		.uleb128 0x6
+ 550 0234 B2070000 		.4byte	.LASF73
+ 551 0238 04       		.sleb128 4
+ 552 0239 06       		.uleb128 0x6
+ 553 023a 2F050000 		.4byte	.LASF74
+ 554 023e FF01     		.sleb128 255
+ 555 0240 00       		.byte	0
+ 556 0241 08       		.uleb128 0x8
+ 557 0242 27010000 		.4byte	.LASF75
+ 558 0246 03       		.byte	0x3
+ 559 0247 1402     		.2byte	0x214
+ 560 0249 18020000 		.4byte	0x218
+ 561 024d 07       		.uleb128 0x7
+ 562 024e 01       		.byte	0x1
+ 563 024f 03       		.byte	0x3
+ 564 0250 1802     		.2byte	0x218
+ 565 0252 88020000 		.4byte	0x288
+ 566 0256 06       		.uleb128 0x6
+ 567 0257 3E020000 		.4byte	.LASF76
+ 568 025b 01       		.sleb128 1
+ 569 025c 06       		.uleb128 0x6
+ 570 025d FD0A0000 		.4byte	.LASF77
+ 571 0261 02       		.sleb128 2
+ 572 0262 06       		.uleb128 0x6
+ 573 0263 ED080000 		.4byte	.LASF78
+ 574 0267 03       		.sleb128 3
+ 575 0268 06       		.uleb128 0x6
+ 576 0269 390B0000 		.4byte	.LASF79
+ 577 026d 04       		.sleb128 4
+ 578 026e 06       		.uleb128 0x6
+ 579 026f 8F0B0000 		.4byte	.LASF80
+ 580 0273 05       		.sleb128 5
+ 581 0274 06       		.uleb128 0x6
+ 582 0275 E3040000 		.4byte	.LASF81
+ 583 0279 06       		.sleb128 6
+ 584 027a 06       		.uleb128 0x6
+ 585 027b 9C060000 		.4byte	.LASF82
+ 586 027f 07       		.sleb128 7
+ 587 0280 06       		.uleb128 0x6
+ 588 0281 D0090000 		.4byte	.LASF83
+ 589 0285 FF01     		.sleb128 255
+ 590 0287 00       		.byte	0
+ 591 0288 09       		.uleb128 0x9
+ 592 0289 08       		.byte	0x8
+ 593 028a 04       		.byte	0x4
+ 594 028b 8F02     		.2byte	0x28f
+ 595 028d C6020000 		.4byte	0x2c6
+ 596 0291 0A       		.uleb128 0xa
+ 597 0292 47080000 		.4byte	.LASF84
+ 598 0296 04       		.byte	0x4
+ 599 0297 9602     		.2byte	0x296
+ 600 0299 76000000 		.4byte	0x76
+ 601 029d 00       		.byte	0
+ 602 029e 0A       		.uleb128 0xa
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccAi6Wbc.s 			page 17
+
+
+ 603 029f E4070000 		.4byte	.LASF85
+ 604 02a3 04       		.byte	0x4
+ 605 02a4 9D02     		.2byte	0x29d
+ 606 02a6 76000000 		.4byte	0x76
+ 607 02aa 02       		.byte	0x2
+ 608 02ab 0A       		.uleb128 0xa
+ 609 02ac F0060000 		.4byte	.LASF86
+ 610 02b0 04       		.byte	0x4
+ 611 02b1 A202     		.2byte	0x2a2
+ 612 02b3 76000000 		.4byte	0x76
+ 613 02b7 04       		.byte	0x4
+ 614 02b8 0A       		.uleb128 0xa
+ 615 02b9 85050000 		.4byte	.LASF87
+ 616 02bd 04       		.byte	0x4
+ 617 02be A802     		.2byte	0x2a8
+ 618 02c0 76000000 		.4byte	0x76
+ 619 02c4 06       		.byte	0x6
+ 620 02c5 00       		.byte	0
+ 621 02c6 08       		.uleb128 0x8
+ 622 02c7 11050000 		.4byte	.LASF88
+ 623 02cb 04       		.byte	0x4
+ 624 02cc AA02     		.2byte	0x2aa
+ 625 02ce 88020000 		.4byte	0x288
+ 626 02d2 09       		.uleb128 0x9
+ 627 02d3 02       		.byte	0x2
+ 628 02d4 05       		.byte	0x5
+ 629 02d5 5501     		.2byte	0x155
+ 630 02d7 F6020000 		.4byte	0x2f6
+ 631 02db 0A       		.uleb128 0xa
+ 632 02dc 360C0000 		.4byte	.LASF89
+ 633 02e0 05       		.byte	0x5
+ 634 02e1 5C01     		.2byte	0x15c
+ 635 02e3 6B000000 		.4byte	0x6b
+ 636 02e7 00       		.byte	0
+ 637 02e8 0A       		.uleb128 0xa
+ 638 02e9 96060000 		.4byte	.LASF90
+ 639 02ed 05       		.byte	0x5
+ 640 02ee 6201     		.2byte	0x162
+ 641 02f0 6B000000 		.4byte	0x6b
+ 642 02f4 01       		.byte	0x1
+ 643 02f5 00       		.byte	0
+ 644 02f6 08       		.uleb128 0x8
+ 645 02f7 8B000000 		.4byte	.LASF91
+ 646 02fb 05       		.byte	0x5
+ 647 02fc 6401     		.2byte	0x164
+ 648 02fe D2020000 		.4byte	0x2d2
+ 649 0302 05       		.uleb128 0x5
+ 650 0303 01       		.byte	0x1
+ 651 0304 06       		.byte	0x6
+ 652 0305 22       		.byte	0x22
+ 653 0306 23030000 		.4byte	0x323
+ 654 030a 06       		.uleb128 0x6
+ 655 030b A4070000 		.4byte	.LASF92
+ 656 030f 00       		.sleb128 0
+ 657 0310 06       		.uleb128 0x6
+ 658 0311 250A0000 		.4byte	.LASF93
+ 659 0315 01       		.sleb128 1
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccAi6Wbc.s 			page 18
+
+
+ 660 0316 06       		.uleb128 0x6
+ 661 0317 26030000 		.4byte	.LASF94
+ 662 031b 02       		.sleb128 2
+ 663 031c 06       		.uleb128 0x6
+ 664 031d 11030000 		.4byte	.LASF95
+ 665 0321 03       		.sleb128 3
+ 666 0322 00       		.byte	0
+ 667 0323 05       		.uleb128 0x5
+ 668 0324 01       		.byte	0x1
+ 669 0325 07       		.byte	0x7
+ 670 0326 1D       		.byte	0x1d
+ 671 0327 68030000 		.4byte	0x368
+ 672 032b 06       		.uleb128 0x6
+ 673 032c 7D0C0000 		.4byte	.LASF96
+ 674 0330 00       		.sleb128 0
+ 675 0331 06       		.uleb128 0x6
+ 676 0332 450A0000 		.4byte	.LASF97
+ 677 0336 01       		.sleb128 1
+ 678 0337 06       		.uleb128 0x6
+ 679 0338 D5080000 		.4byte	.LASF98
+ 680 033c 02       		.sleb128 2
+ 681 033d 06       		.uleb128 0x6
+ 682 033e 31040000 		.4byte	.LASF99
+ 683 0342 03       		.sleb128 3
+ 684 0343 06       		.uleb128 0x6
+ 685 0344 13040000 		.4byte	.LASF100
+ 686 0348 04       		.sleb128 4
+ 687 0349 06       		.uleb128 0x6
+ 688 034a 9A090000 		.4byte	.LASF101
+ 689 034e 05       		.sleb128 5
+ 690 034f 06       		.uleb128 0x6
+ 691 0350 DC060000 		.4byte	.LASF102
+ 692 0354 06       		.sleb128 6
+ 693 0355 06       		.uleb128 0x6
+ 694 0356 11080000 		.4byte	.LASF103
+ 695 035a 07       		.sleb128 7
+ 696 035b 06       		.uleb128 0x6
+ 697 035c 38060000 		.4byte	.LASF104
+ 698 0360 08       		.sleb128 8
+ 699 0361 06       		.uleb128 0x6
+ 700 0362 33090000 		.4byte	.LASF105
+ 701 0366 09       		.sleb128 9
+ 702 0367 00       		.byte	0
+ 703 0368 07       		.uleb128 0x7
+ 704 0369 01       		.byte	0x1
+ 705 036a 08       		.byte	0x8
+ 706 036b 9505     		.2byte	0x595
+ 707 036d 90030000 		.4byte	0x390
+ 708 0371 06       		.uleb128 0x6
+ 709 0372 3F000000 		.4byte	.LASF106
+ 710 0376 00       		.sleb128 0
+ 711 0377 06       		.uleb128 0x6
+ 712 0378 60070000 		.4byte	.LASF107
+ 713 037c 01       		.sleb128 1
+ 714 037d 06       		.uleb128 0x6
+ 715 037e BF0B0000 		.4byte	.LASF108
+ 716 0382 02       		.sleb128 2
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccAi6Wbc.s 			page 19
+
+
+ 717 0383 06       		.uleb128 0x6
+ 718 0384 74020000 		.4byte	.LASF109
+ 719 0388 03       		.sleb128 3
+ 720 0389 06       		.uleb128 0x6
+ 721 038a 6E030000 		.4byte	.LASF110
+ 722 038e 04       		.sleb128 4
+ 723 038f 00       		.byte	0
+ 724 0390 08       		.uleb128 0x8
+ 725 0391 520B0000 		.4byte	.LASF111
+ 726 0395 08       		.byte	0x8
+ 727 0396 A305     		.2byte	0x5a3
+ 728 0398 68030000 		.4byte	0x368
+ 729 039c 05       		.uleb128 0x5
+ 730 039d 01       		.byte	0x1
+ 731 039e 09       		.byte	0x9
+ 732 039f 38       		.byte	0x38
+ 733 03a0 BD030000 		.4byte	0x3bd
+ 734 03a4 06       		.uleb128 0x6
+ 735 03a5 830A0000 		.4byte	.LASF112
+ 736 03a9 00       		.sleb128 0
+ 737 03aa 06       		.uleb128 0x6
+ 738 03ab 7C040000 		.4byte	.LASF113
+ 739 03af 01       		.sleb128 1
+ 740 03b0 06       		.uleb128 0x6
+ 741 03b1 04020000 		.4byte	.LASF114
+ 742 03b5 02       		.sleb128 2
+ 743 03b6 06       		.uleb128 0x6
+ 744 03b7 FC060000 		.4byte	.LASF115
+ 745 03bb 03       		.sleb128 3
+ 746 03bc 00       		.byte	0
+ 747 03bd 04       		.uleb128 0x4
+ 748 03be B9020000 		.4byte	.LASF116
+ 749 03c2 09       		.byte	0x9
+ 750 03c3 3D       		.byte	0x3d
+ 751 03c4 9C030000 		.4byte	0x39c
+ 752 03c8 0B       		.uleb128 0xb
+ 753 03c9 48090000 		.4byte	.LASF131
+ 754 03cd 01       		.byte	0x1
+ 755 03ce 60       		.byte	0x60
+ 756 03cf 00000000 		.4byte	.LFB35
+ 757 03d3 3C000000 		.4byte	.LFE35-.LFB35
+ 758 03d7 01       		.uleb128 0x1
+ 759 03d8 9C       		.byte	0x9c
+ 760 03d9 0C       		.uleb128 0xc
+ 761 03da 650C0000 		.4byte	.LASF132
+ 762 03de 01       		.byte	0x1
+ 763 03df 9B       		.byte	0x9b
+ 764 03e0 5D000000 		.4byte	0x5d
+ 765 03e4 00000000 		.4byte	.LFB36
+ 766 03e8 34010000 		.4byte	.LFE36-.LFB36
+ 767 03ec 01       		.uleb128 0x1
+ 768 03ed 9C       		.byte	0x9c
+ 769 03ee 31040000 		.4byte	0x431
+ 770 03f2 0D       		.uleb128 0xd
+ 771 03f3 79010000 		.4byte	.LASF117
+ 772 03f7 01       		.byte	0x1
+ 773 03f8 9D       		.byte	0x9d
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccAi6Wbc.s 			page 20
+
+
+ 774 03f9 81000000 		.4byte	0x81
+ 775 03fd 05       		.uleb128 0x5
+ 776 03fe 03       		.byte	0x3
+ 777 03ff 04000000 		.4byte	previousTimestamp.6489
+ 778 0403 0D       		.uleb128 0xd
+ 779 0404 7E0B0000 		.4byte	.LASF118
+ 780 0408 01       		.byte	0x1
+ 781 0409 9E       		.byte	0x9e
+ 782 040a 81000000 		.4byte	0x81
+ 783 040e 05       		.uleb128 0x5
+ 784 040f 03       		.byte	0x3
+ 785 0410 00000000 		.4byte	currentTimestamp.6490
+ 786 0414 0D       		.uleb128 0xd
+ 787 0415 DC0A0000 		.4byte	.LASF119
+ 788 0419 01       		.byte	0x1
+ 789 041a 9F       		.byte	0x9f
+ 790 041b 41020000 		.4byte	0x241
+ 791 041f 02       		.uleb128 0x2
+ 792 0420 91       		.byte	0x91
+ 793 0421 6F       		.sleb128 -17
+ 794 0422 0D       		.uleb128 0xd
+ 795 0423 990C0000 		.4byte	.LASF120
+ 796 0427 01       		.byte	0x1
+ 797 0428 A0       		.byte	0xa0
+ 798 0429 6B000000 		.4byte	0x6b
+ 799 042d 02       		.uleb128 0x2
+ 800 042e 91       		.byte	0x91
+ 801 042f 6E       		.sleb128 -18
+ 802 0430 00       		.byte	0
+ 803 0431 0D       		.uleb128 0xd
+ 804 0432 05090000 		.4byte	.LASF121
+ 805 0436 01       		.byte	0x1
+ 806 0437 3E       		.byte	0x3e
+ 807 0438 C6020000 		.4byte	0x2c6
+ 808 043c 05       		.uleb128 0x5
+ 809 043d 03       		.byte	0x3
+ 810 043e 00000000 		.4byte	hrmConnectionParam
+ 811 0442 0E       		.uleb128 0xe
+ 812 0443 49060000 		.4byte	.LASF122
+ 813 0447 08       		.byte	0x8
+ 814 0448 2207     		.2byte	0x722
+ 815 044a 90030000 		.4byte	0x390
+ 816 044e 0E       		.uleb128 0xe
+ 817 044f 93070000 		.4byte	.LASF123
+ 818 0453 08       		.byte	0x8
+ 819 0454 2307     		.2byte	0x723
+ 820 0456 F6020000 		.4byte	0x2f6
+ 821 045a 0F       		.uleb128 0xf
+ 822 045b AC0B0000 		.4byte	.LASF124
+ 823 045f 09       		.byte	0x9
+ 824 0460 43       		.byte	0x43
+ 825 0461 65040000 		.4byte	0x465
+ 826 0465 02       		.uleb128 0x2
+ 827 0466 01       		.byte	0x1
+ 828 0467 02       		.byte	0x2
+ 829 0468 18090000 		.4byte	.LASF125
+ 830 046c 0F       		.uleb128 0xf
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccAi6Wbc.s 			page 21
+
+
+ 831 046d AF030000 		.4byte	.LASF126
+ 832 0471 09       		.byte	0x9
+ 833 0472 44       		.byte	0x44
+ 834 0473 81000000 		.4byte	0x81
+ 835 0477 0F       		.uleb128 0xf
+ 836 0478 63090000 		.4byte	.LASF127
+ 837 047c 09       		.byte	0x9
+ 838 047d 45       		.byte	0x45
+ 839 047e BD030000 		.4byte	0x3bd
+ 840 0482 00       		.byte	0
+ 841              		.section	.debug_abbrev,"",%progbits
+ 842              	.Ldebug_abbrev0:
+ 843 0000 01       		.uleb128 0x1
+ 844 0001 11       		.uleb128 0x11
+ 845 0002 01       		.byte	0x1
+ 846 0003 25       		.uleb128 0x25
+ 847 0004 0E       		.uleb128 0xe
+ 848 0005 13       		.uleb128 0x13
+ 849 0006 0B       		.uleb128 0xb
+ 850 0007 03       		.uleb128 0x3
+ 851 0008 0E       		.uleb128 0xe
+ 852 0009 1B       		.uleb128 0x1b
+ 853 000a 0E       		.uleb128 0xe
+ 854 000b 55       		.uleb128 0x55
+ 855 000c 17       		.uleb128 0x17
+ 856 000d 11       		.uleb128 0x11
+ 857 000e 01       		.uleb128 0x1
+ 858 000f 10       		.uleb128 0x10
+ 859 0010 17       		.uleb128 0x17
+ 860 0011 00       		.byte	0
+ 861 0012 00       		.byte	0
+ 862 0013 02       		.uleb128 0x2
+ 863 0014 24       		.uleb128 0x24
+ 864 0015 00       		.byte	0
+ 865 0016 0B       		.uleb128 0xb
+ 866 0017 0B       		.uleb128 0xb
+ 867 0018 3E       		.uleb128 0x3e
+ 868 0019 0B       		.uleb128 0xb
+ 869 001a 03       		.uleb128 0x3
+ 870 001b 0E       		.uleb128 0xe
+ 871 001c 00       		.byte	0
+ 872 001d 00       		.byte	0
+ 873 001e 03       		.uleb128 0x3
+ 874 001f 24       		.uleb128 0x24
+ 875 0020 00       		.byte	0
+ 876 0021 0B       		.uleb128 0xb
+ 877 0022 0B       		.uleb128 0xb
+ 878 0023 3E       		.uleb128 0x3e
+ 879 0024 0B       		.uleb128 0xb
+ 880 0025 03       		.uleb128 0x3
+ 881 0026 08       		.uleb128 0x8
+ 882 0027 00       		.byte	0
+ 883 0028 00       		.byte	0
+ 884 0029 04       		.uleb128 0x4
+ 885 002a 16       		.uleb128 0x16
+ 886 002b 00       		.byte	0
+ 887 002c 03       		.uleb128 0x3
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccAi6Wbc.s 			page 22
+
+
+ 888 002d 0E       		.uleb128 0xe
+ 889 002e 3A       		.uleb128 0x3a
+ 890 002f 0B       		.uleb128 0xb
+ 891 0030 3B       		.uleb128 0x3b
+ 892 0031 0B       		.uleb128 0xb
+ 893 0032 49       		.uleb128 0x49
+ 894 0033 13       		.uleb128 0x13
+ 895 0034 00       		.byte	0
+ 896 0035 00       		.byte	0
+ 897 0036 05       		.uleb128 0x5
+ 898 0037 04       		.uleb128 0x4
+ 899 0038 01       		.byte	0x1
+ 900 0039 0B       		.uleb128 0xb
+ 901 003a 0B       		.uleb128 0xb
+ 902 003b 3A       		.uleb128 0x3a
+ 903 003c 0B       		.uleb128 0xb
+ 904 003d 3B       		.uleb128 0x3b
+ 905 003e 0B       		.uleb128 0xb
+ 906 003f 01       		.uleb128 0x1
+ 907 0040 13       		.uleb128 0x13
+ 908 0041 00       		.byte	0
+ 909 0042 00       		.byte	0
+ 910 0043 06       		.uleb128 0x6
+ 911 0044 28       		.uleb128 0x28
+ 912 0045 00       		.byte	0
+ 913 0046 03       		.uleb128 0x3
+ 914 0047 0E       		.uleb128 0xe
+ 915 0048 1C       		.uleb128 0x1c
+ 916 0049 0D       		.uleb128 0xd
+ 917 004a 00       		.byte	0
+ 918 004b 00       		.byte	0
+ 919 004c 07       		.uleb128 0x7
+ 920 004d 04       		.uleb128 0x4
+ 921 004e 01       		.byte	0x1
+ 922 004f 0B       		.uleb128 0xb
+ 923 0050 0B       		.uleb128 0xb
+ 924 0051 3A       		.uleb128 0x3a
+ 925 0052 0B       		.uleb128 0xb
+ 926 0053 3B       		.uleb128 0x3b
+ 927 0054 05       		.uleb128 0x5
+ 928 0055 01       		.uleb128 0x1
+ 929 0056 13       		.uleb128 0x13
+ 930 0057 00       		.byte	0
+ 931 0058 00       		.byte	0
+ 932 0059 08       		.uleb128 0x8
+ 933 005a 16       		.uleb128 0x16
+ 934 005b 00       		.byte	0
+ 935 005c 03       		.uleb128 0x3
+ 936 005d 0E       		.uleb128 0xe
+ 937 005e 3A       		.uleb128 0x3a
+ 938 005f 0B       		.uleb128 0xb
+ 939 0060 3B       		.uleb128 0x3b
+ 940 0061 05       		.uleb128 0x5
+ 941 0062 49       		.uleb128 0x49
+ 942 0063 13       		.uleb128 0x13
+ 943 0064 00       		.byte	0
+ 944 0065 00       		.byte	0
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccAi6Wbc.s 			page 23
+
+
+ 945 0066 09       		.uleb128 0x9
+ 946 0067 13       		.uleb128 0x13
+ 947 0068 01       		.byte	0x1
+ 948 0069 0B       		.uleb128 0xb
+ 949 006a 0B       		.uleb128 0xb
+ 950 006b 3A       		.uleb128 0x3a
+ 951 006c 0B       		.uleb128 0xb
+ 952 006d 3B       		.uleb128 0x3b
+ 953 006e 05       		.uleb128 0x5
+ 954 006f 01       		.uleb128 0x1
+ 955 0070 13       		.uleb128 0x13
+ 956 0071 00       		.byte	0
+ 957 0072 00       		.byte	0
+ 958 0073 0A       		.uleb128 0xa
+ 959 0074 0D       		.uleb128 0xd
+ 960 0075 00       		.byte	0
+ 961 0076 03       		.uleb128 0x3
+ 962 0077 0E       		.uleb128 0xe
+ 963 0078 3A       		.uleb128 0x3a
+ 964 0079 0B       		.uleb128 0xb
+ 965 007a 3B       		.uleb128 0x3b
+ 966 007b 05       		.uleb128 0x5
+ 967 007c 49       		.uleb128 0x49
+ 968 007d 13       		.uleb128 0x13
+ 969 007e 38       		.uleb128 0x38
+ 970 007f 0B       		.uleb128 0xb
+ 971 0080 00       		.byte	0
+ 972 0081 00       		.byte	0
+ 973 0082 0B       		.uleb128 0xb
+ 974 0083 2E       		.uleb128 0x2e
+ 975 0084 00       		.byte	0
+ 976 0085 03       		.uleb128 0x3
+ 977 0086 0E       		.uleb128 0xe
+ 978 0087 3A       		.uleb128 0x3a
+ 979 0088 0B       		.uleb128 0xb
+ 980 0089 3B       		.uleb128 0x3b
+ 981 008a 0B       		.uleb128 0xb
+ 982 008b 27       		.uleb128 0x27
+ 983 008c 19       		.uleb128 0x19
+ 984 008d 11       		.uleb128 0x11
+ 985 008e 01       		.uleb128 0x1
+ 986 008f 12       		.uleb128 0x12
+ 987 0090 06       		.uleb128 0x6
+ 988 0091 40       		.uleb128 0x40
+ 989 0092 18       		.uleb128 0x18
+ 990 0093 9642     		.uleb128 0x2116
+ 991 0095 19       		.uleb128 0x19
+ 992 0096 00       		.byte	0
+ 993 0097 00       		.byte	0
+ 994 0098 0C       		.uleb128 0xc
+ 995 0099 2E       		.uleb128 0x2e
+ 996 009a 01       		.byte	0x1
+ 997 009b 3F       		.uleb128 0x3f
+ 998 009c 19       		.uleb128 0x19
+ 999 009d 03       		.uleb128 0x3
+ 1000 009e 0E       		.uleb128 0xe
+ 1001 009f 3A       		.uleb128 0x3a
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccAi6Wbc.s 			page 24
+
+
+ 1002 00a0 0B       		.uleb128 0xb
+ 1003 00a1 3B       		.uleb128 0x3b
+ 1004 00a2 0B       		.uleb128 0xb
+ 1005 00a3 49       		.uleb128 0x49
+ 1006 00a4 13       		.uleb128 0x13
+ 1007 00a5 11       		.uleb128 0x11
+ 1008 00a6 01       		.uleb128 0x1
+ 1009 00a7 12       		.uleb128 0x12
+ 1010 00a8 06       		.uleb128 0x6
+ 1011 00a9 40       		.uleb128 0x40
+ 1012 00aa 18       		.uleb128 0x18
+ 1013 00ab 9642     		.uleb128 0x2116
+ 1014 00ad 19       		.uleb128 0x19
+ 1015 00ae 01       		.uleb128 0x1
+ 1016 00af 13       		.uleb128 0x13
+ 1017 00b0 00       		.byte	0
+ 1018 00b1 00       		.byte	0
+ 1019 00b2 0D       		.uleb128 0xd
+ 1020 00b3 34       		.uleb128 0x34
+ 1021 00b4 00       		.byte	0
+ 1022 00b5 03       		.uleb128 0x3
+ 1023 00b6 0E       		.uleb128 0xe
+ 1024 00b7 3A       		.uleb128 0x3a
+ 1025 00b8 0B       		.uleb128 0xb
+ 1026 00b9 3B       		.uleb128 0x3b
+ 1027 00ba 0B       		.uleb128 0xb
+ 1028 00bb 49       		.uleb128 0x49
+ 1029 00bc 13       		.uleb128 0x13
+ 1030 00bd 02       		.uleb128 0x2
+ 1031 00be 18       		.uleb128 0x18
+ 1032 00bf 00       		.byte	0
+ 1033 00c0 00       		.byte	0
+ 1034 00c1 0E       		.uleb128 0xe
+ 1035 00c2 34       		.uleb128 0x34
+ 1036 00c3 00       		.byte	0
+ 1037 00c4 03       		.uleb128 0x3
+ 1038 00c5 0E       		.uleb128 0xe
+ 1039 00c6 3A       		.uleb128 0x3a
+ 1040 00c7 0B       		.uleb128 0xb
+ 1041 00c8 3B       		.uleb128 0x3b
+ 1042 00c9 05       		.uleb128 0x5
+ 1043 00ca 49       		.uleb128 0x49
+ 1044 00cb 13       		.uleb128 0x13
+ 1045 00cc 3F       		.uleb128 0x3f
+ 1046 00cd 19       		.uleb128 0x19
+ 1047 00ce 3C       		.uleb128 0x3c
+ 1048 00cf 19       		.uleb128 0x19
+ 1049 00d0 00       		.byte	0
+ 1050 00d1 00       		.byte	0
+ 1051 00d2 0F       		.uleb128 0xf
+ 1052 00d3 34       		.uleb128 0x34
+ 1053 00d4 00       		.byte	0
+ 1054 00d5 03       		.uleb128 0x3
+ 1055 00d6 0E       		.uleb128 0xe
+ 1056 00d7 3A       		.uleb128 0x3a
+ 1057 00d8 0B       		.uleb128 0xb
+ 1058 00d9 3B       		.uleb128 0x3b
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccAi6Wbc.s 			page 25
+
+
+ 1059 00da 0B       		.uleb128 0xb
+ 1060 00db 49       		.uleb128 0x49
+ 1061 00dc 13       		.uleb128 0x13
+ 1062 00dd 3F       		.uleb128 0x3f
+ 1063 00de 19       		.uleb128 0x19
+ 1064 00df 3C       		.uleb128 0x3c
+ 1065 00e0 19       		.uleb128 0x19
+ 1066 00e1 00       		.byte	0
+ 1067 00e2 00       		.byte	0
+ 1068 00e3 00       		.byte	0
+ 1069              		.section	.debug_aranges,"",%progbits
+ 1070 0000 24000000 		.4byte	0x24
+ 1071 0004 0200     		.2byte	0x2
+ 1072 0006 00000000 		.4byte	.Ldebug_info0
+ 1073 000a 04       		.byte	0x4
+ 1074 000b 00       		.byte	0
+ 1075 000c 0000     		.2byte	0
+ 1076 000e 0000     		.2byte	0
+ 1077 0010 00000000 		.4byte	.LFB35
+ 1078 0014 3C000000 		.4byte	.LFE35-.LFB35
+ 1079 0018 00000000 		.4byte	.LFB36
+ 1080 001c 34010000 		.4byte	.LFE36-.LFB36
+ 1081 0020 00000000 		.4byte	0
+ 1082 0024 00000000 		.4byte	0
+ 1083              		.section	.debug_ranges,"",%progbits
+ 1084              	.Ldebug_ranges0:
+ 1085 0000 00000000 		.4byte	.LFB35
+ 1086 0004 3C000000 		.4byte	.LFE35
+ 1087 0008 00000000 		.4byte	.LFB36
+ 1088 000c 34010000 		.4byte	.LFE36
+ 1089 0010 00000000 		.4byte	0
+ 1090 0014 00000000 		.4byte	0
+ 1091              		.section	.debug_line,"",%progbits
+ 1092              	.Ldebug_line0:
+ 1093 0000 32010000 		.section	.debug_str,"MS",%progbits,1
+ 1093      0200BE00 
+ 1093      00000201 
+ 1093      FB0E0D00 
+ 1093      01010101 
+ 1094              	.LASF65:
+ 1095 0000 4359424C 		.ascii	"CYBLE_EVT_L2CAP_CBFC_RX_CREDIT_IND\000"
+ 1095      455F4556 
+ 1095      545F4C32 
+ 1095      4341505F 
+ 1095      43424643 
+ 1096              	.LASF21:
+ 1097 0023 4359424C 		.ascii	"CYBLE_EVT_STACK_BUSY_STATUS\000"
+ 1097      455F4556 
+ 1097      545F5354 
+ 1097      41434B5F 
+ 1097      42555359 
+ 1098              	.LASF106:
+ 1099 003f 4359424C 		.ascii	"CYBLE_STATE_STOPPED\000"
+ 1099      455F5354 
+ 1099      4154455F 
+ 1099      53544F50 
+ 1099      50454400 
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccAi6Wbc.s 			page 26
+
+
+ 1100              	.LASF44:
+ 1101 0053 4359424C 		.ascii	"CYBLE_EVT_GATTC_READ_RSP\000"
+ 1101      455F4556 
+ 1101      545F4741 
+ 1101      5454435F 
+ 1101      52454144 
+ 1102              	.LASF64:
+ 1103 006c 4359424C 		.ascii	"CYBLE_EVT_L2CAP_CBFC_DATA_READ\000"
+ 1103      455F4556 
+ 1103      545F4C32 
+ 1103      4341505F 
+ 1103      43424643 
+ 1104              	.LASF91:
+ 1105 008b 4359424C 		.ascii	"CYBLE_CONN_HANDLE_T\000"
+ 1105      455F434F 
+ 1105      4E4E5F48 
+ 1105      414E444C 
+ 1105      455F5400 
+ 1106              	.LASF32:
+ 1107 009f 4359424C 		.ascii	"CYBLE_EVT_GAP_CONNECTION_UPDATE_COMPLETE\000"
+ 1107      455F4556 
+ 1107      545F4741 
+ 1107      505F434F 
+ 1107      4E4E4543 
+ 1108              	.LASF63:
+ 1109 00c8 4359424C 		.ascii	"CYBLE_EVT_L2CAP_CBFC_DISCONN_CNF\000"
+ 1109      455F4556 
+ 1109      545F4C32 
+ 1109      4341505F 
+ 1109      43424643 
+ 1110              	.LASF46:
+ 1111 00e9 4359424C 		.ascii	"CYBLE_EVT_GATTC_READ_MULTI_RSP\000"
+ 1111      455F4556 
+ 1111      545F4741 
+ 1111      5454435F 
+ 1111      52454144 
+ 1112              	.LASF51:
+ 1113 0108 4359424C 		.ascii	"CYBLE_EVT_GATTS_EXEC_WRITE_REQ\000"
+ 1113      455F4556 
+ 1113      545F4741 
+ 1113      5454535F 
+ 1113      45584543 
+ 1114              	.LASF75:
+ 1115 0127 4359424C 		.ascii	"CYBLE_LP_MODE_T\000"
+ 1115      455F4C50 
+ 1115      5F4D4F44 
+ 1115      455F5400 
+ 1116              	.LASF40:
+ 1117 0137 4359424C 		.ascii	"CYBLE_EVT_GATTC_READ_BY_GROUP_TYPE_RSP\000"
+ 1117      455F4556 
+ 1117      545F4741 
+ 1117      5454435F 
+ 1117      52454144 
+ 1118              	.LASF18:
+ 1119 015e 4359424C 		.ascii	"CYBLE_EVT_TIMEOUT\000"
+ 1119      455F4556 
+ 1119      545F5449 
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccAi6Wbc.s 			page 27
+
+
+ 1119      4D454F55 
+ 1119      5400
+ 1120              	.LASF4:
+ 1121 0170 6C6F6E67 		.ascii	"long int\000"
+ 1121      20696E74 
+ 1121      00
+ 1122              	.LASF117:
+ 1123 0179 70726576 		.ascii	"previousTimestamp\000"
+ 1123      696F7573 
+ 1123      54696D65 
+ 1123      7374616D 
+ 1123      7000
+ 1124              	.LASF7:
+ 1125 018b 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 1125      206C6F6E 
+ 1125      6720756E 
+ 1125      7369676E 
+ 1125      65642069 
+ 1126              	.LASF130:
+ 1127 01a2 433A5C55 		.ascii	"C:\\Users\\Manisha Goyal\\Desktop\\safe_3\\lab3_man"
+ 1127      73657273 
+ 1127      5C4D616E 
+ 1127      69736861 
+ 1127      20476F79 
+ 1128 01d0 69736861 		.ascii	"isha\\BLE Lab 3\\BLE Lab 3.cydsn\000"
+ 1128      5C424C45 
+ 1128      204C6162 
+ 1128      20335C42 
+ 1128      4C45204C 
+ 1129              	.LASF20:
+ 1130 01ef 4359424C 		.ascii	"CYBLE_EVT_HCI_STATUS\000"
+ 1130      455F4556 
+ 1130      545F4843 
+ 1130      495F5354 
+ 1130      41545553 
+ 1131              	.LASF114:
+ 1132 0204 434F4E4E 		.ascii	"CONN_PARAM_REQUEST_ACCEPTED\000"
+ 1132      5F504152 
+ 1132      414D5F52 
+ 1132      45515545 
+ 1132      53545F41 
+ 1133              	.LASF68:
+ 1134 0220 4359424C 		.ascii	"CYBLE_EVT_PENDING_FLASH_WRITE\000"
+ 1134      455F4556 
+ 1134      545F5045 
+ 1134      4E44494E 
+ 1134      475F464C 
+ 1135              	.LASF76:
+ 1136 023e 4359424C 		.ascii	"CYBLE_BLESS_STATE_ACTIVE\000"
+ 1136      455F424C 
+ 1136      4553535F 
+ 1136      53544154 
+ 1136      455F4143 
+ 1137              	.LASF31:
+ 1138 0257 4359424C 		.ascii	"CYBLE_EVT_GAP_ENCRYPT_CHANGE\000"
+ 1138      455F4556 
+ 1138      545F4741 
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccAi6Wbc.s 			page 28
+
+
+ 1138      505F454E 
+ 1138      43525950 
+ 1139              	.LASF109:
+ 1140 0274 4359424C 		.ascii	"CYBLE_STATE_ADVERTISING\000"
+ 1140      455F5354 
+ 1140      4154455F 
+ 1140      41445645 
+ 1140      52544953 
+ 1141              	.LASF6:
+ 1142 028c 6C6F6E67 		.ascii	"long long int\000"
+ 1142      206C6F6E 
+ 1142      6720696E 
+ 1142      7400
+ 1143              	.LASF0:
+ 1144 029a 7369676E 		.ascii	"signed char\000"
+ 1144      65642063 
+ 1144      68617200 
+ 1145              	.LASF17:
+ 1146 02a6 4359424C 		.ascii	"CYBLE_EVT_STACK_ON\000"
+ 1146      455F4556 
+ 1146      545F5354 
+ 1146      41434B5F 
+ 1146      4F4E00
+ 1147              	.LASF116:
+ 1148 02b9 434F4E4E 		.ascii	"CONN_PARAM_REQUEST_STATE\000"
+ 1148      5F504152 
+ 1148      414D5F52 
+ 1148      45515545 
+ 1148      53545F53 
+ 1149              	.LASF129:
+ 1150 02d2 2E5C6D61 		.ascii	".\\main.c\000"
+ 1150      696E2E63 
+ 1150      00
+ 1151              	.LASF33:
+ 1152 02db 4359424C 		.ascii	"CYBLE_EVT_GAPC_SCAN_START_STOP\000"
+ 1152      455F4556 
+ 1152      545F4741 
+ 1152      50435F53 
+ 1152      43414E5F 
+ 1153              	.LASF23:
+ 1154 02fa 4359424C 		.ascii	"CYBLE_EVT_GAP_AUTH_REQ\000"
+ 1154      455F4556 
+ 1154      545F4741 
+ 1154      505F4155 
+ 1154      54485F52 
+ 1155              	.LASF95:
+ 1156 0311 4359424C 		.ascii	"CYBLE_HRS_CHAR_COUNT\000"
+ 1156      455F4852 
+ 1156      535F4348 
+ 1156      41525F43 
+ 1156      4F554E54 
+ 1157              	.LASF94:
+ 1158 0326 4359424C 		.ascii	"CYBLE_HRS_CPT\000"
+ 1158      455F4852 
+ 1158      535F4350 
+ 1158      5400
+ 1159              	.LASF49:
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccAi6Wbc.s 			page 29
+
+
+ 1160 0334 4359424C 		.ascii	"CYBLE_EVT_GATTS_WRITE_CMD_REQ\000"
+ 1160      455F4556 
+ 1160      545F4741 
+ 1160      5454535F 
+ 1160      57524954 
+ 1161              	.LASF59:
+ 1162 0352 4359424C 		.ascii	"CYBLE_EVT_L2CAP_COMMAND_REJ\000"
+ 1162      455F4556 
+ 1162      545F4C32 
+ 1162      4341505F 
+ 1162      434F4D4D 
+ 1163              	.LASF110:
+ 1164 036e 4359424C 		.ascii	"CYBLE_STATE_DISCONNECTED\000"
+ 1164      455F5354 
+ 1164      4154455F 
+ 1164      44495343 
+ 1164      4F4E4E45 
+ 1165              	.LASF28:
+ 1166 0387 4359424C 		.ascii	"CYBLE_EVT_GAPP_ADVERTISEMENT_START_STOP\000"
+ 1166      455F4556 
+ 1166      545F4741 
+ 1166      50505F41 
+ 1166      44564552 
+ 1167              	.LASF126:
+ 1168 03af 74696D65 		.ascii	"timestampWhenConnected\000"
+ 1168      7374616D 
+ 1168      70576865 
+ 1168      6E436F6E 
+ 1168      6E656374 
+ 1169              	.LASF9:
+ 1170 03c6 75696E74 		.ascii	"uint8\000"
+ 1170      3800
+ 1171              	.LASF52:
+ 1172 03cc 4359424C 		.ascii	"CYBLE_EVT_GATTC_EXEC_WRITE_RSP\000"
+ 1172      455F4556 
+ 1172      545F4741 
+ 1172      5454435F 
+ 1172      45584543 
+ 1173              	.LASF13:
+ 1174 03eb 646F7562 		.ascii	"double\000"
+ 1174      6C6500
+ 1175              	.LASF62:
+ 1176 03f2 4359424C 		.ascii	"CYBLE_EVT_L2CAP_CBFC_DISCONN_IND\000"
+ 1176      455F4556 
+ 1176      545F4C32 
+ 1176      4341505F 
+ 1176      43424643 
+ 1177              	.LASF100:
+ 1178 0413 4359424C 		.ascii	"CYBLE_DIS_FIRMWARE_REV\000"
+ 1178      455F4449 
+ 1178      535F4649 
+ 1178      524D5741 
+ 1178      52455F52 
+ 1179              	.LASF11:
+ 1180 042a 75696E74 		.ascii	"uint32\000"
+ 1180      333200
+ 1181              	.LASF99:
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccAi6Wbc.s 			page 30
+
+
+ 1182 0431 4359424C 		.ascii	"CYBLE_DIS_HARDWARE_REV\000"
+ 1182      455F4449 
+ 1182      535F4841 
+ 1182      52445741 
+ 1182      52455F52 
+ 1183              	.LASF69:
+ 1184 0448 4359424C 		.ascii	"CYBLE_EVT_MAX\000"
+ 1184      455F4556 
+ 1184      545F4D41 
+ 1184      5800
+ 1185              	.LASF57:
+ 1186 0456 4359424C 		.ascii	"CYBLE_EVT_L2CAP_CONN_PARAM_UPDATE_REQ\000"
+ 1186      455F4556 
+ 1186      545F4C32 
+ 1186      4341505F 
+ 1186      434F4E4E 
+ 1187              	.LASF113:
+ 1188 047c 434F4E4E 		.ascii	"CONN_PARAM_REQUEST_SENT\000"
+ 1188      5F504152 
+ 1188      414D5F52 
+ 1188      45515545 
+ 1188      53545F53 
+ 1189              	.LASF67:
+ 1190 0494 4359424C 		.ascii	"CYBLE_EVT_L2CAP_CBFC_DATA_WRITE_IND\000"
+ 1190      455F4556 
+ 1190      545F4C32 
+ 1190      4341505F 
+ 1190      43424643 
+ 1191              	.LASF8:
+ 1192 04b8 756E7369 		.ascii	"unsigned int\000"
+ 1192      676E6564 
+ 1192      20696E74 
+ 1192      00
+ 1193              	.LASF37:
+ 1194 04c5 4359424C 		.ascii	"CYBLE_EVT_GATT_DISCONNECT_IND\000"
+ 1194      455F4556 
+ 1194      545F4741 
+ 1194      54545F44 
+ 1194      4953434F 
+ 1195              	.LASF81:
+ 1196 04e3 4359424C 		.ascii	"CYBLE_BLESS_STATE_DEEPSLEEP\000"
+ 1196      455F424C 
+ 1196      4553535F 
+ 1196      53544154 
+ 1196      455F4445 
+ 1197              	.LASF5:
+ 1198 04ff 6C6F6E67 		.ascii	"long unsigned int\000"
+ 1198      20756E73 
+ 1198      69676E65 
+ 1198      6420696E 
+ 1198      7400
+ 1199              	.LASF88:
+ 1200 0511 4359424C 		.ascii	"CYBLE_GAP_CONN_UPDATE_PARAM_T\000"
+ 1200      455F4741 
+ 1200      505F434F 
+ 1200      4E4E5F55 
+ 1200      50444154 
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccAi6Wbc.s 			page 31
+
+
+ 1201              	.LASF74:
+ 1202 052f 4359424C 		.ascii	"CYBLE_BLESS_INVALID\000"
+ 1202      455F424C 
+ 1202      4553535F 
+ 1202      494E5641 
+ 1202      4C494400 
+ 1203              	.LASF39:
+ 1204 0543 4359424C 		.ascii	"CYBLE_EVT_GATTC_XCHNG_MTU_RSP\000"
+ 1204      455F4556 
+ 1204      545F4741 
+ 1204      5454435F 
+ 1204      5843484E 
+ 1205              	.LASF56:
+ 1206 0561 4359424C 		.ascii	"CYBLE_EVT_GATTS_DATA_SIGNED_CMD_REQ\000"
+ 1206      455F4556 
+ 1206      545F4741 
+ 1206      5454535F 
+ 1206      44415441 
+ 1207              	.LASF87:
+ 1208 0585 73757065 		.ascii	"supervisionTO\000"
+ 1208      72766973 
+ 1208      696F6E54 
+ 1208      4F00
+ 1209              	.LASF3:
+ 1210 0593 73686F72 		.ascii	"short unsigned int\000"
+ 1210      7420756E 
+ 1210      7369676E 
+ 1210      65642069 
+ 1210      6E7400
+ 1211              	.LASF16:
+ 1212 05a6 4359424C 		.ascii	"CYBLE_EVT_HOST_INVALID\000"
+ 1212      455F4556 
+ 1212      545F484F 
+ 1212      53545F49 
+ 1212      4E56414C 
+ 1213              	.LASF42:
+ 1214 05bd 4359424C 		.ascii	"CYBLE_EVT_GATTC_FIND_INFO_RSP\000"
+ 1214      455F4556 
+ 1214      545F4741 
+ 1214      5454435F 
+ 1214      46494E44 
+ 1215              	.LASF24:
+ 1216 05db 4359424C 		.ascii	"CYBLE_EVT_GAP_PASSKEY_ENTRY_REQUEST\000"
+ 1216      455F4556 
+ 1216      545F4741 
+ 1216      505F5041 
+ 1216      53534B45 
+ 1217              	.LASF29:
+ 1218 05ff 4359424C 		.ascii	"CYBLE_EVT_GAP_DEVICE_CONNECTED\000"
+ 1218      455F4556 
+ 1218      545F4741 
+ 1218      505F4445 
+ 1218      56494345 
+ 1219              	.LASF47:
+ 1220 061e 4359424C 		.ascii	"CYBLE_EVT_GATTS_WRITE_REQ\000"
+ 1220      455F4556 
+ 1220      545F4741 
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccAi6Wbc.s 			page 32
+
+
+ 1220      5454535F 
+ 1220      57524954 
+ 1221              	.LASF104:
+ 1222 0638 4359424C 		.ascii	"CYBLE_DIS_PNP_ID\000"
+ 1222      455F4449 
+ 1222      535F504E 
+ 1222      505F4944 
+ 1222      00
+ 1223              	.LASF122:
+ 1224 0649 6379426C 		.ascii	"cyBle_state\000"
+ 1224      655F7374 
+ 1224      61746500 
+ 1225              	.LASF25:
+ 1226 0655 4359424C 		.ascii	"CYBLE_EVT_GAP_PASSKEY_DISPLAY_REQUEST\000"
+ 1226      455F4556 
+ 1226      545F4741 
+ 1226      505F5041 
+ 1226      53534B45 
+ 1227              	.LASF36:
+ 1228 067b 4359424C 		.ascii	"CYBLE_EVT_GATT_CONNECT_IND\000"
+ 1228      455F4556 
+ 1228      545F4741 
+ 1228      54545F43 
+ 1228      4F4E4E45 
+ 1229              	.LASF90:
+ 1230 0696 61747449 		.ascii	"attId\000"
+ 1230      6400
+ 1231              	.LASF82:
+ 1232 069c 4359424C 		.ascii	"CYBLE_BLESS_STATE_HIBERNATE\000"
+ 1232      455F424C 
+ 1232      4553535F 
+ 1232      53544154 
+ 1232      455F4849 
+ 1233              	.LASF22:
+ 1234 06b8 4359424C 		.ascii	"CYBLE_EVT_GAPC_SCAN_PROGRESS_RESULT\000"
+ 1234      455F4556 
+ 1234      545F4741 
+ 1234      50435F53 
+ 1234      43414E5F 
+ 1235              	.LASF102:
+ 1236 06dc 4359424C 		.ascii	"CYBLE_DIS_SYSTEM_ID\000"
+ 1236      455F4449 
+ 1236      535F5359 
+ 1236      5354454D 
+ 1236      5F494400 
+ 1237              	.LASF86:
+ 1238 06f0 636F6E6E 		.ascii	"connLatency\000"
+ 1238      4C617465 
+ 1238      6E637900 
+ 1239              	.LASF115:
+ 1240 06fc 434F4E4E 		.ascii	"CONN_PARAM_REQUEST_REJECTED\000"
+ 1240      5F504152 
+ 1240      414D5F52 
+ 1240      45515545 
+ 1240      53545F52 
+ 1241              	.LASF60:
+ 1242 0718 4359424C 		.ascii	"CYBLE_EVT_L2CAP_CBFC_CONN_IND\000"
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccAi6Wbc.s 			page 33
+
+
+ 1242      455F4556 
+ 1242      545F4C32 
+ 1242      4341505F 
+ 1242      43424643 
+ 1243              	.LASF41:
+ 1244 0736 4359424C 		.ascii	"CYBLE_EVT_GATTC_READ_BY_TYPE_RSP\000"
+ 1244      455F4556 
+ 1244      545F4741 
+ 1244      5454435F 
+ 1244      52454144 
+ 1245              	.LASF15:
+ 1246 0757 73697A65 		.ascii	"sizetype\000"
+ 1246      74797065 
+ 1246      00
+ 1247              	.LASF107:
+ 1248 0760 4359424C 		.ascii	"CYBLE_STATE_INITIALIZING\000"
+ 1248      455F5354 
+ 1248      4154455F 
+ 1248      494E4954 
+ 1248      49414C49 
+ 1249              	.LASF27:
+ 1250 0779 4359424C 		.ascii	"CYBLE_EVT_GAP_AUTH_FAILED\000"
+ 1250      455F4556 
+ 1250      545F4741 
+ 1250      505F4155 
+ 1250      54485F46 
+ 1251              	.LASF123:
+ 1252 0793 6379426C 		.ascii	"cyBle_connHandle\000"
+ 1252      655F636F 
+ 1252      6E6E4861 
+ 1252      6E646C65 
+ 1252      00
+ 1253              	.LASF92:
+ 1254 07a4 4359424C 		.ascii	"CYBLE_HRS_HRM\000"
+ 1254      455F4852 
+ 1254      535F4852 
+ 1254      4D00
+ 1255              	.LASF73:
+ 1256 07b2 4359424C 		.ascii	"CYBLE_BLESS_HIBERNATE\000"
+ 1256      455F424C 
+ 1256      4553535F 
+ 1256      48494245 
+ 1256      524E4154 
+ 1257              	.LASF26:
+ 1258 07c8 4359424C 		.ascii	"CYBLE_EVT_GAP_AUTH_COMPLETE\000"
+ 1258      455F4556 
+ 1258      545F4741 
+ 1258      505F4155 
+ 1258      54485F43 
+ 1259              	.LASF85:
+ 1260 07e4 636F6E6E 		.ascii	"connIntvMax\000"
+ 1260      496E7476 
+ 1260      4D617800 
+ 1261              	.LASF53:
+ 1262 07f0 4359424C 		.ascii	"CYBLE_EVT_GATTC_HANDLE_VALUE_NTF\000"
+ 1262      455F4556 
+ 1262      545F4741 
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccAi6Wbc.s 			page 34
+
+
+ 1262      5454435F 
+ 1262      48414E44 
+ 1263              	.LASF103:
+ 1264 0811 4359424C 		.ascii	"CYBLE_DIS_REG_CERT_DATA\000"
+ 1264      455F4449 
+ 1264      535F5245 
+ 1264      475F4345 
+ 1264      52545F44 
+ 1265              	.LASF61:
+ 1266 0829 4359424C 		.ascii	"CYBLE_EVT_L2CAP_CBFC_CONN_CNF\000"
+ 1266      455F4556 
+ 1266      545F4C32 
+ 1266      4341505F 
+ 1266      43424643 
+ 1267              	.LASF84:
+ 1268 0847 636F6E6E 		.ascii	"connIntvMin\000"
+ 1268      496E7476 
+ 1268      4D696E00 
+ 1269              	.LASF12:
+ 1270 0853 666C6F61 		.ascii	"float\000"
+ 1270      7400
+ 1271              	.LASF128:
+ 1272 0859 474E5520 		.ascii	"GNU C 4.8.4 20140526 (release) [ARM/embedded-4_8-br"
+ 1272      4320342E 
+ 1272      382E3420 
+ 1272      32303134 
+ 1272      30353236 
+ 1273 088c 616E6368 		.ascii	"anch revision 211358] -mcpu=cortex-m0 -mthumb -g -O"
+ 1273      20726576 
+ 1273      6973696F 
+ 1273      6E203231 
+ 1273      31333538 
+ 1274 08bf 30202D66 		.ascii	"0 -ffunction-sections\000"
+ 1274      66756E63 
+ 1274      74696F6E 
+ 1274      2D736563 
+ 1274      74696F6E 
+ 1275              	.LASF98:
+ 1276 08d5 4359424C 		.ascii	"CYBLE_DIS_SERIAL_NUMBER\000"
+ 1276      455F4449 
+ 1276      535F5345 
+ 1276      5249414C 
+ 1276      5F4E554D 
+ 1277              	.LASF78:
+ 1278 08ed 4359424C 		.ascii	"CYBLE_BLESS_STATE_SLEEP\000"
+ 1278      455F424C 
+ 1278      4553535F 
+ 1278      53544154 
+ 1278      455F534C 
+ 1279              	.LASF121:
+ 1280 0905 68726D43 		.ascii	"hrmConnectionParam\000"
+ 1280      6F6E6E65 
+ 1280      6374696F 
+ 1280      6E506172 
+ 1280      616D00
+ 1281              	.LASF125:
+ 1282 0918 5F426F6F 		.ascii	"_Bool\000"
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccAi6Wbc.s 			page 35
+
+
+ 1282      6C00
+ 1283              	.LASF1:
+ 1284 091e 756E7369 		.ascii	"unsigned char\000"
+ 1284      676E6564 
+ 1284      20636861 
+ 1284      7200
+ 1285              	.LASF10:
+ 1286 092c 75696E74 		.ascii	"uint16\000"
+ 1286      313600
+ 1287              	.LASF105:
+ 1288 0933 4359424C 		.ascii	"CYBLE_DIS_CHAR_COUNT\000"
+ 1288      455F4449 
+ 1288      535F4348 
+ 1288      41525F43 
+ 1288      4F554E54 
+ 1289              	.LASF131:
+ 1290 0948 496E6974 		.ascii	"InitializeSystem\000"
+ 1290      69616C69 
+ 1290      7A655379 
+ 1290      7374656D 
+ 1290      00
+ 1291              	.LASF2:
+ 1292 0959 73686F72 		.ascii	"short int\000"
+ 1292      7420696E 
+ 1292      7400
+ 1293              	.LASF127:
+ 1294 0963 636F6E6E 		.ascii	"connParamRequestState\000"
+ 1294      50617261 
+ 1294      6D526571 
+ 1294      75657374 
+ 1294      53746174 
+ 1295              	.LASF54:
+ 1296 0979 4359424C 		.ascii	"CYBLE_EVT_GATTC_HANDLE_VALUE_IND\000"
+ 1296      455F4556 
+ 1296      545F4741 
+ 1296      5454435F 
+ 1296      48414E44 
+ 1297              	.LASF101:
+ 1298 099a 4359424C 		.ascii	"CYBLE_DIS_SOFTWARE_REV\000"
+ 1298      455F4449 
+ 1298      535F534F 
+ 1298      46545741 
+ 1298      52455F52 
+ 1299              	.LASF50:
+ 1300 09b1 4359424C 		.ascii	"CYBLE_EVT_GATTS_PREP_WRITE_REQ\000"
+ 1300      455F4556 
+ 1300      545F4741 
+ 1300      5454535F 
+ 1300      50524550 
+ 1301              	.LASF83:
+ 1302 09d0 4359424C 		.ascii	"CYBLE_BLESS_STATE_INVALID\000"
+ 1302      455F424C 
+ 1302      4553535F 
+ 1302      53544154 
+ 1302      455F494E 
+ 1303              	.LASF55:
+ 1304 09ea 4359424C 		.ascii	"CYBLE_EVT_GATTS_HANDLE_VALUE_CNF\000"
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccAi6Wbc.s 			page 36
+
+
+ 1304      455F4556 
+ 1304      545F4741 
+ 1304      5454535F 
+ 1304      48414E44 
+ 1305              	.LASF35:
+ 1306 0a0b 4359424C 		.ascii	"CYBLE_EVT_GATTC_ERROR_RSP\000"
+ 1306      455F4556 
+ 1306      545F4741 
+ 1306      5454435F 
+ 1306      4552524F 
+ 1307              	.LASF93:
+ 1308 0a25 4359424C 		.ascii	"CYBLE_HRS_BSL\000"
+ 1308      455F4852 
+ 1308      535F4253 
+ 1308      4C00
+ 1309              	.LASF71:
+ 1310 0a33 4359424C 		.ascii	"CYBLE_BLESS_SLEEP\000"
+ 1310      455F424C 
+ 1310      4553535F 
+ 1310      534C4545 
+ 1310      5000
+ 1311              	.LASF97:
+ 1312 0a45 4359424C 		.ascii	"CYBLE_DIS_MODEL_NUMBER\000"
+ 1312      455F4449 
+ 1312      535F4D4F 
+ 1312      44454C5F 
+ 1312      4E554D42 
+ 1313              	.LASF14:
+ 1314 0a5c 63686172 		.ascii	"char\000"
+ 1314      00
+ 1315              	.LASF30:
+ 1316 0a61 4359424C 		.ascii	"CYBLE_EVT_GAP_DEVICE_DISCONNECTED\000"
+ 1316      455F4556 
+ 1316      545F4741 
+ 1316      505F4445 
+ 1316      56494345 
+ 1317              	.LASF112:
+ 1318 0a83 434F4E4E 		.ascii	"CONN_PARAM_REQUEST_NOT_SENT\000"
+ 1318      5F504152 
+ 1318      414D5F52 
+ 1318      45515545 
+ 1318      53545F4E 
+ 1319              	.LASF48:
+ 1320 0a9f 4359424C 		.ascii	"CYBLE_EVT_GATTC_WRITE_RSP\000"
+ 1320      455F4556 
+ 1320      545F4741 
+ 1320      5454435F 
+ 1320      57524954 
+ 1321              	.LASF66:
+ 1322 0ab9 4359424C 		.ascii	"CYBLE_EVT_L2CAP_CBFC_TX_CREDIT_IND\000"
+ 1322      455F4556 
+ 1322      545F4C32 
+ 1322      4341505F 
+ 1322      43424643 
+ 1323              	.LASF119:
+ 1324 0adc 626C654D 		.ascii	"bleMode\000"
+ 1324      6F646500 
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccAi6Wbc.s 			page 37
+
+
+ 1325              	.LASF19:
+ 1326 0ae4 4359424C 		.ascii	"CYBLE_EVT_HARDWARE_ERROR\000"
+ 1326      455F4556 
+ 1326      545F4841 
+ 1326      52445741 
+ 1326      52455F45 
+ 1327              	.LASF77:
+ 1328 0afd 4359424C 		.ascii	"CYBLE_BLESS_STATE_EVENT_CLOSE\000"
+ 1328      455F424C 
+ 1328      4553535F 
+ 1328      53544154 
+ 1328      455F4556 
+ 1329              	.LASF38:
+ 1330 0b1b 4359424C 		.ascii	"CYBLE_EVT_GATTS_XCNHG_MTU_REQ\000"
+ 1330      455F4556 
+ 1330      545F4741 
+ 1330      5454535F 
+ 1330      58434E48 
+ 1331              	.LASF79:
+ 1332 0b39 4359424C 		.ascii	"CYBLE_BLESS_STATE_ECO_ON\000"
+ 1332      455F424C 
+ 1332      4553535F 
+ 1332      53544154 
+ 1332      455F4543 
+ 1333              	.LASF111:
+ 1334 0b52 4359424C 		.ascii	"CYBLE_STATE_T\000"
+ 1334      455F5354 
+ 1334      4154455F 
+ 1334      5400
+ 1335              	.LASF45:
+ 1336 0b60 4359424C 		.ascii	"CYBLE_EVT_GATTC_READ_BLOB_RSP\000"
+ 1336      455F4556 
+ 1336      545F4741 
+ 1336      5454435F 
+ 1336      52454144 
+ 1337              	.LASF118:
+ 1338 0b7e 63757272 		.ascii	"currentTimestamp\000"
+ 1338      656E7454 
+ 1338      696D6573 
+ 1338      74616D70 
+ 1338      00
+ 1339              	.LASF80:
+ 1340 0b8f 4359424C 		.ascii	"CYBLE_BLESS_STATE_ECO_STABLE\000"
+ 1340      455F424C 
+ 1340      4553535F 
+ 1340      53544154 
+ 1340      455F4543 
+ 1341              	.LASF124:
+ 1342 0bac 656E7465 		.ascii	"enterHibernateFlag\000"
+ 1342      72486962 
+ 1342      65726E61 
+ 1342      7465466C 
+ 1342      616700
+ 1343              	.LASF108:
+ 1344 0bbf 4359424C 		.ascii	"CYBLE_STATE_CONNECTED\000"
+ 1344      455F5354 
+ 1344      4154455F 
+ARM GAS  C:\Users\MANISH~1\AppData\Local\Temp\ccAi6Wbc.s 			page 38
+
+
+ 1344      434F4E4E 
+ 1344      45435445 
+ 1345              	.LASF72:
+ 1346 0bd5 4359424C 		.ascii	"CYBLE_BLESS_DEEPSLEEP\000"
+ 1346      455F424C 
+ 1346      4553535F 
+ 1346      44454550 
+ 1346      534C4545 
+ 1347              	.LASF43:
+ 1348 0beb 4359424C 		.ascii	"CYBLE_EVT_GATTC_FIND_BY_TYPE_VALUE_RSP\000"
+ 1348      455F4556 
+ 1348      545F4741 
+ 1348      5454435F 
+ 1348      46494E44 
+ 1349              	.LASF34:
+ 1350 0c12 4359424C 		.ascii	"CYBLE_EVT_GAP_KEYINFO_EXCHNGE_CMPLT\000"
+ 1350      455F4556 
+ 1350      545F4741 
+ 1350      505F4B45 
+ 1350      59494E46 
+ 1351              	.LASF89:
+ 1352 0c36 62644861 		.ascii	"bdHandle\000"
+ 1352      6E646C65 
+ 1352      00
+ 1353              	.LASF58:
+ 1354 0c3f 4359424C 		.ascii	"CYBLE_EVT_L2CAP_CONN_PARAM_UPDATE_RSP\000"
+ 1354      455F4556 
+ 1354      545F4C32 
+ 1354      4341505F 
+ 1354      434F4E4E 
+ 1355              	.LASF132:
+ 1356 0c65 6D61696E 		.ascii	"main\000"
+ 1356      00
+ 1357              	.LASF70:
+ 1358 0c6a 4359424C 		.ascii	"CYBLE_BLESS_ACTIVE\000"
+ 1358      455F424C 
+ 1358      4553535F 
+ 1358      41435449 
+ 1358      564500
+ 1359              	.LASF96:
+ 1360 0c7d 4359424C 		.ascii	"CYBLE_DIS_MANUFACTURER_NAME\000"
+ 1360      455F4449 
+ 1360      535F4D41 
+ 1360      4E554641 
+ 1360      43545552 
+ 1361              	.LASF120:
+ 1362 0c99 696E7465 		.ascii	"interruptStatus\000"
+ 1362      72727570 
+ 1362      74537461 
+ 1362      74757300 
+ 1363              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.8.4 20140526 (release) [ARM/embedded-4_8-br
